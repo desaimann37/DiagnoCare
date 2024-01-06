@@ -1,0 +1,38 @@
+.login {
+    min-height: 100vh;
+  }
+  
+  .bg-image {
+    background-image: url('https://cdn.pixabay.com/photo/2018/05/19/00/53/online-education-3412473_640.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .login-heading {
+    font-weight: 300;
+  }
+  
+  .btn-login {
+    font-size: 0.9rem;
+    letter-spacing: 0.05rem;
+    padding: 0.75rem 1rem;
+  }
+  .invalid
+  {
+    border-color: red!important;
+  }
+
+  .create-account-btn {
+    background-color: #4eb5d2; /* Replace with your desired background color */
+    color: white; /* Text color */
+    padding: 10px 20px; /* Adjust padding as needed */
+    border: none;
+    border-radius: 5px; /* Rounded corners, adjust as needed */
+    font-size: 16px; /* Adjust font size as needed */
+    cursor: pointer;
+  }
+  
+  .create-account-btn:hover {
+    background-color: blue; /* Replace with your desired hover background color */
+  }
+  
