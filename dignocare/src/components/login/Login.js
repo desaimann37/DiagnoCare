@@ -1,129 +1,127 @@
-import React, { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-// import { ToastContainer, toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
+import React, { useState } from 'react';
+import farmImage from '../../assets/doctor-bg1.png';
 import './login.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function SignIn() {
-  const [logdata, setData] = useState({
-    email: "",
-    password: "",
+function Login() {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
   });
-  const navigate = useNavigate();
-  const [isauthenticated, setIsauthenticated] = useState(
-    localStorage.getItem('isauthenticated') === 'true'
-  );
 
-  useEffect(() => {
-    if (isauthenticated) {
-      console.log("Authenticated");
-      
-      setData({ ...logdata, email: "", password: "" });
-      localStorage.setItem("isauthenticated", isauthenticated);
-    } else {
-      console.log(isauthenticated + "400");
-      
-      localStorage.setItem("isauthenticated", isauthenticated);
-    }
-  }, [isauthenticated]);
+  const [isRegister, setIsRegister] = useState(false);
 
-  const adddata = (e) => {
-    const { name, value } = e.target;
-    setData((prevData) => {
-      return {
-        ...prevData,
-        [name]: value,
-      };
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
   };
 
-  const submit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-  
-    const { email, password } = logdata;
-    //   toast.error("Login failed. Please check your credentials.");
-    }
-  
-  const labelStyle = { color: "black" };
-  const buttonStyle = { backgroundColor: "black", color: "white" };
+    console.log('Form submitted:', formData);
+  };
 
-  const welcomeBackStyle = {
-    fontWeight: "bold", 
-    fontFamily: "Arial, sans-serif", 
+  const toggleForm = () => {
+    setIsRegister(!isRegister);
   };
 
   return (
-    <div className="App">
-      <div className="container-fluid ps-md-0">
-        <div className="row g-0">
-          <div className="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
-          <div className="col-md-8 col-lg-6">
-            <div className="login d-flex align-items-center py-5">
-              <div className="container">
-                <div className="row">
-                  <div className="col-md-9 col-lg-8 mx-auto">
-                    <h3 className="login-heading mb-4" style={{...welcomeBackStyle, ...labelStyle}}>
-                      Welcome back!
-                    </h3>
-
-                    <form method="POST">
-                      <div className="form-floating mb-3">
-                        <input
-                          type="email"
-                          className="form-control"
-                          id="floatingInput"
-                          name="email"
-                          placeholder="name@example.com"
-                          value={logdata.email}
-                          onChange={adddata}
-                        />
-                        <label htmlFor="floatingInput" style={labelStyle}>
-                          Email address
-                        </label>
-                      </div>
-                      <div className="form-floating mb-3">
-                        <input
-                          type="password"
-                          className="form-control"
-                          id="floatingPassword"
-                          name="password"
-                          placeholder="Password"
-                          value={logdata.password}
-                          onChange={adddata}
-                        />
-                        <label htmlFor="floatingPassword" style={labelStyle}>
-                          Password
-                        </label>
-                      </div>
-                        <div className="d-grid">
-                          <button
-                            className="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2"
-                            type="submit"
-                            onClick={submit}
-                            style={buttonStyle}
-                          >
-                            Sign in
-                          </button>
-                        </div>
-                    </form>
-
-                    <div className="d-grid">
-                      <div className="text-center">
-                        <p style={labelStyle}>New to StudyHub?</p>
-                        <NavLink to="/register">
-                          <button className="create-account-btn" style={buttonStyle}>
-                            Create your Account
-                          </button>
-                        </NavLink>
-
-                        {isauthenticated && <NavLink to="/">Go to Home</NavLink>}
-                      </div>
-                    </div>
-                  </div>
+    <div className="login-container">
+      <div className="login-image-section">
+        <img src={farmImage} alt="hello" />
+      </div>
+      <div className="login-text-section">
+        <div className="col-xxl-8 col-xl-9 col-lg-9 col-md-7 col-sm-9">
+          <div className="card-body p-5">
+            <h1 className="fs-4 card-title fw-bold mb-4">{isRegister ? 'Register' : 'Login'}</h1>
+            <form
+              method="POST"
+              className="needs-validation"
+              noValidate
+              autoComplete="off"
+              onSubmit={handleSubmit}
+            >
+              {isRegister && (
+                <div className="mb-3">
+                  <label className="mb-2 text-muted" htmlFor="name">
+                    Name
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    className="form-control"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="invalid-feedback">Name is required</div>
                 </div>
+              )}
+
+              <div className="mb-3">
+                <label className="mb-2 text-muted" htmlFor="email">
+                  E-Mail Address
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  className="form-control"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  autoFocus
+                />
+                <div className="invalid-feedback">Email is invalid</div>
+              </div>
+
+              <div className="mb-3">
+                <div className="mb-2 w-100">
+                  <label className="text-muted" htmlFor="password">
+                    Password
+                  </label>
+                </div>
+                <input
+                  id="password"
+                  type="password"
+                  className="form-control"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+                <div className="invalid-feedback">Password is required</div>
+              </div>
+
+              <div className="align-items-center">
+                <button type="submit" className="btn btn-primary">
+                  {isRegister ? 'Register' : 'Login'}
+                </button>
+              </div>
+            </form>
+            <div className="card-footer py-3 border-0">
+              <div className="text-center">
+                {isRegister ? (
+                  <>
+                    Already have an account?{' '}
+                    <span className="text-dark underline" onClick={toggleForm}>
+                      Login
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    Don't have an account?{' '}
+                    <span className="text-dark underline" onClick={toggleForm}>
+                      Create One
+                    </span>
+                  </>
+                )}
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -131,4 +129,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default Login;

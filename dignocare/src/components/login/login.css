@@ -1,38 +1,64 @@
-.login {
-    min-height: 100vh;
+.login-container {
+    display: flex;
+    height: 90vh;
+    padding: 20px; 
+    overflow: hidden;
   }
   
-  .bg-image {
-    background-image: url('https://cdn.pixabay.com/photo/2018/05/19/00/53/online-education-3412473_640.jpg');
-    background-size: cover;
-    background-position: center;
+  .login-image-section {
+    flex: 1;
+    overflow: hidden;
   }
   
-  .login-heading {
-    font-weight: 300;
+  .login-image-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
   }
   
-  .btn-login {
-    font-size: 0.9rem;
-    letter-spacing: 0.05rem;
-    padding: 0.75rem 1rem;
+  .login-text-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
   }
-  .invalid
-  {
-    border-color: red!important;
+  
+  .login-container .card-title {
+    margin-left: 38%; 
+  }
+  
+  .login-container .btn {
+    margin-left: 38%; 
+  }
+  .login-container .btn-primary {
+    background-color: #a258bd;
+    color: #fef6fc;
+    border-color: rgba(14, 253, 62, 0);
+  }
+  
+  .login-container .btn-primary:hover {
+    background-color: #982dbf;
+    color: #faf0f8;
+    border-color: rgba(0, 129, 242, 0);
   }
 
-  .create-account-btn {
-    background-color: #4eb5d2; /* Replace with your desired background color */
-    color: white; /* Text color */
-    padding: 10px 20px; /* Adjust padding as needed */
-    border: none;
-    border-radius: 5px; /* Rounded corners, adjust as needed */
-    font-size: 16px; /* Adjust font size as needed */
+  #email:focus {
+    border-color: #a258bd; 
+    box-shadow: 0 0 5px rgba(129, 80, 155, 0.5); 
+  }
+
+  #password:focus {
+    border-color: #a258bd;
+    box-shadow: 0 0 5px rgba(129, 80, 155, 0.5); 
+  }
+
+  #name:focus {
+    border-color: #a258bd;
+    box-shadow: 0 0 5px rgba(129, 80, 155, 0.5); 
+  }
+
+  .underline {
+    text-decoration: underline;
     cursor: pointer;
   }
-  
-  .create-account-btn:hover {
-    background-color: blue; /* Replace with your desired hover background color */
-  }
-  

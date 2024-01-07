@@ -1,7 +1,6 @@
 import { BrowserRouter,Route,Routes } from 'react-router-dom'
 import Navbar from './components/navbar/Navbar'
-import SignIn from './components/login/Login';
-import SignUp from './components/login/Signup';
+import Login from './components/login/Login';
 
 function App() {
   return (
@@ -9,8 +8,7 @@ function App() {
        <BrowserRouter>
        <Navbar/>
         <Routes>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login/>}/>
         </Routes>
       </BrowserRouter>
     </div>

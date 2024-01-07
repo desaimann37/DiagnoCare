@@ -19,13 +19,13 @@ body {
 
 .navbar {
   height: 60px;
-  background-color: #001e2f;
+  background-color: #fcfcfc;
   position: relative;
   box-shadow: 0 4px 4px rgba(0,0,0,.1);
 }
 
 .logo {
-    color: #fdf0d5;
+    color: #1c201f;
     font-size: 25px;
 }
 
@@ -50,12 +50,12 @@ body {
 .nav-elements ul a {
   font-size: 16px;
   font-weight: 400;
-  color: #fdf0d5;
+  color: #1c201f;
   text-decoration: none;
 }
 
 .nav-elements ul a.active {
-  color: #fff4e0;
+  color: #1c201f;
   font-weight: 500;
   position: relative;
 }
@@ -67,7 +67,7 @@ body {
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: #fff4e0;
+  background-color: #1c201f;
 }
 
 @media (max-width: 768px) {
@@ -86,7 +86,7 @@ body {
     position: absolute;
     right: 0;
     top: 60px;
-    background-color: #001e2f;
+    background-color: #fcfcfc;
     width: 0px;
     height: calc(100vh - 60px);
     transition: all 0.3s ease-in;
