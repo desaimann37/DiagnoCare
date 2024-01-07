@@ -35,7 +35,7 @@ function Login() {
       <div className="login-text-section">
         <div className="col-xxl-8 col-xl-9 col-lg-9 col-md-7 col-sm-9">
           <div className="card-body p-5">
-            <h1 className="fs-4 card-title fw-bold mb-4">{isRegister ? 'Register' : 'Login'}</h1>
+            <h1 className="fs-10 card-title fw-bold mb-4">{isRegister ? 'Register' : 'Login'}</h1>
             <form
               method="POST"
               className="needs-validation"
@@ -45,7 +45,7 @@ function Login() {
             >
               {isRegister && (
                 <div className="mb-3">
-                  <label className="mb-2 text-muted" htmlFor="name">
+                  <label className="mb-2 text-muted label-large" htmlFor="name">
                     Name
                   </label>
                   <input
@@ -62,7 +62,7 @@ function Login() {
               )}
 
               <div className="mb-3">
-                <label className="mb-2 text-muted" htmlFor="email">
+                <label className="mb-2 text-muted label-large" htmlFor="email">
                   E-Mail Address
                 </label>
                 <input
@@ -80,7 +80,7 @@ function Login() {
 
               <div className="mb-3">
                 <div className="mb-2 w-100">
-                  <label className="text-muted" htmlFor="password">
+                  <label className="text-muted label-large" htmlFor="password">
                     Password
                   </label>
                 </div>

@@ -5,6 +5,10 @@
     overflow: hidden;
   }
   
+  .label-large {
+    font-size: 21px; 
+  }
+
   .login-image-section {
     flex: 1;
     overflow: hidden;
