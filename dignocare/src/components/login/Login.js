@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import axios from 'axios'; 
 import farmImage from '../../assets/doctor-bg1.png';
 import './login.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Login() {
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
   });
@@ -18,9 +20,19 @@ function Login() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+
+    const endpoint = isRegister ? 'signup' : 'signin';
+
+    try {
+      const response = await axios.post(`http://localhost:5000/api/${endpoint}`, formData);
+      console.log(response.data);
+      // Handle success, e.g., redirect to dashboard
+    } catch (error) {
+      // setError('Invalid credentials');
+      // Handle error, e.g., show error message
+    }
   };
 
   const toggleForm = () => {
