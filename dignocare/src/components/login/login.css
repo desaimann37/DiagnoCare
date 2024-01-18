@@ -36,30 +36,35 @@
     margin-left: 38%; 
   }
   .login-container .btn-primary {
-    background-color: #a258bd;
+    background-color: var(--roczen-plus);
     color: #fef6fc;
     border-color: rgba(14, 253, 62, 0);
   }
   
   .login-container .btn-primary:hover {
-    background-color: #982dbf;
+    background-color: var(--black);
     color: #faf0f8;
     border-color: rgba(0, 129, 242, 0);
   }
 
-  #email:focus {
-    border-color: #a258bd; 
-    box-shadow: 0 0 5px rgba(129, 80, 155, 0.5); 
+  .login-container label{
+    font-size: 1.2rem;
+    color: var(--black);
   }
-
-  #password:focus {
-    border-color: #a258bd;
-    box-shadow: 0 0 5px rgba(129, 80, 155, 0.5); 
+  #name::placeholder,#password::placeholder,#email::placeholder{
+    color: var(--grey-accent);
   }
-
-  #name:focus {
-    border-color: #a258bd;
-    box-shadow: 0 0 5px rgba(129, 80, 155, 0.5); 
+  #email,#password,#name{
+    padding: 15px;
+    font-size: 1rem;
+    border-radius: 55px;
+    color: var(--black);
+  }
+  #email:focus , #password:focus , #name:focus{
+    border-color: var(--black); 
+    box-shadow: none;
+    border-radius: 20px;
+    border-radius: 55px;
   }
 
   .underline {

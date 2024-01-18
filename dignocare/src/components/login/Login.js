@@ -57,11 +57,12 @@ function Login() {
             >
               {isRegister && (
                 <div className="mb-3">
-                  <label className="mb-2 text-muted label-large" htmlFor="name">
+                  <label className="mb-2 label-large " htmlFor="name">
                     Name
                   </label>
                   <input
                     id="name"
+                    placeholder="Enter your name"
                     type="text"
                     className="form-control"
                     name="name"
@@ -74,12 +75,13 @@ function Login() {
               )}
 
               <div className="mb-3">
-                <label className="mb-2 text-muted label-large" htmlFor="email">
+                <label className="mb-2 label-large" htmlFor="email">
                   E-Mail Address
                 </label>
                 <input
                   id="email"
-                  type="email"
+                    placeholder="Enter your Email address "
+                    type="email"
                   className="form-control"
                   name="email"
                   value={formData.email}
@@ -92,14 +94,15 @@ function Login() {
 
               <div className="mb-3">
                 <div className="mb-2 w-100">
-                  <label className="text-muted label-large" htmlFor="password">
+                  <label className=" label-large" htmlFor="password">
                     Password
                   </label>
                 </div>
                 <input
                   id="password"
                   type="password"
-                  className="form-control"
+                    placeholder="Enter Password"
+                    className="form-control"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}

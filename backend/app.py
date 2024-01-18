@@ -41,6 +41,7 @@ def api_signin():
     # if user and check_password_hash(user['password'], password):
     if user and user['password'] == password:
         session['user_id'] = str(user['_id'])
+        print('Signin successful')
         return jsonify({'message': 'Signin successful', 'user': user})
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
