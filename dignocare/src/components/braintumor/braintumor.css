@@ -1,0 +1,51 @@
+body, h1, p, button {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Basic styling for the page */
+  .assessment-page {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .assessment-page .hero {
+    display: flex;
+    align-items: center;
+    padding: 50px;
+  }
+  
+  .assessment-page .hero-image {
+    width: 50%;
+    border-radius: 10px; /* Rounded corners */
+  }
+  
+  .assessment-page .hero-content {
+    flex: 1;
+    padding: 0 50px;
+    text-align: left;
+  }
+  
+  .assessment-page h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  
+  .assessment-page p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 30px;
+  }
+  
+  .assessment-page .start-assessment-btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .assessment-page .start-assessment-btn:hover {
+    background-color: #0056b3;
+  }

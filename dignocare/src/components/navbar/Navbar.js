@@ -14,7 +14,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="container">
         <div className="logo">
-        <b>DignoCare</b>
+        <b>Digno<span>Care</span></b>
         </div>
         <div className="menu-icon" onClick={handleShowNavbar}>
           <Hamburger />
