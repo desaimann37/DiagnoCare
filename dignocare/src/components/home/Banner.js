@@ -66,47 +66,6 @@ const Banner = () => {
           <div className="interactive"></div>
         </div>
       </div>
-      <Carousel
-        className="carousel"
-        autoPlay={true}
-        animation="slide"
-        indicators={false}
-        navButtonsAlwaysVisible={true}
-        cycleNavigation={true}
-        navButtonsProps={{
-          style: {
-            backgroundColor: "#fff",
-            color: "#494949",
-            borderRadius: 0,
-            marginTop: -22,
-            height: "100px",
-          },
-        }}
-      >
-        {data.map((item, index) => {
-          return (
-            <>
-              <Paper key={index}>
-                <div style={{ position: "relative" }}>
-                  <img src={item.img} alt={item.title} className="banner_img" />
-                  <div className="item_container">
-                    <h2 className="item_title">{item.title}</h2>
-                    <p className="item_desc">{item.description}</p>
-                    <br />
-                    <button
-                      type="submit"
-                      className="btn btn-primary item_button"
-                    >
-                      Register
-                    </button>
-                  </div>
-                </div>
-              </Paper>
-              {/* <img src={item.img} alt="" className='banner_img'/> */}
-            </>
-          );
-        })}
-      </Carousel>
     </>
   );
 };

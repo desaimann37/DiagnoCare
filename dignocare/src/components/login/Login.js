@@ -58,7 +58,7 @@ function Login() {
               {isRegister && (
                 <div className="mb-3">
                   <label className="mb-2 label-large " htmlFor="name">
-                    Name
+                    Name <span>*</span>
                   </label>
                   <input
                     id="name"
@@ -76,7 +76,7 @@ function Login() {
 
               <div className="mb-3">
                 <label className="mb-2 label-large" htmlFor="email">
-                  E-Mail Address
+                  E-Mail Address <span>*</span>
                 </label>
                 <input
                   id="email"
@@ -89,13 +89,13 @@ function Login() {
                   required
                   autoFocus
                 />
-                <div className="invalid-feedback">Email is invalid</div>
+                <div className="invalid-feedback">Email is invalid </div>
               </div>
 
               <div className="mb-3">
                 <div className="mb-2 w-100">
                   <label className=" label-large" htmlFor="password">
-                    Password
+                    Password <span>*</span>
                   </label>
                 </div>
                 <input

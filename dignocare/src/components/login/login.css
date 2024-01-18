@@ -48,7 +48,7 @@
   }
 
   .login-container label{
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: var(--black);
   }
   #name::placeholder,#password::placeholder,#email::placeholder{
@@ -59,6 +59,11 @@
     font-size: 1rem;
     border-radius: 55px;
     color: var(--black);
+  }
+
+  .login-container span{
+    color: red;
+    font-weight: 700;
   }
   #email:focus , #password:focus , #name:focus{
     border-color: var(--black); 
