@@ -1,21 +1,4 @@
 
-.text-container {
-    z-index: 10;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    position: absolute;
-    top: 0;
-    left: 0;
-    justify-content: center;
-    align-items: center;
-    font-size: 96px;
-    color: white;
-    opacity: 0.8;
-    user-select: none;
-    text-shadow: 1px 1px rgba(0, 0, 0, 0.1);
-}
-
 :root {
     --gradient-color-1: #FFFFFF;
     --gradient-color-2: #81F5FF;

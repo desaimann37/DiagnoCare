@@ -1,15 +1,15 @@
 import React from 'react'
 import img from '../../assets/doc_home.jpg'
 
-const Alzheimer = () => {
+const BrainTumor = () => {
   return (
     <div className="assessment-page">
       <section className="hero">
-        <img src={img} alt="Assessment Image" className="hero-image" />
+        <img src={img} className="hero-image" />
         <div className="hero-content">
-        <h1>Alzheimer's Assessment</h1>
+        <h1>Brain Tumor Assessment</h1>
           <p>
-            Perform a comprehensive assessment for Alzheimer's. Gather patient
+            Perform a comprehensive assessment for Brain Tumor. Gather patient
             information and analyze symptoms to make informed decisions and
             provide effective treatment plans.
           </p>
@@ -20,4 +20,4 @@ const Alzheimer = () => {
   )
 }
 
-export default Alzheimer
+export default BrainTumor

@@ -3,10 +3,10 @@ import Navbar from './components/navbar/Navbar'
 import Login from './components/login/Login';
 import Banner from './components/home/Banner';
 import Footer from './components/footer/Footer'
-import Diabetes from './components/diabetes/Diabetes';
-import LungCancer from './components/lungcancer/LungCancer';
-import Alzheimer from './components/Alzheimer/Alzheimer';
-import BrainTumor from './components/braintumor/BrainTumor';
+import Diabetes from './components/d_diabetes/Diabetes';
+import LungCancer from './components/d_lungcancer/LungCancer';
+import Alzheimer from './components/d_alzheimer/Alzheimer';
+import BrainTumor from './components/d_braintumor/BrainTumor';
 import ChatWidget from './components/chatwidget/ChatWidget';
 function App() {
   return (

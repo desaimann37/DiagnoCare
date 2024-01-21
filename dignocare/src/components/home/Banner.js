@@ -1,27 +1,6 @@
 import React from "react";
-import Carousel from "react-material-ui-carousel";
-import { Paper } from "@mui/material";
 import "./banner.css";
 import "./gradientbg.css";
-import bannerbg from "../../assets/banner-bg4.png";
-const data = [
-  {
-    img: bannerbg,
-    title: "First Slide",
-    description: "Nulla vitae elit libero, a pharetra augue mollis interdum.",
-  },
-  {
-    img: bannerbg,
-    title: "Second Slide",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  },
-  {
-    img: bannerbg,
-    title: "Third Slide",
-    description:
-      "Praesent commodo cursus magna, vel scelerisque nisl consectetur.",
-  },
-];
 
 const Banner = () => {
   return (
