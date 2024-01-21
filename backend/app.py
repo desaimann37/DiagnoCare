@@ -1,16 +1,22 @@
 from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from pymongo import MongoClient
-from werkzeug.security import generate_password_hash, check_password_hash
+# from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'your_secret_key'
 
 # Connect to MongoDB
-client = MongoClient('mongodb://localhost:27017/')
-db = client['DignoCare']
-users_collection = db['users']
+client = MongoClient('mongodb+srv://dm_37:SWKIOAkzdQgoWn68@cluster0.u4wm1ik.mongodb.net/sdp_backend')
+db = client['sdp_backend']
+auth_collection = db['auth']
+
+@app.route('/hello' , methods=['GET'])
+def sayHello():
+    return "Hello User!"
+
+
 
 @app.route('/api/signup', methods=['POST'])
 def api_signup():
@@ -25,35 +31,13 @@ def api_signup():
         'email': email,
         'password': password
     }
+    # Here Instead of manually getting JSON data from POSTMAN we need to get it from frontend !!
+    #For the same in frontend axios url to post data entered by user will be passed to '/api/signup' end point and from there POST Method will be called automatically!
 
-    users_collection.insert_one(user)
+    auth_collection.insert_one(user)
     print("Signup successful")
     return jsonify({'message': 'Signup successful'})
 
-@app.route('/api/signin', methods=['POST'])
-def api_signin():
-    data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
-
-    user = users_collection.find_one({'email': email})
-
-    # if user and check_password_hash(user['password'], password):
-    if user and user['password'] == password:
-        session['user_id'] = str(user['_id'])
-        print('Signin successful')
-        return jsonify({'message': 'Signin successful', 'user': user})
-    else:
-        return jsonify({'error': 'Invalid credentials'}), 401
-
-@app.route('/api/dashboard')
-def api_dashboard():
-    if 'user_id' in session:
-        user_id = session['user_id']
-        user = users_collection.find_one({'_id': user_id})
-        return jsonify({'message': f'Welcome to the dashboard, {user["name"]}!'})
-    else:
-        return jsonify({'error': 'Not authenticated'}), 401
 
 if __name__ == '__main__':
     app.run(debug=True)
