@@ -2,9 +2,12 @@ import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { ReactComponent as Hamburger } from '../../assets/hamburger.svg'
 import './navbar.css'
+import DropDownprofile from './DropDownprofile'
 
 const Navbar = () => {
   const [showNavbar, setShowNavbar] = useState(false)
+
+  const [isAuthenticated , setIsAuthenticated] = useState(false);
 
   const handleShowNavbar = () => {
     setShowNavbar(!showNavbar)
@@ -14,7 +17,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="container">
         <div className="logo">
-        <b>Digno<span>Care</span></b>
+        <b>Diagno<span>Care</span></b>
         </div>
         <div className="menu-icon" onClick={handleShowNavbar}>
           <Hamburger />
@@ -34,10 +37,19 @@ const Navbar = () => {
               <NavLink to="/alzheimer">Alzheimer's</NavLink>
             </li>
             <li>
-              <NavLink to="/BrainTumor">BrainTumor</NavLink>
+              <NavLink to="/braintumor">BrainTumor</NavLink>
             </li>
-            <li>
-              <NavLink to="/login">SignIn</NavLink>
+           {/* Add One NavLink to end of nav bar at right corner */}
+
+            {
+                !isAuthenticated ? <DropDownprofile />   
+                 : 
+              <li>
+                <NavLink to="/login">SignIn</NavLink>
+              </li>
+            }
+            <li onClick={()=>setIsAuthenticated((prev)=> !prev)}>
+              <NavLink to="/Profile">Profile</NavLink>
             </li>
           </ul>
         </div>
@@ -47,3 +59,16 @@ const Navbar = () => {
 }
 
 export default Navbar
+
+
+
+
+
+
+
+
+
+
+
+
+

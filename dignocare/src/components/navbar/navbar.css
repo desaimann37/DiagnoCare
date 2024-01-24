@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 body {
+  /* position: fixed; */
   margin: 0;
   padding: 0;
   font-family: 'Poppins', sans-serif;
@@ -15,6 +16,34 @@ body {
   justify-content: space-between;
   align-items: center;
   height: 100%;
+}
+
+.dropDownProfile {
+  position: absolute;
+  top: 4.5rem;
+  right: 20.5rem;
+  width: 120px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: white;
+  border: 1px solid grey;
+  text-align: right; /* Align text to the right */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Align items to the right */
+}
+
+.dropDownProfile::before {
+  content: '';
+  position: absolute;
+  top: -0.7rem;
+  right: 1.1rem;
+  width: 20px;
+  height: 20px;
+  transform: rotate(45deg);
+  background-color: white;
+  border-left: 1px solid grey;
+  border-top: 1px solid grey;
 }
 
 .navbar {
