@@ -5,6 +5,7 @@ import './login.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Login() {
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -29,6 +30,9 @@ function Login() {
       const response = await axios.post(`http://127.0.0.1:5000/api/${endpoint}`, formData);
       console.log(response.data);
       // Handle success, e.g., redirect to dashboard
+      setIsRegister(true);
+      
+      window.location.href = '/';
     } catch (error) {
       // setError('Invalid credentials');
       // Handle error, e.g., show error message
