@@ -12,9 +12,36 @@ client = MongoClient('mongodb+srv://dm_37:SWKIOAkzdQgoWn68@cluster0.u4wm1ik.mong
 db = client['sdp_backend']
 auth_collection = db['auth']
 
-@app.route('/hello' , methods=['GET'])
-def sayHello():
-    return "Hello User!"
+# @app.route('/hello' , methods=['GET'])
+# def sayHello():
+#     return "Hello User!"
+
+@app.route('/api/login' , methods=['POST'])
+def api_login():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+
+    # Give me rest of the code 
+    if not email or not password:
+        return jsonify({'message': 'Email and password are required'}), 400
+
+    user = auth_collection.find_one({'email': email})
+    
+    if user:
+        # For now, let's compare the password directly (insecure, use hashing in production)
+        if user['password'] == password:
+            # Set user information in the session (you might want to use a more secure way in production)
+            session['user'] = {
+                'email': user['email'],
+                'name': user['name']
+            }
+            return jsonify({'message': 'Login successful'})
+        else:
+            return jsonify({'message': 'Incorrect password'}), 401
+    else:
+        return jsonify({'message': 'User not found'}), 404
+
 
 
 
