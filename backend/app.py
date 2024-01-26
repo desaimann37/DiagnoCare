@@ -12,9 +12,9 @@ client = MongoClient('mongodb+srv://dm_37:SWKIOAkzdQgoWn68@cluster0.u4wm1ik.mong
 db = client['sdp_backend']
 auth_collection = db['auth']
 
-# @app.route('/hello' , methods=['GET'])
-# def sayHello():
-#     return "Hello User!"
+@app.route('/hello' , methods=['GET'])
+def sayHello():
+    return "Hello User!"
 
 @app.route('/api/login' , methods=['POST'])
 def api_login():
