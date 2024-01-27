@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { ReactComponent as Hamburger } from '../../assets/hamburger.svg'
 import './navbar.css'
-import DropDownprofile from './DropDownprofile'
 
 const Navbar = () => {
   const [showNavbar, setShowNavbar] = useState(false)
@@ -41,13 +40,11 @@ const Navbar = () => {
             </li>
            {/* Add One NavLink to end of nav bar at right corner */}
 
-            {
-                !isAuthenticated ? <DropDownprofile />   
-                 : 
+          
               <li>
                 <NavLink to="/login">SignIn</NavLink>
               </li>
-            }
+           
             <li onClick={()=>setIsAuthenticated((prev)=> !prev)}>
               <NavLink to="/Profile">Profile</NavLink>
             </li>

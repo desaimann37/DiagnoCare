@@ -1,8 +1,10 @@
 import React from 'react'
 import img from '../../assets/doc_home.jpg'
+import BrainTumorForm from './BrainTumorForm'
 
 const BrainTumor = () => {
   return (
+    <>
     <div className="assessment-page">
       <section className="hero">
         <img src={img} className="hero-image" />
@@ -17,7 +19,9 @@ const BrainTumor = () => {
         </div>
       </section>
     </div>
-  )
+      <BrainTumorForm/>
+</>
+)
 }
 
 export default BrainTumor
