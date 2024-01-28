@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import shortid from "shortid";
 import '../d_braintumor/btform.css'
+import axios from 'axios'; 
 
 const AlzheimerForm = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -32,6 +33,7 @@ const AlzheimerForm = () => {
   
   const handleFile = (file) => {
     if (file) {
+      console.log(file)
       if (isFileTypeAllowed(file)) {
         let reader = new FileReader();
         reader.onloadend = () => {
@@ -42,6 +44,7 @@ const AlzheimerForm = () => {
           });
         };
         reader.readAsDataURL(file);
+        console.log(reader)
       } else {
         alert("Invalid file type. Please select a valid image file (jpg/jpeg).");
       }
@@ -51,6 +54,31 @@ const AlzheimerForm = () => {
   const isFileTypeAllowed = (file) => {
     const allowedTypes = ["image/jpeg", "image/jpg"];
     return allowedTypes.includes(file.type);
+  };
+
+  const predictAlzheimer = async () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      try {
+        const response =  await axios.post('http://127.0.0.1:5000/predict', formData , {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log(result); 
+          console.log("hash!!!");
+        } else {
+          alert("Error predicting. Please try again. Not so HASH..");
+        }
+      } catch (error) {
+        console.error("Error predicting:", error);
+      }
+    }
   };
 
   const deleteFile = () => {
@@ -115,7 +143,7 @@ const AlzheimerForm = () => {
                         </div>
                       </div>
                       <div className="d-flex justify-content-center">
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn btn-primary" onClick={predictAlzheimer}>
                           Predict
                         </button>
                       </div>
