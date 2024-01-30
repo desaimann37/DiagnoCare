@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import "./form.css";
+import api from './api'
 
 const DiabetesForm = () => {
   const [formData, setFormData] = useState({
-    cholesterol: "",
-    physicalHealth: "",
     HighBP: "",
     HighChol: "",
     CholCheck: "",
@@ -23,10 +22,12 @@ const DiabetesForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     console.log("Form Data:", formData);
+    const a = await api.post('/predict/', formData);
+    console.log("got prediction")
+    console.log(a.data)
   };
 
   return (
@@ -44,27 +45,27 @@ const DiabetesForm = () => {
               autoComplete="off"
               onSubmit={handleSubmit}
             >
-              <div className="mb-3 d-flex">
-                <div className="flex-grow-1">
-                  <label className="mb-2 label-large" htmlFor="Gender">
+             
+            <div className="mb-3 d-flex">
+                <div className="mr-3 flex-grow-1">
+                  <label className="mb-2 label-large" htmlFor="Sex">
                     Gender <span>*</span>
                   </label>
                   <select
-                    id="Gender"
+                    id="Sex"
                     className="form-control custom-dropdown"
-                    name="Gender"
+                    name="Sex"
                     value={formData.Sex}
                     onChange={handleChange}
                     required
                   >
                     <option value="">Select an option</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
+                    <option value="1">Male</option>
+                    <option value="0">Female</option>
                   </select>
-                  <div className="invalid-feedback">Required</div>
+                  <div className="invalid-feedback">Gender is required</div>
                 </div>
-              </div>
+                </div>
 
               {/* Row 2 */}
               <div className="mb-3 d-flex">
@@ -81,8 +82,8 @@ const DiabetesForm = () => {
                     required
                   >
                     <option value="">Select an option</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
                   </select>
                   <div className="invalid-feedback">High BP is required</div>
                 </div>
@@ -100,8 +101,8 @@ const DiabetesForm = () => {
                     required
                   >
                     <option value="">Select an option</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
                   </select>
                   <div className="invalid-feedback">
                     High Cholesterol is required
@@ -124,8 +125,8 @@ const DiabetesForm = () => {
                     required
                   >
                     <option value="">Select an option</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
                   </select>
                   <div className="invalid-feedback">Stroke is required</div>
                 </div>
@@ -143,8 +144,8 @@ const DiabetesForm = () => {
                     required
                   >
                     <option value="">Select an option</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
                   </select>
                   <div className="invalid-feedback">
                     Cholesterol Check is required
@@ -207,34 +208,16 @@ const DiabetesForm = () => {
                     required
                   >
                     <option value="">Select an option</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
                   </select>
                   <div className="invalid-feedback">Select an option</div>
                 </div>
 
-                <div className="flex-grow-1">
-                  <label className="mb-2 label-large" htmlFor="physicalHealth">
-                    Physical Health <span>*</span>
-                  </label>
-                  <input
-                    id="physicalHealth"
-                    placeholder="Enter physical health status"
-                    type="text"
-                    className="form-control"
-                    name="physicalHealth"
-                    value={formData.physicalHealth}
-                    onChange={handleChange}
-                    required
-                  />
-                  <div className="invalid-feedback">
-                    Physical Health is required
-                  </div>
-                </div>
               </div>
 
               <div className="align-items-center">
-                <button type="submit" className="btn btn-primary">
+                <button type="submit">
                   Predict
                 </button>
               </div>
@@ -244,6 +227,6 @@ const DiabetesForm = () => {
       </div>
     </div>
   );
-};
+            };
 
 export default DiabetesForm;
