@@ -5,5 +5,15 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "axios": "^1.6.5",
     "vanta": "^0.5.24"
-  }
+  },
+  "name": "diagnocare",
+  "description": "[Uploading DiagnoCare SRS 2.pdf…]()\r [DiagnoCare Dataset Survey.pdf](https://github.com/ishapaghdal301/DiagnoCare/files/14002532/DiagnoCare.Dataset.Survey.pdf)",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
 }

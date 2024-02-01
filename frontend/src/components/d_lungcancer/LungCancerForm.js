@@ -2,16 +2,18 @@ import React ,{useState}from 'react'
 
 const LungCancerForm = () => {
     const [formData, setFormData] = useState({
-        cholesterol: "",
-        physicalHealth: "",
-        HighBP: "",
-        HighChol: "",
-        CholCheck: "",
-        BMI: "",
-        Stroke: "",
-        HeartDiseaseorAttack: "",
-        Sex: "",
-        Age: "",
+      Age : "" ,
+      Gender : "" ,
+      AirPollution  : "" ,
+      Smoking : "" ,
+      Fatigue : "" ,
+      WeightLoss : "" ,
+      ShortnessofBreath  : "" ,
+      Wheezing : "" ,
+      SwallowingDifficulty : "" ,
+      ClubbingofFingerNails  : "" ,
+      FrequentCold : "" ,
+      DryCough : ""
       });
     
       const handleChange = (e) => {
