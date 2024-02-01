@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./form.css";
-import api from './api'
+import api from 'C:/Users/Tanisha/Desktop/DiagnoCare/frontend/src/api.js'
 
 const DiabetesForm = () => {
   const [formData, setFormData] = useState({
@@ -217,7 +217,7 @@ const DiabetesForm = () => {
               </div>
 
               <div className="align-items-center">
-                <button type="submit">
+                <button type="submit" className="btn btn-primary">
                   Predict
                 </button>
               </div>
