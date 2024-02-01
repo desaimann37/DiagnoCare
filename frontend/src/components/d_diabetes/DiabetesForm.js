@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./form.css";
-import api from '../../api'
+import api from '../../api.js'
 
 const DiabetesForm = () => {
   const [formData, setFormData] = useState({
