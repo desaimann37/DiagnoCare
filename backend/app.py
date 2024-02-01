@@ -41,7 +41,7 @@ def api_login():
                 'email': user['email'],
                 'name': user['name']
             }
-            return jsonify({'message': 'Login successful'})
+            return jsonify({'message': 'Login successful' , 'user' : user})
         else:
             return jsonify({'message': 'Incorrect password'}), 401
     else:

@@ -29,10 +29,12 @@ function Login() {
     try {
       const response = await axios.post(`http://127.0.0.1:5000/api/${endpoint}`, formData);
       console.log(response.data);
-      // Handle success, e.g., redirect to dashboard
+      localStorage.setItem("user",response.data)
+      console.log(localStorage.getItem("user"))
+      
       setIsRegister(true);
       
-      window.location.href = '/';
+      // window.location.href = '/';
     } catch (error) {
       // setError('Invalid credentials');
       // Handle error, e.g., show error message

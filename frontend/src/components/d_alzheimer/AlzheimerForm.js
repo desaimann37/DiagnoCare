@@ -62,14 +62,17 @@ const AlzheimerForm = () => {
       formData.append("file", selectedFile);
 
       try {
-        const response =  await axios.post('http://127.0.0.1:8000/predict', formData , {
+        const response =  await axios.post('http://localhost:8000/predict', formData , {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
 
-        if (response.ok) {
+        if (response.status == 200) {
+          console.log('Hello')
+          
           const result = await response.json();
+          alert(result)
           console.log(result); 
           console.log("hash!!!");
         } else {
