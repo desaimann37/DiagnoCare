@@ -1,6 +1,11 @@
 from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from pymongo import MongoClient
+import os
+import openai
+from openai import OpenAI
+from dotenv import load_dotenv
+# from config import OPENAI_API_KEY
 
 import tensorflow as tf
 from PIL import Image
@@ -10,6 +15,10 @@ import io
 
 app = Flask(__name__)
 CORS(app)
+
+load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
 app.secret_key = 'your_secret_key'
 
 # Connect to MongoDB
@@ -17,10 +26,31 @@ client = MongoClient('mongodb+srv://dm_37:SWKIOAkzdQgoWn68@cluster0.u4wm1ik.mong
 db = client['sdp_backend']
 auth_collection = db['auth']
 
-@app.route('/hello' , methods=['GET'])
-def sayHello():
-    return "Hello User!"
 
+client = OpenAI(api_key = OPENAI_API_KEY)
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.get_json()
+    print(data.get('question'))
+    question = data.get('question')
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+        {"role": "user", "content": question}
+        ]
+    )   
+
+    print(completion.choices[0].message)
+    return jsonify({'response': completion.choices[0].message.content})
+    # response = openai.Completion.create(
+    #     engine="text-davinci-002",
+    #     prompt=question,
+    #     max_tokens=1024,
+    #     n=1,
+    #     stop=None,
+    #     temprature=0.7
+    # )
+    
 @app.route('/api/login' , methods=['POST'])
 def api_login():
     data = request.get_json()

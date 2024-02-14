@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { ReactComponent as Hamburger } from '../../assets/hamburger.svg'
 import './navbar.css'
+import ProfileDropdown from './Dropdown'
 
 const Navbar = () => {
   const [showNavbar, setShowNavbar] = useState(false)
@@ -51,6 +52,7 @@ const Navbar = () => {
           </ul>
         </div>
       </div>
+      <ProfileDropdown/>
     </nav>
   )
 }
