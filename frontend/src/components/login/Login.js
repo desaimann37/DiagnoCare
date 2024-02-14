@@ -27,7 +27,7 @@ function Login() {
     const endpoint = isRegister ? 'signup' : 'login';
 
     try {
-      const response = await axios.post(`http://127.0.0.1:5000/api/${endpoint}`, formData);
+      const response = await axios.post(`http://127.0.0.1:5000/auth/${endpoint}`, formData);
       console.log(response.data);
       localStorage.setItem("user",response.data)
       console.log(localStorage.getItem("user"))

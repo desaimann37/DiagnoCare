@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask
 from flask_cors import CORS
 from pymongo import MongoClient
 import os
@@ -11,6 +11,14 @@ import tensorflow as tf
 from PIL import Image
 import numpy as np
 import io 
+from auth import auth_bp
+from extension import db
+# import tensorflow as tf
+# from PIL import Image
+# import numpy as np
+# import io 
+
+
 # from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -78,6 +86,15 @@ def api_login():
         return jsonify({'message': 'User not found'}), 404
 
 
+# Mongodb Name : 
+print(db.name)
+
+
+# Register blue_print : 
+app.register_blueprint(auth_bp , url_prefix='/auth')
+
+
+"""
 model = tf.keras.models.load_model('../Models/alzheimer2.h5')
 
 @app.route('/predict', methods=['POST'])
@@ -109,27 +126,7 @@ def predict():
     except Exception as e:
         return jsonify({"error": f"Error processing image: {str(e)}"}), 500
 
-
-@app.route('/api/signup', methods=['POST'])
-def api_signup():
-    data = request.get_json()
-    name = data.get('name')
-    email = data.get('email')
-    # password = generate_password_hash(data.get('password'), method='sha256')
-    password = data.get('password')
-
-    user = {
-        'name': name,
-        'email': email,
-        'password': password
-    }
-    # Here Instead of manually getting JSON data from POSTMAN we need to get it from frontend !!
-    #For the same in frontend axios url to post data entered by user will be passed to '/api/signup' end point and from there POST Method will be called automatically!
-
-    auth_collection.insert_one(user)
-    print("Signup successful")
-    return jsonify({'message': 'Signup successful'})
-
+"""
 
 if __name__ == '__main__':
     app.run(debug=True)
