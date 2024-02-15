@@ -34,7 +34,7 @@ function Login() {
       
       setIsRegister(true);
       
-      // window.location.href = '/';
+      window.location.href = '/';
     } catch (error) {
       // setError('Invalid credentials');
       // Handle error, e.g., show error message

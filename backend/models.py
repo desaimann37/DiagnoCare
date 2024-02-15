@@ -1,8 +1,15 @@
-# from extension import db , auth_collection
-from uuid  import uuid4
+"""
+from app import db_instance
+from datetime import datetime
 
-# auth_collection.insert_one({
-#     "name" : "new_name",
-#     "email" : "new@gmail.com",
-#     "password" : "new_pass"
-# })
+class TokenBlocklist(db_instance.Document):
+    id = db_instance.IntField(required=True)
+    jti = db_instance.StringField(required=True)
+    create_at = db_instance.DateTimeField(default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<User {self.jti}>'
+
+    def save(self):
+        self.save()
+"""
