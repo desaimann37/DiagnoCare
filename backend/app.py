@@ -9,20 +9,21 @@ from extension import jwt, auth_collection
 # from dotenv import load_dotenv
 # from tensorflow.keras.preprocessing import image
 # from config import OPENAI_API_KEY
-import tensorflow as tf
+# import tensorflow as tf
 # from PIL import Image
 # import numpy as np
 # import io 
 from auth import auth_bp
 from users import user_bp
 
-
-
-
 # from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 CORS(app)
+app.secret_key = 'your_secret_key'
+
+jwt.init_app(app)
+
 
 # Register blue_print : 
 app.register_blueprint(auth_bp , url_prefix='/auth')
@@ -96,17 +97,9 @@ def api_login():
     else:
         return jsonify({'message': 'User not found'}), 404
 
-# Mongodb Name : 
-print(db.name)
-
-
-# Register blue_print : 
-app.register_blueprint(auth_bp , url_prefix='/auth')
-
-
 """
 
-model = tf.keras.models.load_model('../Models/alzheimer2.h5')
+# model = tf.keras.models.load_model('../Models/alzheimer2.h5')
 
 # load user : 
 @jwt.user_lookup_loader
