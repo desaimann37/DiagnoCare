@@ -11,8 +11,7 @@ from flask_jwt_extended import (
                                 get_jwt_identity
                             )
 
-
-auth_bp = Blueprint('auth' , __name__)
+auth_bp = Blueprint('auth' , _name_)
 
 # Signup Logic : 
 @auth_bp.route('/signup', methods=['POST'])
@@ -124,6 +123,3 @@ def refresh_access():
     identity = get_jwt_identity()
     new_access_token = create_access_token(identity=identity)
     return jsonify({"access_token": new_access_token})
-
-
-
