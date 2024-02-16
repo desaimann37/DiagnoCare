@@ -7,6 +7,7 @@ import Diabetes from './components/d_diabetes/Diabetes';
 import LungCancer from './components/d_lungcancer/LungCancer';
 import Alzheimer from './components/d_alzheimer/Alzheimer';
 import BrainTumor from './components/d_braintumor/BrainTumor';
+import Chatbot from './components/chatwidget/Chatbot';
 // import ChatWidget from './components/chatwidget/ChatWidget';
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
           <Route path='/braintumor' element={<BrainTumor/>}/>
           {/* <Route path='UserProfile' element={<AuthUser />} /> */}
         </Routes>
-        {/* <ChatWidget/> */}
+        {/* <Chatbot/> */}
         <Footer/>
       </BrowserRouter>
     </div>

@@ -16,8 +16,12 @@ app = FastAPI()
 
 origins = [
     'http://localhost:3000',
+<<<<<<< HEAD
     'http://192.168.1.25:3000', 
     
+=======
+    'http://192.168.1.25:3000',   
+>>>>>>> 8600eb2607808f3771521f3875ce59478e897d7c
 ]
 
 
@@ -28,8 +32,6 @@ app.add_middleware(
     allow_credentials = True ,
     allow_methods = ['*'],
     allow_headers = ['*'],
-  
-
 )
 
 print('The scikit-learn version is {}.'.format(sklearn.__version__))
