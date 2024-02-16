@@ -21,13 +21,6 @@ import numpy as np
 import io 
 from auth import auth_bp
 from extension import db
-# import tensorflow as tf
-# from PIL import Image
-# import numpy as np
-# import io 
-
-
-# from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
@@ -51,7 +44,6 @@ app.secret_key = 'your_secret_key'
 client = MongoClient('mongodb+srv://dm_37:SWKIOAkzdQgoWn68@cluster0.u4wm1ik.mongodb.net/sdp_backend')
 db = client['sdp_backend']
 auth_collection = db['auth']
-
 
 client = OpenAI(api_key = OPENAI_API_KEY)
 @app.route('/chat', methods=['POST'])
@@ -103,12 +95,10 @@ def api_login():
     else:
         return jsonify({'message': 'User not found'}), 404
 
-
 # Mongodb Name : 
 print(db.name)
 
 jwt.init_app(app)
-
 
 # Register blue_print : 
 app.register_blueprint(auth_bp , url_prefix='/auth')
@@ -118,8 +108,6 @@ class CustomUser:
     def __init__(self, user_dict):
         self.name = user_dict.get('name')
         self.email = user_dict.get('email')
-
-
 
 # load user : 
 @jwt.user_lookup_loader
@@ -132,16 +120,12 @@ def user_lookup_callback(__jwt_headers , jwt_data):
     else:
         raise LookupError("User not found")
 
-
-
 # additional claims(while getting jwt parameters in postman)
 @jwt.additional_claims_loader
 def make_additional_claims(identity):
     if identity == "abc":
         return {"is_staff" : True}
     return {"is_staff": False}
-
-
 
 # jwt error handlers : 
 @jwt.expired_token_loader
@@ -164,15 +148,6 @@ def token_in_blocklist_callback(jwt_header , jwt_data):
 
     return token is not None
 """
-    
-
-
-
-
-
-
-
-    
 
 model1 = tf.keras.models.load_model('../Models/alzheimer2.h5')
 model2 = tf.keras.models.load_model('../Models/BrainTumor3.h5')
