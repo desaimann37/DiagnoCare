@@ -1,18 +1,13 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask import Flask,request, jsonify
 from flask_cors import CORS
-from auth import auth_bp, auth_collection
-from extension import db , jwt , MONGO_URI
-from users import user_bp
-# from flask_mongoengine import MongoEngine
-# from models import TokenBlocklist
-
-from pymongo import MongoClient
+# from pymongo import MongoClient
 import os
-import openai
-from openai import OpenAI
-from dotenv import load_dotenv
-from tensorflow.keras.preprocessing import image
+from extension import jwt, auth_collection
+# import openai
+# from openai import OpenAI
+# from dotenv import load_dotenv
+# from tensorflow.keras.preprocessing import image
 # from config import OPENAI_API_KEY
 
 import tensorflow as tf
@@ -21,6 +16,14 @@ import numpy as np
 import io 
 from auth import auth_bp
 from extension import db
+# import tensorflow as tf
+# from PIL import Image
+# import numpy as np
+# import io 
+from auth import auth_bp
+from users import user_bp
+
+# from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
@@ -34,12 +37,27 @@ db_instance = MongoEngine(app)
 """
 
 CORS(app)
+app.secret_key = 'your_secret_key'
 
-load_dotenv()
+jwt.init_app(app)
+
+
+# Register blue_print : 
+app.register_blueprint(auth_bp , url_prefix='/auth')
+app.register_blueprint(user_bp , url_prefix='/users')
+
+class CustomUser:
+    def __init__(self, user_dict):
+        self.name = user_dict.get('name')
+        self.email = user_dict.get('email')
+
+# load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 app.secret_key = 'your_secret_key'
 
+
+"""
 # Connect to MongoDB
 client = MongoClient('mongodb+srv://dm_37:SWKIOAkzdQgoWn68@cluster0.u4wm1ik.mongodb.net/sdp_backend')
 db = client['sdp_backend']
@@ -109,6 +127,10 @@ class CustomUser:
         self.name = user_dict.get('name')
         self.email = user_dict.get('email')
 
+"""
+
+# model = tf.keras.models.load_model('../Models/alzheimer2.h5')
+
 # load user : 
 @jwt.user_lookup_loader
 def user_lookup_callback(__jwt_headers , jwt_data):
@@ -149,6 +171,15 @@ def token_in_blocklist_callback(jwt_header , jwt_data):
     return token is not None
 """
 
+    
+
+
+
+
+
+
+
+"""
 model1 = tf.keras.models.load_model('../Models/alzheimer2.h5')
 model2 = tf.keras.models.load_model('../Models/BrainTumor3.h5')
 
@@ -206,6 +237,7 @@ def predict_braintumor():
         print(e)
         return jsonify({"error": f"Error processing image: {str(e)}"}), 500
 
+"""
 
 if __name__ == '__main__':
     app.run(debug=True)
