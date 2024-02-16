@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import "./form.css";
 import api from '../../api.js'
 
+
+
+
 const DiabetesForm = () => {
   const [formData, setFormData] = useState({
     HighBP: "",
@@ -13,6 +16,7 @@ const DiabetesForm = () => {
     Sex: "",
     Age: "",
   });
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,7 +34,14 @@ const DiabetesForm = () => {
     console.log(a.data)
   };
 
+  const handleGenerateReport = () => {
+    setShowReport(true);
+  };
+
+ 
+
   return (
+
     <div className="d-form-container">
       <div className="d-form-text-section">
         <div className="col-xxl-8 col-xl-9 col-lg-9 col-md-7 col-sm-9">
@@ -220,8 +231,12 @@ const DiabetesForm = () => {
                 <button type="submit" className="btn btn-primary">
                   Predict
                 </button>
+
               </div>
+
+
             </form>
+       
           </div>
         </div>
       </div>

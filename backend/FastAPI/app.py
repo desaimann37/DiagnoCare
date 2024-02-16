@@ -3,19 +3,24 @@ import uvicorn # To work with ASGI
 from fastapi import FastAPI
 import pickle
 from fastapi.middleware.cors import CORSMiddleware
-from DiabetesModel import DiabetesModel
-from LungCancerModel import LungCancerModel
+from models.DiabetesModel import DiabetesModel
+from models.LungCancerModel import LungCancerModel
 import sklearn
+from config.database import collection_name1, collection_name2
+from bson import ObjectId #Used by mongodb to identify id created by itself
+from schema.schemas import list_serial1, list_serial2
+
 
 #Create the app object
 app = FastAPI() 
 
 origins = [
     'http://localhost:3000',
-    'http://192.168.1.25:3000',
-    
+    'http://192.168.1.25:3000', 
     
 ]
+
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,15 +35,22 @@ app.add_middleware(
 print('The scikit-learn version is {}.'.format(sklearn.__version__))
 
 #Load trained model
-pickle_diabetes= open("Diabetes.pkl","rb")
+pickle_diabetes= open("pklFiles/Diabetes.pkl","rb")
 classifier1 = pickle.load(pickle_diabetes)
 
-pickle_lung_cancer = open("LungCancer.pkl","rb")
+pickle_lung_cancer = open("pklFiles/LungCancer.pkl","rb")
 classifier2 = pickle.load(pickle_lung_cancer)
 
-@app.get('/')
-def index():
-    return {'message': 'Hello, World'}
+@app.get('/get/diabetes')
+async def get_diabetes_objects():
+    diabetes_objects = list_serial1(collection_name1.find())
+    return diabetes_objects
+
+
+@app.get('/get/lungcncer')
+async def get_lungcancer_objects():
+    lungcancer_objects = list_serial2(collection_name2.find())
+    return lungcancer_objects
 
 #Post api to make predictions for Diabetes
 @app.post('/predict/diabetes')
@@ -52,11 +64,12 @@ def predict_diabetes(data:DiabetesModel):
     BMI = data['BMI']
     Stroke = data['Stroke']
     HeartDiseaseorAttack = data['HeartDiseaseorAttack']
-    Sex = 0
+    Sex = data['Sex']
     Age = data['Age']
 
     print(classifier1.predict([[HighBP, HighChol, CholCheck, BMI, Stroke, HeartDiseaseorAttack, Sex, Age]]))
     prediction = classifier1.predict([[HighBP, HighChol, CholCheck, BMI, Stroke, HeartDiseaseorAttack, Sex, Age]])
+    
 
     if(prediction[0] == 0):
         prediction = "No Diabetes"   
@@ -67,6 +80,10 @@ def predict_diabetes(data:DiabetesModel):
     else:
         prediction = "Diabetes"
 
+    data['Result'] = prediction;
+
+    collection_name1.insert_one(data)
+    print("Data stored successfully")
     return {
         'prediction': prediction
     }  
@@ -101,6 +118,11 @@ def predict_diabetes(data:LungCancerModel):
     
     else:
         prediction = "High"
+
+    data['Result'] = prediction;
+
+    collection_name2.insert_one(data)
+    print("Data stored successfully")
 
     return {
         'prediction': prediction

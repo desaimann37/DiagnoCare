@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from pymongo import MongoClient
-
 import tensorflow as tf
 from PIL import Image
 import numpy as np
