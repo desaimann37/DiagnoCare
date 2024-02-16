@@ -6,10 +6,6 @@ import numpy as np
 
 app = FastAPI()
 
-@app.get("/hello")
-def hello():
-    return "Hello"
-
 origins = ["http://localhost:3000"]
 app.add_middleware(
     CORSMiddleware,
@@ -23,6 +19,7 @@ model = tf.keras.models.load_model('../Models/alzheimer2.h5')
 
 @app.post("/predict")
 async def predict():
+    file = request.files['image']
     # print("Received file:", file.filename)
 
     # if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
