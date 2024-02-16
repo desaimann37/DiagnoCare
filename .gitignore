@@ -1,1 +1,3 @@
 node_modules
+./Patient/.env
+./backend/.env

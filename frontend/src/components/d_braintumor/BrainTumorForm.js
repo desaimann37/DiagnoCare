@@ -1,133 +1,103 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
-import shortid from "shortid";
-
+import { ToastContainer, toast } from 'react-toastify';
+import axios from "axios";
 import "./btform.css";
 
 const BrainTumorForm = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [formData, setFormData] = useState({
+    BrainTumorImage: null,
+  });
+  const [prediction, setPrediction] = useState(null);
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
+  const handleChange = (e) => {
+    const { name, files } = e.target;
+    setFormData({
+      ...formData,
+      [name]: files[0],
+    });
   };
 
-  const handleDragEnter = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  };
 
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-  
-    const file = e.dataTransfer.files[0];
-    handleFile(file);
-  };
-  
-  const fileChange = (e) => {
-    const file = e.target.files[0];
-    handleFile(file);
-  };
-  
-  const handleFile = (file) => {
-    if (file) {
-      if (isFileTypeAllowed(file)) {
-        let reader = new FileReader();
-        reader.onloadend = () => {
-          setSelectedFile({
-            id: shortid.generate(),
-            filename: file.name,
-            fileimage: reader.result,
-          });
-        };
-        reader.readAsDataURL(file);
-      } else {
-        alert("Invalid file type. Please select a valid image file (jpg/jpeg).");
-      }
+    if (!formData.BrainTumorImage) {
+      toast.error("Please upload an image.");
+      return;
     }
-  };
-  
-  const isFileTypeAllowed = (file) => {
-    const allowedTypes = ["image/jpeg", "image/jpg"];
-    return allowedTypes.includes(file.type);
-  };
 
-  const deleteFile = () => {
-    setSelectedFile(null);
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("file", formData.BrainTumorImage);
+
+      const response = await axios.post(
+        "http://localhost:5000/predict_braintumor",
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const data = await response.data;
+      console.log(data);
+      setPrediction(data.prediction);
+    } catch (error) {
+      console.error("Error analyzing soil:", error);
+    }
   };
 
   return (
-    <div className="fileupload-view">
-      <div className="row justify-content-center m-0">
-        <h1 className="fs-10 card-title fw-bold mb-4 text-center">
-          Brain Tumour Prediction
-        </h1>
-        <div className="col-md-6">
-          <div className="card mt-5">
-            <div className="card-body">
-              <div
-                className="kb-data-box"
-                onDragOver={handleDragOver}
-                onDragEnter={handleDragEnter}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-              >
-                <form>
-                  <div className="kb-file-upload">
-                    <div className="file-upload-box">
-                      <input
-                        type="file"
-                        id="fileupload"
-                        className="file-upload-input"
-                        onChange={fileChange}
-                      />
-                      <span>
-                        Drag and drop or{" "}
-                        <span className="file-link">Choose your file</span>
-                      </span>
-                    </div>
-                  </div>
-                  {selectedFile && (
-                    <div className="kb-attach-box mb-3">
-                      <div className="file-atc-box">
-                        {selectedFile.filename.match(/.(jpg|jpeg)$/i) ? (
-                          <div className="file-image">
-                            {" "}
-                            <img src={selectedFile.fileimage} alt="" />
-                          </div>
-                        ) : (
-                          <div className="file-image">
-                            <i className="far fa-file-alt"></i>
-                          </div>
-                        )}
-                        <div className="file-detail">
-                          <h5>{selectedFile.filename}</h5>
-                          <div className="file-actions">
-                            <button
-                              type="button"
-                              className="file-action-btn"
-                              onClick={deleteFile}
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="d-flex justify-content-center">
-                        <button type="submit" className="btn btn-primary">
-                          Predict
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </form>
+    <div className="d-form-container">
+      {/* <ToastContainer
+        className="Toastify__toast-container"
+        toastClassName="Toastify__toast"
+        bodyClassName="Toastify__toast-body"
+      /> */}
+      <div className="d-form-text-section">
+        <div className="col-xxl-8 col-xl-9 col-lg-9 col-md-7 col-sm-9">
+          <div className="card-body p-5">
+            <h1 className="fs-10 card-title fw-bold mb-5">
+              BrainTumor Detection
+            </h1>
+            <form
+              method="POST"
+              className="needs-validation"
+              noValidate
+              autoComplete="off"
+              onSubmit={handleSubmit}
+            >
+              <div className="mb-3">
+                <label className="mb-2 label-large" htmlFor="BrainTumorImage">
+                  Upload MRI Photo <span>*</span>
+                </label>
+                <input
+                  id="BrainTumorImage"
+                  type="file"
+                  accept="image/*"
+                  className="form-control"
+                  name="BrainTumorImage"
+                  onChange={handleChange}
+                  required
+                />
+                <div className="invalid-feedback">Image is required</div>
               </div>
-            </div>
+
+              <div className="align-items-center">
+                <button type="submit" className="btn btn-primary">
+                  Detect Disease
+                </button>
+              </div>
+            </form>
+            {prediction && (
+              <div className="prediction-result">
+                <h2>Disease :</h2>
+                <h5>{prediction}</h5>
+              </div>
+            )}
           </div>
         </div>
       </div>
+      <div className="steps-container"></div>
     </div>
   );
 };

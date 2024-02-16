@@ -23,7 +23,7 @@ function App() {
           <Route path='/braintumor' element={<BrainTumor/>}/>
           {/* <Route path='UserProfile' element={<AuthUser />} /> */}
         </Routes>
-        <Chatbot/>
+        {/* <Chatbot/> */}
         <Footer/>
       </BrowserRouter>
     </div>
