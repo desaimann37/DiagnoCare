@@ -1,13 +1,19 @@
 import React, { useState } from "react";
-import {toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import axios from "axios";
 import "./btform.css";
+import { jsPDF } from "jspdf";
+import loader from "../../assets/Spinner-2.gif";
 
 const BrainTumorForm = () => {
   const [formData, setFormData] = useState({
     BrainTumorImage: null,
   });
-  const [prediction, setPrediction] = useState(null);
+  const [Symptoms, setSymptoms] = useState();
+  const [predicted_category, setpredicted_category] = useState();
+  const [Treatment, setTreatment] = useState();
+  const [Recommendation, setRecommendation] = useState();
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, files } = e.target;
@@ -26,6 +32,8 @@ const BrainTumorForm = () => {
     }
 
     try {
+      setLoading(true);
+
       const formDataToSend = new FormData();
       formDataToSend.append("file", formData.BrainTumorImage);
 
@@ -40,10 +48,91 @@ const BrainTumorForm = () => {
       );
       const data = await response.data;
       console.log(data);
-      setPrediction(data.prediction);
+      setSymptoms(data.Symptoms);
+      setpredicted_category(data.predicted_category);
+      setTreatment(data.Treatment);
+      setRecommendation(data.Recommendation);
     } catch (error) {
-      console.error("Error analyzing soil:", error);
+      console.error("Error analyzing disease:", error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleDownloadPDF = async () => {
+    const doc = new jsPDF();
+
+    const maxWidth = 300;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+
+    const predicted_categoryLines = doc.splitTextToSize(
+      predicted_category,
+      maxWidth
+    );
+    const SymptomsLines = doc.splitTextToSize(Symptoms, maxWidth);
+    const TreatmentLines = doc.splitTextToSize(Treatment, maxWidth);
+    const RecommendationLines = doc.splitTextToSize(Recommendation, maxWidth);
+
+    doc.setFont("helvetica");
+    doc.setFontSize(20);
+
+    let yPos = 30;
+    doc.text("REPORT", 87, yPos);
+
+    // Convert the image to base64 data URL
+    const imageBase64 = await getImageBase64(formData.BrainTumorImage);
+
+    // Add image to PDF
+    doc.addImage(imageBase64, "JPG", 10, 40, 60, 60);
+
+    doc.setFontSize(12);
+
+    yPos += 80;
+    doc.setTextColor(255, 0, 0);
+    doc.text("Disease name:", 10, yPos);
+    yPos += 7;
+    doc.setTextColor(0, 0, 0);
+    doc.text("Brain Tumour", 10, yPos);
+    yPos += 12;
+
+    doc.setTextColor(255, 0, 0);
+    doc.text("Predicted Category of Disease:", 10, yPos);
+    yPos += 7;
+    doc.setTextColor(0, 0, 0);
+    doc.text(predicted_categoryLines, 10, yPos);
+    yPos += predicted_categoryLines.length * 12;
+
+    doc.setTextColor(255, 0, 0);
+    doc.text("Symptoms:", 10, yPos);
+    yPos += 7;
+    doc.setTextColor(0, 0, 0);
+    doc.text(SymptomsLines, 10, yPos);
+    yPos += SymptomsLines.length * 12;
+
+    doc.setTextColor(255, 0, 0);
+    doc.text("Treatment:", 10, yPos);
+    yPos += 7;
+    doc.setTextColor(0, 0, 0);
+    doc.text(TreatmentLines, 10, yPos);
+    yPos += TreatmentLines.length * 10;
+
+    doc.setTextColor(255, 0, 0);
+    doc.text("Recommendation:", 10, yPos);
+    yPos += 7;
+    doc.setTextColor(0, 0, 0);
+    doc.text(RecommendationLines, 10, yPos);
+
+    doc.save("BrainTumorReport.pdf");
+  };
+
+  const getImageBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
   };
 
   return (
@@ -88,12 +177,54 @@ const BrainTumorForm = () => {
                 </button>
               </div>
             </form>
-            {prediction && (
-              <div className="prediction-result">
-                <h2>Disease :</h2>
-                <h5>{prediction}</h5>
+            <br/>
+            {loading && (
+              <div className="loader-container">
+                <img src={loader} alt="Loader" className="loader" />
               </div>
             )}
+            {!loading &&
+              Symptoms &&
+              predicted_category &&
+              Treatment &&
+              Recommendation && (
+                <>
+                  <h1>Report</h1>
+                  <br />
+                  <div className="prediction-result">
+                    <h2>Predicted Category :</h2>
+                    <h5>{predicted_category}</h5>
+                  </div>
+                  <br />
+
+                  <div className="prediction-result">
+                    <h2>Symptoms :</h2>
+                    <h5>{Symptoms}</h5>
+                  </div>
+                  <br />
+
+                  <div className="prediction-result">
+                    <h2>Treatment :</h2>
+                    <h5>{Treatment}</h5>
+                  </div>
+                  <br />
+
+                  <div className="prediction-result">
+                    <h2>Recommendation :</h2>
+                    <h5>{Recommendation}</h5>
+                  </div>
+                  <br />
+                  <div className="align-items-center">
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={handleDownloadPDF}
+                    >
+                      Download Report PDF
+                    </button>
+                  </div>
+                </>
+              )}
           </div>
         </div>
       </div>

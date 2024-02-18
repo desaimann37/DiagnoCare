@@ -13,3 +13,4 @@ class LungCancerModel(BaseModel):
     ClubbingofFingerNails  : int
     FrequentCold : int
     DryCough : int
+    
