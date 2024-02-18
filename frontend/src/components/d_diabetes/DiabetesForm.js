@@ -34,9 +34,9 @@ const DiabetesForm = () => {
     console.log(a.data)
   };
 
-  const handleGenerateReport = () => {
-    setShowReport(true);
-  };
+  // const handleGenerateReport = () => {
+  //   setShowReport(true);
+  // };
 
  
 
