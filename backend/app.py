@@ -1,5 +1,4 @@
-from flask import Flask
-from flask import Flask,request, jsonify
+from flask import Flask,request,jsonify
 from flask_cors import CORS
 # from pymongo import MongoClient
 import os
@@ -9,19 +8,13 @@ from extension import jwt, auth_collection
 # from dotenv import load_dotenv
 # from tensorflow.keras.preprocessing import image
 # from config import OPENAI_API_KEY
-
-import tensorflow as tf
-from PIL import Image
-import numpy as np
-import io 
-from auth import auth_bp
-from extension import db
 # import tensorflow as tf
 # from PIL import Image
 # import numpy as np
 # import io 
 from auth import auth_bp
 from users import user_bp
+from extension import db
 
 # from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -171,15 +164,9 @@ def token_in_blocklist_callback(jwt_header , jwt_data):
     return token is not None
 """
 
-    
-
-
-
-
-
-
 
 """
+
 model1 = tf.keras.models.load_model('../Models/alzheimer2.h5')
 model2 = tf.keras.models.load_model('../Models/BrainTumor3.h5')
 
