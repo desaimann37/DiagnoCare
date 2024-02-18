@@ -6,28 +6,7 @@ import sklearn
 from config.database import collection_name1, collection_name2
 from bson import ObjectId  # Used by MongoDB to identify IDs created by itself
 
-<<<<<<< HEAD
 app = Flask(__name__)
-=======
-
-#Create the app object
-app = FastAPI() 
-
-origins = [
-    'http://localhost:3000',
-    'http://192.168.1.25:3000',   
-]
-
-
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins = origins,
-    allow_credentials = True ,
-    allow_methods = ['*'],
-    allow_headers = ['*'],
-)
->>>>>>> 4321dcb6cd113ea65229de9c4a9cd2978526e213
 
 print('The scikit-learn version is {}.'.format(sklearn.__version__))
 
