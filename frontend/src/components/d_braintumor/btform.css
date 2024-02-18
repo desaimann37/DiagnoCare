@@ -138,3 +138,15 @@
 .file-atc-box:last-child {
     margin-bottom: 0;
 }
+
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .loader {
+    width: 4%;
+    height: 4%;
+  }

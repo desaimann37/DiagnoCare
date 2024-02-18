@@ -1,23 +1,17 @@
 from flask import Flask
 from flask import Flask,request, jsonify
 from flask_cors import CORS
-<<<<<<< HEAD
 from pymongo import MongoClient
 import tensorflow as tf
-from PIL import Image
 import numpy as np
 import io 
-# from werkzeug.security import generate_password_hash, check_password_hash
 
-app = Flask(__name__)
-=======
 import os
 from extension import jwt, auth_collection
 from auth import auth_bp
 from users import user_bp
 
-app = Flask(_name_)
->>>>>>> 8600eb2607808f3771521f3875ce59478e897d7c
+app = Flask(__name__)
 CORS(app)
 
 jwt.init_app(app)
@@ -73,5 +67,5 @@ def token_in_blocklist_callback(jwt_header , jwt_data):
     return token is not None
 """
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True)
