@@ -4,7 +4,7 @@ import farmImage from '../../assets/doctor-bg1.png';
 import './login.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Login() {
+const Login = (props)=>{
 
   const [formData, setFormData] = useState({
     name: '',
@@ -33,8 +33,11 @@ function Login() {
       console.log(localStorage.getItem("user"))
       
       setIsRegister(true);
-      
-      window.location.href = '/';
+      const user_obj = response.data
+      //pass this user_obj to parent component 
+
+      props.onUserLogin(user_obj);
+      // window.location.href = '/';
     } catch (error) {
       // setError('Invalid credentials');
       // Handle error, e.g., show error message

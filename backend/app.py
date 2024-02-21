@@ -40,7 +40,7 @@ app.register_blueprint(auth_bp , url_prefix='/auth')
 app.register_blueprint(user_bp , url_prefix='/users')
 
 class CustomUser:
-    def _init_(self, user_dict):
+    def __init__(self, user_dict):
         self.name = user_dict.get('name')
         self.email = user_dict.get('email')
 

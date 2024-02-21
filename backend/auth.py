@@ -1,5 +1,6 @@
 from flask import Blueprint , jsonify , request 
 from extension import auth_collection
+from datetime import timedelta
 # from models import TokenBlocklist
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import (
@@ -71,8 +72,12 @@ def api_login():
         if user:
             hashed_password = user.get('password')
             if check_password_hash(hashed_password, password):
-                access_token = create_access_token(identity=user['name'])
-                refresh_token = create_refresh_token(identity=user['name'])
+                 # Define a custom expiration time (e.g., 1 day)
+                custom_expiration_time = timedelta(days=1)
+
+                access_token = create_access_token(identity=user['name'], expires_delta=custom_expiration_time)
+                refresh_token = create_refresh_token(identity=user['name'], expires_delta=custom_expiration_time)
+                
                 # Passwords match
                 user['_id'] = str(user['_id'])  # Convert ObjectId to string
                 # session['user'] = {
