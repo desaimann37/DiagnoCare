@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 
 
-client = MongoClient("mongodb+srv://dm_37:SWKIOAkzdQgoWn68@cluster0.u4wm1ik.mongodb.net/")
+client = MongoClient("mongodb+srv://dm_37:SWKIOAkzdQgoWn68@cluster0.u4wm1ik.mongodb.net/sdp_backend")
 # Send a ping to confirm a successful connection
 try:
     client.admin.command('ping')

@@ -32,11 +32,11 @@ from users import user_bp
 
 from flask import Flask, request, jsonify
 import pickle
-from models.DiabetesModel import DiabetesModel
-from models.LungCancerModel import LungCancerModel
+#from models.DiabetesModel import DiabetesModel
+#from models.LungCancerModel import LungCancerModel
 import sklearn
 from config.database import collection_name1, collection_name2
-from bson import ObjectId  # Used by MongoDB to identify IDs created by itself
+
 
 app = Flask(__name__)
 CORS(app)

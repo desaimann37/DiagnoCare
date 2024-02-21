@@ -29,7 +29,7 @@ const DiabetesForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form Data:", formData);
-    const a = await api.post('/predict/diabetes/', formData);
+    const a = await api.post('/predict/diabetes', formData);
     console.log("got prediction")
     console.log(a.data)
   };
