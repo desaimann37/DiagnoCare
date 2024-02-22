@@ -9,3 +9,4 @@ class DiabetesModel(BaseModel):
     HeartDiseaseorAttack : int
     Sex : int
     Age : int
+
