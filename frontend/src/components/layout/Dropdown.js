@@ -1,16 +1,43 @@
 import React, { useEffect , useState} from 'react'
 import './dropdown.css'
 import { Link } from 'react-router-dom'
-const Dropdown = ({obj1}) => {
-  const [LoggedinObj,setLoggedinObj] = useState(null);
+
+const Dropdown = () => {
+  const [LoggedinObj, setLoggedinObj] = useState(null);
 
   useEffect(() => {
     const storedUserObj = localStorage.getItem('loggedin_obj');
     const parsedUserObj = storedUserObj ? JSON.parse(storedUserObj) : null;
     setLoggedinObj(parsedUserObj);
   }, []);
+
+  const handleLogout = () => {
+    // Send logout request to the backend
+    fetch('/logout', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        // Clear logged-in user data and token from localStorage
+        localStorage.removeItem('loggedin_obj');
+        localStorage.removeItem('user');
+        // Redirect or perform any other action after successful logout
+        // For example, redirecting to the login page
+        window.location.href = '/login';
+      } else {
+        // Handle error response from the backend
+        console.error('Logout failed:', response.statusText);
+      }
+    })
+    .catch(error => {
+      console.error('Error during logout:', error);
+    });
+  };
+
   return (
-    
     <div className="dropdown-container">
       <details className="dropdown right">
         <summary className="avatar">
@@ -20,7 +47,7 @@ const Dropdown = ({obj1}) => {
           {/* Optional: user details area w/ gray bg */}
           <li>
             <p>
-            <span className="block bold">{LoggedinObj ? LoggedinObj.user.name : 'Not logged in'}</span>
+              <span className="block bold">{LoggedinObj ? LoggedinObj.user.name : 'Not logged in'}</span>
               <br />
               <span className="block italic">{LoggedinObj ? LoggedinObj.user.email : 'Not logged in'}</span>
             </p>
@@ -44,9 +71,11 @@ const Dropdown = ({obj1}) => {
           {/* Optional divider */}
           <li className="divider"></li>
           <li>
-            <Link to="/logout">
-              <span className="material-symbols-outlined">Logout</span>
-            </Link>
+            {/* <button onClick={handleLogout}> */}
+              <Link>
+              <span onClick={handleLogout} className="material-symbols-outlined">Logout</span>
+              </Link>
+            {/* </button> */}
           </li>
         </ul>
       </details>

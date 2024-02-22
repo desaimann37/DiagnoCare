@@ -178,10 +178,15 @@ const BrainTumorForm = () => {
               </div>
             </form>
             <br/>
+            <br/>
             {loading && (
+              <>
               <div className="loader-container">
                 <img src={loader} alt="Loader" className="loader" />
               </div>
+              <br/>
+                <div className="loader-container">Genrating Report...</div>
+</>
             )}
             {!loading &&
               Symptoms &&

@@ -37,7 +37,7 @@ const Login = (props)=>{
       //pass this user_obj to parent component 
 
       props.onUserLogin(user_obj);
-      // window.location.href = '/';
+      window.location.href = '/';
     } catch (error) {
       // setError('Invalid credentials');
       // Handle error, e.g., show error message

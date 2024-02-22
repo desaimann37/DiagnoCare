@@ -102,7 +102,6 @@ def api_login():
         print(e)  # Print the traceback for debugging
         return jsonify({'error': 'Internal server error'}), 500
 
-"""
 # Logout User : 
 @auth_bp.route('/logout' , methods=['GET'])
 @jwt_required()
@@ -113,7 +112,6 @@ def logout_user():
     token_block_list.save()
 
     return jsonify({"message": "Logged Out Successfully"}), 200
-"""
 
 @auth_bp.get('/whoami')
 @jwt_required()
