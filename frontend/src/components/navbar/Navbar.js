@@ -1,13 +1,20 @@
-import { useState } from 'react'
+import { useState ,useEffect} from 'react'
 import { NavLink } from 'react-router-dom'
 import { ReactComponent as Hamburger } from '../../assets/hamburger.svg'
 import './navbar.css'
 import Dropdown from './Dropdown'
 
-const Navbar = ({OnClick}) => {
-  const [showNavbar, setShowNavbar] = useState(false)
-
+const Navbar = () => {
+  // const user = OnClick?.user
+  const [showNavbar, setShowNavbar] = useState(false);
+  const [LoggedinObj,setLoggedinObj] = useState(null);
   const [isAuthenticated , setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const storedUserObj = localStorage.getItem('loggedin_obj');
+    // console.log('Stored User Object:', storedUserObj);
+    setLoggedinObj(storedUserObj ? storedUserObj : null);
+  }, []);
 
   const handleShowNavbar = () => {
     setShowNavbar(!showNavbar)
@@ -25,7 +32,7 @@ const Navbar = ({OnClick}) => {
         <div className={`nav-elements  ${showNavbar && 'active'}`}>
           <ul>
             <li>
-              <NavLink to="/">Home</NavLink>
+              <NavLink to="/home">Home</NavLink>
             </li>
             <li>
               <NavLink to="/diabetes">Diabetes</NavLink>
@@ -52,7 +59,7 @@ const Navbar = ({OnClick}) => {
           </ul>
         </div>
       </div>
-      <Dropdown obj1={OnClick} />
+      <Dropdown obj1={LoggedinObj} />
     </nav>
   )
 }
