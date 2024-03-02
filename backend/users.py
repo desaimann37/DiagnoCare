@@ -24,7 +24,6 @@ def paginate(collection_name, page, per_page):
 
     return jsonify(result_list)
 
-
 @user_bp.get('/doctor/list')
 @jwt_required()
 def get_all_users():

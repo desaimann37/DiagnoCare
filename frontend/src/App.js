@@ -7,6 +7,7 @@ import Diabetes from "./components/d_diabetes/Diabetes";
 import LungCancer from "./components/d_lungcancer/LungCancer";
 import Alzheimer from "./components/d_alzheimer/Alzheimer";
 import BrainTumor from "./components/d_braintumor/BrainTumor";
+import Account from "./components/layout/Account";
 
 function App() {
   const [loggedin_obj, setLoggedinObj] = useState(null);
@@ -37,6 +38,7 @@ function App() {
                 <Route path="lungcancer" element={<LungCancer />} />
                 <Route path="alzheimer" element={<Alzheimer />} />
                 <Route path="braintumor" element={<BrainTumor />} />
+                <Route path="account" element={<Account />} />
               </Route>
             </Routes>
           </>

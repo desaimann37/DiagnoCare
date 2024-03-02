@@ -59,7 +59,7 @@ const Dropdown = () => {
           </li>
           {/* Menu links */}
           <li>
-            <Link to="#">
+            <Link to="/account">
               <span className="material-symbols-outlined">Account</span>
             </Link>
           </li>
