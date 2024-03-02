@@ -10,7 +10,6 @@ user_bp = Blueprint(
 )
 
 #Pagination : 
-
 def paginate(collection_name, page, per_page):
     database = mongo['sdp_backend']
     collection = database[collection_name]
@@ -26,12 +25,11 @@ def paginate(collection_name, page, per_page):
     return jsonify(result_list)
 
 
-@user_bp.get('/all')
+@user_bp.get('/doctor/list')
 @jwt_required()
 def get_all_users():
-
     claims = get_jwt()
-
+    # print(claims)
     if claims.get('is_staff') == True:
         page = int(request.args.get('page', 1))  # default to page 1 if not provided
         per_page = int(request.args.get('per_page', 3))  # default to 10 items per page if not provided

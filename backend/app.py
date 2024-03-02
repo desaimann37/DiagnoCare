@@ -60,7 +60,7 @@ def user_lookup_callback(__jwt_headers , jwt_data):
 # additional claims(while getting jwt parameters in postman)
 @jwt.additional_claims_loader
 def make_additional_claims(identity):
-    if identity == "abc":
+    if identity:
         return {"is_staff" : True}
     return {"is_staff": False}
 

@@ -11,7 +11,6 @@ from flask_jwt_extended import (
                                 current_user,
                                 get_jwt_identity
                             )
-
 auth_bp = Blueprint('auth' , __name__)
 
 # Signup Logic : 
@@ -47,8 +46,16 @@ def api_signup():
             'password': hash_password
         }
         auth_collection.insert_one(user)
+
+        # Define a custom expiration time (e.g., 1 day)
+        custom_expiration_time = timedelta(days=1)
+        access_token = create_access_token(identity=user['name'], expires_delta=custom_expiration_time)
+        refresh_token = create_refresh_token(identity=user['name'], expires_delta=custom_expiration_time)
+        # Passwords match
+        user['_id'] = str(user['_id'])  # Convert ObjectId to string
         print("Signup successful")
-        return jsonify({'message': 'Signup successful'})
+
+        return jsonify({'message': 'Signup successful', 'user': user, 'tokens' : {"access":access_token,    "refresh": refresh_token}})
     except Exception as e:
         print(e)  
         return jsonify({'error': 'Internal server error'}), 500
@@ -72,18 +79,13 @@ def api_login():
         if user:
             hashed_password = user.get('password')
             if check_password_hash(hashed_password, password):
-                 # Define a custom expiration time (e.g., 1 day)
+                # Define a custom expiration time (e.g., 1 day)
                 custom_expiration_time = timedelta(days=1)
-
                 access_token = create_access_token(identity=user['name'], expires_delta=custom_expiration_time)
                 refresh_token = create_refresh_token(identity=user['name'], expires_delta=custom_expiration_time)
-                
+
                 # Passwords match
                 user['_id'] = str(user['_id'])  # Convert ObjectId to string
-                # session['user'] = {
-                #     'email': user['email'],
-                #     'name': user['name']
-                # }
                 return jsonify(
                     {
                         'message': 'Login successful', 
@@ -110,10 +112,10 @@ def logout_user():
     jti = jwt['jti']
     token_block_list = TokenBlocklist(jti = jti)
     token_block_list.save()
-
     return jsonify({"message": "Logged Out Successfully"}), 200
 
-@auth_bp.get('/whoami')
+# Doctor's information : 
+@auth_bp.get('/doctor')
 @jwt_required()
 def whoami():
     return jsonify({"message" : "message", "user_details" : {"name": current_user.name, "email": current_user.email}})

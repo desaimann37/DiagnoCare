@@ -2,12 +2,12 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.preprocessing import image
+from keras.preprocessing import image
 import io
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
-import re
+# import re
 
 app = Flask(__name__)
 CORS(app)  

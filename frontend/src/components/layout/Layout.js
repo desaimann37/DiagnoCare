@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink, Link, Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { ReactComponent as Hamburger } from "../../assets/hamburger.svg";
 import "./navbar.css";
 import Dropdown from "./Dropdown";

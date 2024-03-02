@@ -44,43 +44,50 @@ const Dropdown = () => {
           <img src="https://gravatar.com/avatar/00000000000000000000000000000000?d=mp" alt="Avatar" />
         </summary>
         <ul>
-          {/* Optional: user details area w/ gray bg */}
           <li>
-            <p>
-              <span className="block bold">{LoggedinObj ? LoggedinObj.user.name : 'Not logged in'}</span>
-              <br />
-              <span className="block italic">{LoggedinObj ? LoggedinObj.user.email : 'Not logged in'}</span>
-            </p>
+            {LoggedinObj && LoggedinObj.user ? (
+              <p>
+                <span className="block bold">{LoggedinObj.user.name}</span>
+                <br />
+                <span className="block italic">{LoggedinObj.user.email}</span>
+              </p>
+            ) : (
+              <p>
+                <span className="block bold">Not logged in</span>
+              </p>
+            )}
           </li>
           {/* Menu links */}
           <li>
             <Link to="#">
-              <span className="material-symbols-outlined">Account</span> 
+              <span className="material-symbols-outlined">Account</span>
             </Link>
           </li>
           <li>
             <Link to="#">
-              <span className="material-symbols-outlined">Settings</span> 
+              <span className="material-symbols-outlined">Settings</span>
             </Link>
           </li>
           <li>
             <Link to="#">
-              <span className="material-symbols-outlined">Help</span> 
+              <span className="material-symbols-outlined">Help</span>
             </Link>
           </li>
           {/* Optional divider */}
           <li className="divider"></li>
           <li>
-            {/* <button onClick={handleLogout}> */}
-              <Link>
-              <span onClick={handleLogout} className="material-symbols-outlined">Logout</span>
+            {LoggedinObj && LoggedinObj.user && (
+              <Link to="#">
+                <span onClick={handleLogout} className="material-symbols-outlined">
+                  Logout
+                </span>
               </Link>
-            {/* </button> */}
+            )}
           </li>
         </ul>
       </details>
     </div>
-  )
-}
+  );
+};
 
-export default Dropdown
+export default Dropdown;
