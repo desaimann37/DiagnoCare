@@ -9,7 +9,6 @@ from extension import jwt, auth_collection
 # from dotenv import load_dotenv
 # from tensorflow.keras.preprocessing import image
 # from config import OPENAI_API_KEY
-
 import tensorflow as tf
 from PIL import Image
 import numpy as np
@@ -85,7 +84,6 @@ def token_in_blocklist_callback(jwt_header , jwt_data):
 
     return token is not None
 """
-
 
 if __name__ == '__main__':
     app.run(debug=True)

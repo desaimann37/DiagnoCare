@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import "./form.css";
 import api from '../../api.js'
 
-
-
-
 const DiabetesForm = () => {
   const [formData, setFormData] = useState({
     HighBP: "",
@@ -29,7 +26,7 @@ const DiabetesForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form Data:", formData);
-    const a = await api.post('/predict/diabetes/', formData);
+    const a = await api.post('http://127.0.0.1:5000/predict/diabetes/', formData);
     console.log("got prediction")
     console.log(a.data)
   };
@@ -37,9 +34,6 @@ const DiabetesForm = () => {
   // const handleGenerateReport = () => {
   //   setShowReport(true);
   // };
-
- 
-
   return (
 
     <div className="d-form-container">

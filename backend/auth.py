@@ -37,8 +37,7 @@ def api_signup():
         # Check weather input email is existing in out database or not? 
         if user and 'email' in user and email == user['email']:
             return jsonify({'message': 'Email Already Existed with this Email address!'}), 400
-         
-
+        
         hash_password = generate_password_hash(password, method='pbkdf2:sha256')
         user = {
             'name': name,
@@ -53,9 +52,12 @@ def api_signup():
         refresh_token = create_refresh_token(identity=user['name'], expires_delta=custom_expiration_time)
         # Passwords match
         user['_id'] = str(user['_id'])  # Convert ObjectId to string
+
         print("Signup successful")
 
-        return jsonify({'message': 'Signup successful', 'user': user, 'tokens' : {"access":access_token,    "refresh": refresh_token}})
+        response = jsonify({'message': 'Signup successful', 'user': user, 'tokens' : {"access":access_token,    "refresh": refresh_token}})
+        response.set_cookie('access_token_cookie', value=access_token, httponly=True)
+        return response,200
     except Exception as e:
         print(e)  
         return jsonify({'error': 'Internal server error'}), 500
@@ -86,7 +88,7 @@ def api_login():
 
                 # Passwords match
                 user['_id'] = str(user['_id'])  # Convert ObjectId to string
-                return jsonify(
+                response = jsonify(
                     {
                         'message': 'Login successful', 
                         'user': user,
@@ -95,7 +97,10 @@ def api_login():
                             "refresh": refresh_token,
                         }
                     }
-                ), 200
+                )
+                response.set_cookie('access_token_cookie', value=access_token, httponly=True)
+
+                return response,200
             else:
                 return jsonify({'message': 'Incorrect password'}), 401
         else:
@@ -105,6 +110,7 @@ def api_login():
         return jsonify({'error': 'Internal server error'}), 500
 
 # Logout User : 
+"""    
 @auth_bp.route('/logout' , methods=['GET'])
 @jwt_required()
 def logout_user():
@@ -113,12 +119,15 @@ def logout_user():
     token_block_list = TokenBlocklist(jti = jti)
     token_block_list.save()
     return jsonify({"message": "Logged Out Successfully"}), 200
+"""
 
 # Doctor's information : 
-@auth_bp.get('/doctor')
+@auth_bp.get('/account')
 @jwt_required()
 def whoami():
     return jsonify({"message" : "message", "user_details" : {"name": current_user.name, "email": current_user.email}})
+
+
 
 
 #used for identify user name for which access_token generated!
