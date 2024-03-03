@@ -8,7 +8,6 @@ mongo = MongoClient(MONGO_URI)
 db = mongo.get_database()
 backend = db['sdp_backend']
 auth_collection = backend['auth']
-
 jwt = JWTManager()
 
 

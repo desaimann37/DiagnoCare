@@ -4,11 +4,11 @@ import api from '../../api.js'
 
 const DiabetesForm = () => {
   const [formData, setFormData] = useState({
-    // Patient_Name: "",
-    // Patient_address: "",
-    // Patient_mobile: "",
-    // Patient_email: "",
-    // Doctor_Name: "",
+    Patient_Name: "",
+    Patient_address: "",
+    Patient_mobile: "",
+    Patient_email: "",
+    Doctor_Name: "",
     HighBP: "",
     HighChol: "",
     CholCheck: "",
@@ -57,9 +57,10 @@ const DiabetesForm = () => {
               autoComplete="off"
               onSubmit={handleSubmit}
             >
+             
             <div className="mb-3 d-flex">
                 <div className="mr-3 flex-grow-1">
-                  {/* 
+                   
                   <h2>Enter Patient Details : </h2><br/>
                   <label className="mb-2 label-large" htmlFor="Name">
                     Name <span>*</span>
@@ -136,7 +137,7 @@ const DiabetesForm = () => {
                   />
                   <div className="invalid-feedback">Doctor's Name is required</div>
                   <br/>
-                  */}
+                  
                   <label className="mb-2 label-large" htmlFor="Sex">
                     Gender <span>*</span>
                   </label>

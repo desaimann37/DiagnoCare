@@ -45,8 +45,15 @@ class CustomUser:
 
 app.secret_key = 'your_secret_key'
 
-
-
+"""
+@app.route('/predict/diabetes')
+def run_predict():
+    try:
+        exec(open('predict.py').read())
+        return 'predict.py seccessfully running!'
+    except Exception as e:
+        return f"Error while running file {e}" 
+"""
 
 # load user : 
 @jwt.user_lookup_loader
