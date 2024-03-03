@@ -7,17 +7,38 @@ import io
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
-# import re
+import pickle
+from config.database import collection_name1, collection_name2
 
 app = Flask(__name__)
-CORS(app)  
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Adjust the origin based on your React app's URL
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key = OPENAI_API_KEY)
 
+# Set the OpenAI API key directly in the client constructor
+client = OpenAI(api_key='your_actual_api_key')
+
+# Model1 : Alzheimer
+# Model2 : Brain Tumor
+# classifier1 : Diabetes
+# classifier2 : Lung Cancer
 model1 = tf.keras.models.load_model('../Models/alzheimer2.h5')
+# model1.compile(
+#     optimizer='adam',
+#     loss='categorical_crossentropy',
+#     metrics=['accuracy']
+# )
 model2 = tf.keras.models.load_model('../Models/BrainTumor3.h5')
+
+# Load trained Diabetes model
+with open("./pklFiles/Diabetes.pkl", "rb") as f:
+    classifier1 = pickle.load(f)
+
+with open("pklFiles/LungCancer.pkl", "rb") as f:
+    classifier2 = pickle.load(f)
+
+
 
 def generate_report(predicted_category,disease):
     prompt_Symtoms = f"You are a medical practictioner and an expert working for a very reputed hospital.Give Symptoms for the disease:{disease} of the category: {predicted_category}."
@@ -114,6 +135,83 @@ def predict_braintumor():
     except Exception as e:
         print(e)
         return jsonify({"error": f"Error processing image: {str(e)}"}), 500
+
+
+
+@app.route('/get/diabetes', methods=['GET'])
+def get_diabetes_objects():
+    diabetes_objects = list(collection_name1.find())
+    return jsonify(diabetes_objects)
+
+
+@app.route('/predict/diabetes', methods=['POST'])
+def predict_diabetes():
+    try:
+        data = request.json
+        print(data)
+        HighBP = int(data['HighBP'])
+        HighChol = int(data['HighChol'])
+        CholCheck = int(data['CholCheck'])
+        BMI = float(data['BMI'])
+        Stroke = int(data['Stroke'])
+        HeartDiseaseorAttack = int(data['HeartDiseaseorAttack'])
+        Sex = int(data['Sex'])
+        Age = int(data['Age'])
+        prediction = classifier1.predict([[HighBP, HighChol, CholCheck, BMI, Stroke, HeartDiseaseorAttack, Sex, Age]])
+
+        if prediction[0] == 0:
+            prediction = "No Diabetes"
+        else:
+            prediction = "Diabetes"
+        
+        data['Result'] = prediction
+
+        collection_name1.insert_one(data)
+        print("Data of Diabetes stored successfully!")
+        return jsonify({'prediction': prediction})
+    
+    except Exception as e:
+        print(e)
+        return jsonify({"error": f"Error while predicting Diabetes: {str(e)}"}), 500
+
+@app.route('/get/lungcancer', methods=['GET'])
+def get_lungcancer_objects():
+    lungcancer_objects = list(collection_name2.find())
+    return jsonify(lungcancer_objects)
+
+
+
+@app.route('/predict/lungcancer', methods=['POST'])
+def predict_lungcancer():
+    data = request.json
+    print(data)
+    Age = data['Age']
+    Gender = data['Gender']
+    AirPollution = data['AirPollution']
+    Smoking = data['Smoking']
+    Fatigue = data['Fatigue']
+    WeightLoss = data['WeightLoss']
+    ShortnessofBreath = data['ShortnessofBreath']
+    Wheezing = data['Wheezing']
+    SwallowingDifficulty = data['SwallowingDifficulty']
+    ClubbingofFingerNails = data['ClubbingofFingerNails']
+    FrequentCold = data['FrequentCold']
+    DryCough = data['DryCough']
+    prediction = classifier2.predict([[Age, Gender, AirPollution, Smoking, Fatigue, WeightLoss, ShortnessofBreath,
+                                        Wheezing, SwallowingDifficulty, ClubbingofFingerNails, FrequentCold, DryCough]])
+    if prediction[0] == 0:
+        prediction = "Low"
+    elif prediction[0] == 1:
+        prediction = "Medium"
+    else:
+        prediction = "High"
+    data['Result'] = prediction
+    collection_name2.insert_one(data)
+    print("Data stored successfully")
+    return jsonify({'prediction': prediction})
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True , port=5000) 

@@ -28,8 +28,8 @@ const LungCancerForm = () => {
       const handleSubmit = async(e) => {
         e.preventDefault();
         console.log("Form Data:", formData);
-        const a = await api.post('/predict/lungcancer/', formData);
-        console.log("got prediction")
+        const a = await api.post('http://localhost:5000/predict/lungcancer', formData);
+        console.log("got prediction for lung cancer!")
         console.log(a.data)
       };
 

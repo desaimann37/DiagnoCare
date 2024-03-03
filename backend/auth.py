@@ -127,9 +127,6 @@ def logout_user():
 def whoami():
     return jsonify({"message" : "message", "user_details" : {"name": current_user.name, "email": current_user.email}})
 
-
-
-
 #used for identify user name for which access_token generated!
 @auth_bp.get('/refresh')
 @jwt_required(refresh = True)

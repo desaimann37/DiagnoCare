@@ -4,6 +4,11 @@ import api from '../../api.js'
 
 const DiabetesForm = () => {
   const [formData, setFormData] = useState({
+    // Patient_Name: "",
+    // Patient_address: "",
+    // Patient_mobile: "",
+    // Patient_email: "",
+    // Doctor_Name: "",
     HighBP: "",
     HighChol: "",
     CholCheck: "",
@@ -26,7 +31,7 @@ const DiabetesForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form Data:", formData);
-    const a = await api.post('http://127.0.0.1:5000/predict/diabetes/', formData);
+    const a = await api.post('http://localhost:5000/predict/diabetes', formData);
     console.log("got prediction")
     console.log(a.data)
   };
@@ -34,6 +39,8 @@ const DiabetesForm = () => {
   // const handleGenerateReport = () => {
   //   setShowReport(true);
   // };
+
+  
   return (
 
     <div className="d-form-container">
@@ -50,9 +57,86 @@ const DiabetesForm = () => {
               autoComplete="off"
               onSubmit={handleSubmit}
             >
-             
             <div className="mb-3 d-flex">
                 <div className="mr-3 flex-grow-1">
+                  {/* 
+                  <h2>Enter Patient Details : </h2><br/>
+                  <label className="mb-2 label-large" htmlFor="Name">
+                    Name <span>*</span>
+                  </label>
+                  <input
+                    id="Name"
+                    placeholder="Enter Patient's Name"
+                    type="text"
+                    className="form-control"
+                    name="Patient_Name"
+                    value={formData.Patient_Name}
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="invalid-feedback">Patient's Name is required</div>
+                  <br/>
+                  <label className="mb-2 label-large" htmlFor="Address">
+                    Address <span>*</span>
+                  </label>
+                  <input
+                    id="Address"
+                    placeholder="Enter Patient's Address"
+                    type="text"
+                    className="form-control"
+                    name="Patient_address"
+                    value={formData.Patient_address}
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="invalid-feedback">Patient's Address is required</div>
+                  <br/>
+                  <label className="mb-2 label-large" htmlFor="Mobile">
+                    Mobile <span>*</span>
+                  </label>
+                  <input
+                    id="Mobile"
+                    placeholder="Enter Patient's Mobile Number"
+                    type="number"
+                    className="form-control"
+                    name="Patient_mobile"
+                    value={formData.Patient_mobile}
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="invalid-feedback">Patient's Mobile Number is required</div>
+                  <br/>
+                  <label className="mb-2 label-large" htmlFor="Email">
+                    Email <span>*</span>
+                  </label>
+                  <input
+                    id="Email"
+                    placeholder="Enter Patient's Email Id"
+                    type="email"
+                    className="form-control"
+                    name="Patient_email"
+                    value={formData.Patient_email}
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="invalid-feedback">Patient's Email is required</div>
+                  <br/>
+                  <label className="mb-2 label-large" htmlFor="Doctor_Name">
+                    Doctor's Name <span>*</span>
+                  </label>
+                  <input
+                    id="Doctor_Name"
+                    placeholder="Enter Doctor's Name"
+                    type="text"
+                    className="form-control"
+                    name="Doctor_Name"
+                    value={formData.Doctor_Name}
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="invalid-feedback">Doctor's Name is required</div>
+                  <br/>
+                  */}
                   <label className="mb-2 label-large" htmlFor="Sex">
                     Gender <span>*</span>
                   </label>
@@ -225,17 +309,13 @@ const DiabetesForm = () => {
                 <button type="submit" className="btn btn-primary">
                   Predict
                 </button>
-
               </div>
-
-
             </form>
-       
           </div>
         </div>
       </div>
     </div>
   );
-            };
+};
 
 export default DiabetesForm;

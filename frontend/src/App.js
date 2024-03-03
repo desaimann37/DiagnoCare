@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, Navigate, Form } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Navbar from "./components/layout/Layout";
 import Login from "./components/login/Login";
@@ -7,7 +7,7 @@ import Diabetes from "./components/d_diabetes/Diabetes";
 import LungCancer from "./components/d_lungcancer/LungCancer";
 import Alzheimer from "./components/d_alzheimer/Alzheimer";
 import BrainTumor from "./components/d_braintumor/BrainTumor";
-import PatientForm from "./components/Form";
+// import PatientForm from "./components/Form";
 import Account from "./components/layout/Account";
 
 function App() {
@@ -38,7 +38,7 @@ function App() {
                 <Route path="lungcancer" element={<LungCancer />} />
                 <Route path="alzheimer" element={<Alzheimer />} />
                 <Route path="braintumor" element={<BrainTumor />} />
-                <Route path="form" element={<PatientForm />} />
+                {/* <Route path="form" element={<PatientForm />} /> */}
                 <Route path="account" element={<Account />} />
               </Route>
             </Routes>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import api from "../api.js";
+// import api from "../api.js";
 
 const Form = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +19,14 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form Data:", formData);
+
+    // Clear form fields after submission
+    setFormData({
+      Name: "",
+      PatientId: "",
+      Address: "",
+    });
+    window.location.href = "/";
   };
 
   return (
@@ -38,15 +46,15 @@ const Form = () => {
             >
               <div className="mb-3 d-flex">
                 <div className="mr-3 flex-grow-1">
-                  <label className="mb-2 label-large" htmlFor="patientId">
-                    Pateint Id <span>*</span>
+                  <label className="mb-2 label-large" htmlFor="PatientId">
+                    Patient Id <span>*</span>
                   </label>
                   <input
                     id="PatientId"
                     placeholder="Enter patient id"
                     type="text"
                     className="form-control"
-                    name="Patient Id"
+                    name="PatientId"
                     value={formData.PatientId}
                     onChange={handleChange}
                     required
@@ -62,7 +70,7 @@ const Form = () => {
                   </label>
                   <input
                     id="Name"
-                    placeholder="Enter name of the patinet"
+                    placeholder="Enter name of the patient"
                     type="text"
                     className="form-control"
                     name="Name"
@@ -81,7 +89,7 @@ const Form = () => {
                   </label>
                   <input
                     id="Address"
-                    placeholder="Enter Address of the patinet"
+                    placeholder="Enter Address of the patient"
                     type="text"
                     className="form-control"
                     name="Address"
@@ -95,7 +103,7 @@ const Form = () => {
 
               <div className="align-items-center">
                 <button type="submit" className="btn btn-primary">
-                  Add
+                  Next 
                 </button>
               </div>
             </form>

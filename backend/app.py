@@ -45,6 +45,9 @@ class CustomUser:
 
 app.secret_key = 'your_secret_key'
 
+
+
+
 # load user : 
 @jwt.user_lookup_loader
 def user_lookup_callback(__jwt_headers , jwt_data):
