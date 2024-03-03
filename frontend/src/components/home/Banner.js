@@ -7,7 +7,7 @@ const Banner = () => {
     <>
       <div className="centered-container">
       <div className="corner-image left-bottom"></div>
-      {/* <div className="corner-image right-top"></div> */}
+      <div className="corner-image right-top"></div>
         <h1>Precision Diagnosis with Industry-Leading Expertise</h1>
         <p>
           DiagnoCare is designed to assist healthcare professionals in diagnosing various
