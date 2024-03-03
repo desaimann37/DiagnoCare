@@ -6,7 +6,7 @@ const Account = () => {
 
   useEffect(() => {
     // Fetch account list from the backend
-    const ACCESS_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwOTM3MDg4OCwianRpIjoiZWQzYTFjNDQtZjdjMi00NjVjLTlhYTgtYmMxZTcwYmM5NWFiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImlzaGEiLCJuYmYiOjE3MDkzNzA4ODgsImV4cCI6MTcwOTQ1NzI4OCwiaXNfc3RhZmYiOnRydWV9.06Rz6jKv_b9KpyT9s6bhKfgw9fGE8zoBqPeE4TwGsow';
+    const ACCESS_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwOTQ2OTUyMCwianRpIjoiZjBhOWI1MmUtMzViYS00NzRlLWJmZTgtYzRlMWRkZTQyYmViIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImlzaGEiLCJuYmYiOjE3MDk0Njk1MjAsImV4cCI6MTcwOTU1NTkyMCwiaXNfc3RhZmYiOnRydWV9.W-fg-H-ElaEV66sUo9bC9yCoWyoNAQUHyA-xp-luCls';
     fetch('http://127.0.0.1:5000/users/doctor/list?page=1&per_page=100' , {
       headers:{
         'Authorization' : `Bearer ${ACCESS_TOKEN}`,

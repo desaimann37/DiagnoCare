@@ -24,11 +24,6 @@ client = OpenAI(api_key='your_actual_api_key')
 # classifier1 : Diabetes
 # classifier2 : Lung Cancer
 model1 = tf.keras.models.load_model('../Models/alzheimer2.h5')
-# model1.compile(
-#     optimizer='adam',
-#     loss='categorical_crossentropy',
-#     metrics=['accuracy']
-# )
 model2 = tf.keras.models.load_model('../Models/BrainTumor3.h5')
 
 # Load trained Diabetes model
@@ -209,9 +204,6 @@ def predict_lungcancer():
     collection_name2.insert_one(data)
     print("Data stored successfully")
     return jsonify({'prediction': prediction})
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True , port=5000) 
