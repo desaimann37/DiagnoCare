@@ -45,7 +45,6 @@ function App() {
                 <Route path="braintumor" element={<BrainTumor />} />
                 {/* <Route path="form" element={<PatientForm />} /> */}
                 <Route path="account" element={<Account />} />
-                <Route path="card" element={<CircularDemo />} />
               </Route>
             </Routes>
           </>

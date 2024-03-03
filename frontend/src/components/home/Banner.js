@@ -1,6 +1,7 @@
 import React from "react";
 import "./banner.css";
 import "./gradientbg.css";
+import Cards from "./Cards";
 
 const Banner = () => {
   return (
@@ -45,6 +46,8 @@ const Banner = () => {
           <div className="interactive"></div>
         </div>
       </div>
+
+      <Cards/>
     </>
   );
 };

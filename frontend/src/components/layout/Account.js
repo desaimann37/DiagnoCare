@@ -6,7 +6,7 @@ const Account = () => {
 
   useEffect(() => {
     // Fetch account list from the backend
-    const ACCESS_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwOTQ3MzgyMSwianRpIjoiMmExZTU1ZDYtNTg5Ni00ZjAzLTllYTUtMTBiYjc4OTM5NmY4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImFiYyIsIm5iZiI6MTcwOTQ3MzgyMSwiY3NyZiI6Ijc4YjhlMGM2LTcyMWQtNDliZS1iYTEzLWQzYzJhMTJhMDk3NiIsImV4cCI6MTcwOTU2MDIyMSwiaXNfc3RhZmYiOnRydWV9.txGbTvkBB7TCJmVWtceeRQi7lF9u5y4S_a21c84_Eh8';
+    const ACCESS_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwOTQ4MjYxNCwianRpIjoiZmFjZWIxMGQtNjA3OS00NzlmLTkxYzMtODdjMGViODNjMDRlIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImFiYyIsIm5iZiI6MTcwOTQ4MjYxNCwiY3NyZiI6IjE3ZGVjOWJjLTRiZmUtNDUzYi1hZDE1LTRmNjNiNDhmMGY2OCIsImV4cCI6MTcwOTU2OTAxNCwiaXNfc3RhZmYiOnRydWV9.eOk7QmhZ8MK8lIa7jPXd-8SMVxLJ2JnN2qi_HiGD_hg';
     fetch('http://127.0.0.1:5000/users/doctor/list?page=1&per_page=100' , {
       headers:{
         'Authorization' : `Bearer ${ACCESS_TOKEN}`,
