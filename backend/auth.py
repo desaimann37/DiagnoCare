@@ -1,6 +1,7 @@
 from flask import Blueprint , jsonify , request 
-from extension import auth_collection
+from extension import auth_collection,  patient_collection
 from datetime import timedelta
+from bson import ObjectId, json_util
 # from models import TokenBlocklist
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import (
@@ -9,7 +10,8 @@ from flask_jwt_extended import (
                                 jwt_required, 
                                 get_jwt, 
                                 current_user,
-                                get_jwt_identity
+                                get_jwt_identity,
+                                current_user
                             )
 auth_bp = Blueprint('auth' , __name__)
 
@@ -134,3 +136,101 @@ def refresh_access():
     identity = get_jwt_identity()
     new_access_token = create_access_token(identity=identity)
     return jsonify({"access_token": new_access_token})
+
+
+# CHATGPTed------------->>>>>>>
+
+# Add new patient 
+@auth_bp.route('/patients', methods=['POST'])
+@jwt_required()
+def add_patient():
+    try:
+        data = request.get_json()
+        name = data.get('name')
+        address = data.get('address')
+        phone_number = data.get('phone_number')
+        doctor_id = current_user.id
+
+        if not name:
+            return jsonify({'message': 'Name is required'}), 400
+
+        patient = {
+            'name': name,
+            'address': address,
+            'phone_number': phone_number,
+            'doctor_id': doctor_id, 
+        }
+
+        patient_collection.insert_one(patient)
+
+        return jsonify({'message': 'Patient added successfully'}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Internal server error'}), 500
+
+# Update patient
+@auth_bp.route('/patients/<patient_id>', methods=['PUT'])
+@jwt_required()
+def update_patient(patient_id):
+    try:
+        data = request.get_json()
+        patient = patient_collection.find_one({'_id': ObjectId(patient_id), 'doctor_id': current_user.id})
+
+        if not patient:
+            return jsonify({'message': 'Patient not found'}), 404
+
+        patient.update(data)
+        patient_collection.update_one({'_id': ObjectId(patient_id)}, {'$set': patient})
+
+        return jsonify({'message': 'Patient updated successfully'}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Internal server error'}), 500
+
+# Delete patient
+@auth_bp.route('/patients/<patient_id>', methods=['DELETE'])
+@jwt_required()
+def delete_patient(patient_id):
+    try:
+        result = patient_collection.delete_one({'_id': ObjectId(patient_id), 'doctor_id': current_user.id})
+
+        if result.deleted_count == 0:
+            return jsonify({'message': 'Patient not found'}), 404
+
+        return jsonify({'message': 'Patient deleted successfully'}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Internal server error'}), 500
+
+@auth_bp.route('/patients', methods=['GET'])
+@jwt_required()
+def get_all_patients():
+    try:
+        
+        patients = list(patient_collection.find({'doctor_id': current_user.id}))
+        
+        patients_json = json_util.dumps(patients)
+        
+        return patients_json, 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Internal server error'}), 500
+
+# Search
+@auth_bp.route('/patients/search', methods=['GET'])
+@jwt_required()
+def search_patient():
+    try:
+        query = request.args.get('query')
+
+        if not query:
+            return jsonify({'message': 'Query parameter is required'}), 400
+
+        patients = list(patient_collection.find({'doctor_id': current_user.id,
+                                                 '$or': [{'name': {'$regex': query, '$options': 'i'}},
+                                                         {'email': {'$regex': query, '$options': 'i'}}]}))
+        patients_json = json_util.dumps(patients)
+        return patients_json, 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Internal server error'}), 500
