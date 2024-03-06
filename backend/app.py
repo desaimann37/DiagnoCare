@@ -33,6 +33,8 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)  # Custom expiration 
 """
 jwt = JWTManager(app)
 
+jwt.init_app(app)
+
 # Register blue_print : 
 app.register_blueprint(auth_bp , url_prefix='/auth')
 app.register_blueprint(user_bp , url_prefix='/users')

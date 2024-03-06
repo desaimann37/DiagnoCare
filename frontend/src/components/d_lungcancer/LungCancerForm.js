@@ -1,7 +1,15 @@
 import React ,{useState}from 'react'
 import api from '../../api.js'
+import loader from "../../assets/Spinner-2.gif";
+import { jsPDF } from "jspdf";
 
 const LungCancerForm = () => {
+  const [Symptoms, setSymptoms] = useState();
+  const [predicted_category, setpredicted_category] = useState();
+  const [Treatment, setTreatment] = useState();
+  const [Recommendation, setRecommendation] = useState();
+  const [loading, setLoading] = useState(false);
+
     const [formData, setFormData] = useState({
       Age : "" ,
       Gender : "" ,
@@ -27,10 +35,88 @@ const LungCancerForm = () => {
     
       const handleSubmit = async(e) => {
         e.preventDefault();
+
+        try{
         console.log("Form Data:", formData);
         const a = await api.post('http://localhost:5000/predict/lungcancer', formData);
         console.log("got prediction for lung cancer!")
         console.log(a.data)
+        setSymptoms(a.data.Symptoms);
+        setpredicted_category(a.data.predicted_category);
+        setTreatment(a.data.Treatment);
+        setRecommendation(a.data.Recommendation);
+        }catch (error) {
+          console.error("Error analyzing disease:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      const handleDownloadPDF = async () => {
+        const doc = new jsPDF();
+    
+        const maxWidth = 300;
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(20);
+    
+        const predicted_categoryLines = doc.splitTextToSize(
+          predicted_category,
+          maxWidth
+        );
+        const SymptomsLines = doc.splitTextToSize(Symptoms, maxWidth);
+        const TreatmentLines = doc.splitTextToSize(Treatment, maxWidth);
+        const RecommendationLines = doc.splitTextToSize(Recommendation, maxWidth);
+    
+        doc.setFont("helvetica");
+        doc.setFontSize(20);
+    
+        let yPos = 30;
+        doc.text("REPORT", 87, yPos);
+    
+        // Convert the image to base64 data URL
+        //const imageBase64 = await getImageBase64(formData.AlzheimerImage);
+    
+        // Add image to PDF
+        //doc.addImage(imageBase64, "JPG", 10, 40, 60, 60);
+    
+        doc.setFontSize(12);
+    
+        yPos += 12;
+        doc.setTextColor(255, 0, 0);
+        doc.text("Disease name:", 10, yPos);
+        yPos += 7;
+        doc.setTextColor(0, 0, 0);
+        doc.text("Lung Cancer", 10, yPos);
+        yPos += 12;
+    
+        doc.setTextColor(255, 0, 0);
+        doc.text("Predicted Category of Disease:", 10, yPos);
+        yPos += 7;
+        doc.setTextColor(0, 0, 0);
+        doc.text(predicted_categoryLines, 10, yPos);
+        yPos += predicted_categoryLines.length * 12;
+    
+        doc.setTextColor(255, 0, 0);
+        doc.text("Symptoms:", 10, yPos);
+        yPos += 7;
+        doc.setTextColor(0, 0, 0);
+        doc.text(SymptomsLines, 10, yPos);
+        yPos += SymptomsLines.length * 12;
+    
+        doc.setTextColor(255, 0, 0);
+        doc.text("Treatment:", 10, yPos);
+        yPos += 7;
+        doc.setTextColor(0, 0, 0);
+        doc.text(TreatmentLines, 10, yPos);
+        yPos += TreatmentLines.length * 10;
+    
+        doc.setTextColor(255, 0, 0);
+        doc.text("Recommendation:", 10, yPos);
+        yPos += 7;
+        doc.setTextColor(0, 0, 0);
+        doc.text(RecommendationLines, 10, yPos);
+    
+        doc.save("LungCancerReport.pdf");
       };
 
   return (
@@ -279,6 +365,60 @@ const LungCancerForm = () => {
                 </button>
               </div>
             </form>
+
+            <br />
+            {loading && (
+              <div className="loader-container">
+                <img src={loader} alt="Loader" className="loader" />
+              </div>
+            )}
+            {!loading &&
+              Symptoms &&
+              predicted_category &&
+              Treatment &&
+              Recommendation &&
+               (
+                <>
+                  <h1>Report</h1>
+                  <br />
+
+                  <div className="prediction-result">
+                    <h2>Predicted Category :</h2>
+                    <h5>{predicted_category}</h5>
+                  </div>
+                  <br />
+
+                  <div className="prediction-result">
+                    <h2>Symptoms :</h2>
+                    <h5>{Symptoms}</h5>
+                  </div>
+                  <br />
+
+                  <div className="prediction-result">
+                    <h2>Treatment :</h2>
+                    <h5>{Treatment}</h5>
+                  </div>
+                  <br />
+
+                  <div className="prediction-result">
+                    <h2>Recommendation :</h2>
+                    <h5>{Recommendation}</h5>
+                  </div>
+                  <br />
+
+                  <div className="align-items-center">
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={handleDownloadPDF}
+                    >
+                      Download Report PDF
+                    </button>
+                  </div>
+                </>
+              )}
+
+
           </div>
         </div>
       </div>
