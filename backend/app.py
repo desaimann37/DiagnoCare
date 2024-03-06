@@ -4,35 +4,34 @@ from flask_cors import CORS
 # from pymongo import MongoClient
 import os
 from extension import jwt, auth_collection
-# import openai
-# from openai import OpenAI
-# from dotenv import load_dotenv
-# from tensorflow.keras.preprocessing import image
-# from config import OPENAI_API_KEY
 import tensorflow as tf
 from PIL import Image
 import numpy as np
 import io 
 from auth import auth_bp
 from extension import db
-# import tensorflow as tf
-# from PIL import Image
-# import numpy as np
-# import io 
-from pymongo import MongoClient
+from datetime import timedelta
 import tensorflow as tf
 import numpy as np
 import io 
-
 import os
 from extension import jwt, auth_collection
 from auth import auth_bp
 from users import user_bp
+from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
 CORS(app)
 
-jwt.init_app(app)
+"""
+# Configure Flask-JWT-Extended
+app.config['JWT_SECRET_KEY'] = 'your_secret_key'
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_ACCESS_COOKIE_PATH'] = '/auth/login/'
+app.config['JWT_COOKIE_CSRF_PROTECT'] = True 
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)  # Custom expiration time
+"""
+jwt = JWTManager(app)
 
 # Register blue_print : 
 app.register_blueprint(auth_bp , url_prefix='/auth')
@@ -87,14 +86,7 @@ def invalid_token_callback(error):
 def missing_token_callback(error):
     return jsonify({"message" : "Request does not contain valid token", "error": "authorization_header"}), 401
 
-"""
-@jwt.token_in_blocklist_loader
-def token_in_blocklist_callback(jwt_header , jwt_data):
-    jti = jwt_data['jti']
-    token = TokenBlocklist.__objects(TokenBlocklist.jti == jti)
 
-    return token is not None
-"""
 
 if __name__ == '__main__':
     app.run(debug=True)

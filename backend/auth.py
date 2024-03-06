@@ -2,15 +2,14 @@ from flask import Blueprint , jsonify , request
 from extension import auth_collection,  patient_collection
 from datetime import timedelta
 from bson import ObjectId, json_util
-# from models import TokenBlocklist
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import (
                                 create_access_token,
                                 create_refresh_token,
                                 jwt_required, 
-                                get_jwt, 
                                 current_user,
                                 get_jwt_identity,
+                                set_access_cookies,
                                 current_user
                             )
 auth_bp = Blueprint('auth' , __name__)
@@ -95,13 +94,15 @@ def api_login():
                         'message': 'Login successful', 
                         'user': user,
                         'tokens' : {
-                            "access":access_token,
+                            "access": access_token,
                             "refresh": refresh_token,
                         }
                     }
                 )
-                response.set_cookie('access_token_cookie', value=access_token, httponly=True)
-
+                print("start...")
+                # set_access_cookies(response, access_token)
+                response.set_cookie('auth_cookie', value=access_token, httponly=True, secure=True, max_age=custom_expiration_time.total_seconds())
+                print("end...")
                 return response,200
             else:
                 return jsonify({'message': 'Incorrect password'}), 401
