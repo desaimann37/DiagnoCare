@@ -17,7 +17,7 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Set the OpenAI API key directly in the client constructor
-client = OpenAI(api_key='your_actual_api_key')
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Model1 : Alzheimer
 # Model2 : Brain Tumor
@@ -124,6 +124,7 @@ def predict_braintumor():
 
         print(predicted_category)
         medical_report = generate_report(predicted_category,"braintumor")
+        print(medical_report)
 
         return jsonify(medical_report), 200
 
@@ -143,7 +144,6 @@ def get_diabetes_objects():
 def predict_diabetes():
     try:
         data = request.json
-        print(data)
         HighBP = int(data['HighBP'])
         HighChol = int(data['HighChol'])
         CholCheck = int(data['CholCheck'])
@@ -153,17 +153,21 @@ def predict_diabetes():
         Sex = int(data['Sex'])
         Age = int(data['Age'])
         prediction = classifier1.predict([[HighBP, HighChol, CholCheck, BMI, Stroke, HeartDiseaseorAttack, Sex, Age]])
-
+        categories = ["No Diabetes" , "Diabetes"]
         if prediction[0] == 0:
-            prediction = "No Diabetes"
+            predicted_category = categories[0]
         else:
-            prediction = "Diabetes"
+            predicted_category = categories[1]
         
-        data['Result'] = prediction
+        print(predicted_category)
+        
+        data['Result'] = predicted_category
 
         collection_name1.insert_one(data)
+        medical_report = generate_report(predicted_category,"diabetes")
         print("Data of Diabetes stored successfully!")
-        return jsonify({'prediction': prediction})
+        print(medical_report)
+        return jsonify(medical_report), 200
     
     except Exception as e:
         print(e)
@@ -194,16 +198,21 @@ def predict_lungcancer():
     DryCough = data['DryCough']
     prediction = classifier2.predict([[Age, Gender, AirPollution, Smoking, Fatigue, WeightLoss, ShortnessofBreath,
                                         Wheezing, SwallowingDifficulty, ClubbingofFingerNails, FrequentCold, DryCough]])
+    
+    categories = ["Low" , "Medium" , "High"]
     if prediction[0] == 0:
-        prediction = "Low"
+         predicted_category = categories[0]
     elif prediction[0] == 1:
-        prediction = "Medium"
+         predicted_category = categories[1]
     else:
-        prediction = "High"
-    data['Result'] = prediction
+         predicted_category = categories[2]
+
+    data['Result'] = predicted_category
     collection_name2.insert_one(data)
-    print("Data stored successfully")
-    return jsonify({'prediction': prediction})
+    medical_report = generate_report(predicted_category,"lung cancer")
+    print("Data of Lung Cancer stored successfully!")
+    print(medical_report)
+    return jsonify(medical_report), 200
 
 if __name__ == '__main__':
     app.run(debug=True , port=5000) 

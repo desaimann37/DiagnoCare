@@ -32,6 +32,7 @@ from users import user_bp
 app = Flask(__name__)
 CORS(app)
 
+
 jwt.init_app(app)
 
 # Register blue_print : 

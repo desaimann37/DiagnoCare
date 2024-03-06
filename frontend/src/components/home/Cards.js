@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Carousel } from "primereact/carousel";
+// { Carousel } from "primereact/carousel";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./card.css";
 import { Card, CardContent, Typography, Grid } from "@mui/material";

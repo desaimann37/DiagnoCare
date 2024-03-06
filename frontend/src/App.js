@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
+//import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
 import Navbar from "./components/layout/Layout";
 import Login from "./components/login/Login";
 import Banner from "./components/home/Banner";
@@ -10,10 +10,10 @@ import Alzheimer from "./components/d_alzheimer/Alzheimer";
 import BrainTumor from "./components/d_braintumor/BrainTumor";
 // import PatientForm from "./components/Form";
 import Account from "./components/layout/Account";
-import CircularDemo from "./components/home/Cards";
+import CircularDemo from "./components/home/Cards"
 
 
-import "primereact/resources/themes/lara-light-cyan/theme.css";
+//import "primereact/resources/themes/lara-light-cyan/theme.css";
 
 function App() {
   const [loggedin_obj, setLoggedinObj] = useState(null);
