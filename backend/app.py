@@ -1,24 +1,15 @@
 from flask import Flask
 from flask import Flask,request, jsonify
 from flask_cors import CORS
-# from pymongo import MongoClient
-import os
 from extension import jwt, auth_collection
 import tensorflow as tf
 from PIL import Image
 import numpy as np
-import io 
-from auth import auth_bp
 from extension import db
-from datetime import timedelta
-import tensorflow as tf
-import numpy as np
-import io 
-import os
-from extension import jwt, auth_collection
 from auth import auth_bp
 from users import user_bp
 from flask_jwt_extended import JWTManager
+from predict import predict_alzheimer,predict_braintumor,predict_diabetes,predict_lungcancer
 
 app = Flask(__name__)
 CORS(app)
@@ -87,6 +78,23 @@ def invalid_token_callback(error):
 @jwt.unauthorized_loader
 def missing_token_callback(error):
     return jsonify({"message" : "Request does not contain valid token", "error": "authorization_header"}), 401
+
+
+@app.route('/predict_alzheimer', methods=['POST'])
+def endpoint_predict_alzheimer():
+    return predict_alzheimer()
+
+@app.route('/predict/braintumor', methods=['POST'])
+def endpoint_predict_braintumor():
+    return predict_braintumor()
+
+@app.route('/predict/diabetes', methods=['POST'])
+def endpoint_predict_diabetes():
+    return predict_diabetes()
+
+@app.route('/predict/lungcancer', methods=['POST'])
+def endpoint_predict_lungcancer():
+    return predict_lungcancer()
 
 
 

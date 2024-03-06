@@ -5,8 +5,7 @@ import loader from "../../assets/Spinner-2.gif";
 import { jsPDF } from "jspdf";
 
 const ACCESS_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwOTQ4MjYxNCwianRpIjoiZmFjZWIxMGQtNjA3OS00NzlmLTkxYzMtODdjMGViODNjMDRlIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImFiYyIsIm5iZiI6MTcwOTQ4MjYxNCwiY3NyZiI6IjE3ZGVjOWJjLTRiZmUtNDUzYi1hZDE1LTRmNjNiNDhmMGY2OCIsImV4cCI6MTcwOTU2OTAxNCwiaXNfc3RhZmYiOnRydWV9.eOk7QmhZ8MK8lIa7jPXd-8SMVxLJ2JnN2qi_HiGD_hg";
-
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwOTc0NTg0MSwianRpIjoiOTFiYzkxY2MtNDI4MC00NzI3LWI2NjQtN2U4ZmM2ZWI1ZDUyIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImFiYyIsIm5iZiI6MTcwOTc0NTg0MSwiZXhwIjoxNzA5ODMyMjQxLCJpc19zdGFmZiI6dHJ1ZX0.9_kGfP5Gs3VXYhZvRzJ6utUD2IqngIp1qJq_7IrGv3U"
 const DiabetesForm = () => {
   const [doctors, setDoctors] = useState([]);
   const [Symptoms, setSymptoms] = useState();

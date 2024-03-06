@@ -10,8 +10,8 @@ from openai import OpenAI
 import pickle
 from config.database import collection_name1, collection_name2
 
-app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Adjust the origin based on your React app's URL
+# app = Flask(__name__)
+# CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Adjust the origin based on your React app's URL
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -81,7 +81,6 @@ def generate_report(predicted_category,disease):
     # medical_report = parse_medical_report(response.choices[0].message.content)
     return {'Symptoms' : Symptoms.choices[0].message.content, 'predicted_category' : predicted_category, 'Treatment' : Treatment.choices[0].message.content, 'Recommendation' : Recommendation.choices[0].message.content}
 
-@app.route('/predict_alzheimer', methods=['POST'])
 def predict_alzheimer():
     try:
         file = request.files['file']
@@ -106,7 +105,6 @@ def predict_alzheimer():
         print(e)
         return jsonify({"error": f"Error processing image: {str(e)}"}), 500
 
-@app.route('/predict_braintumor', methods=['POST'])
 def predict_braintumor():
     try:
         file = request.files['file']
@@ -133,14 +131,6 @@ def predict_braintumor():
         return jsonify({"error": f"Error processing image: {str(e)}"}), 500
 
 
-
-@app.route('/get/diabetes', methods=['GET'])
-def get_diabetes_objects():
-    diabetes_objects = list(collection_name1.find())
-    return jsonify(diabetes_objects)
-
-
-@app.route('/predict/diabetes', methods=['POST'])
 def predict_diabetes():
     try:
         data = request.json
@@ -173,14 +163,8 @@ def predict_diabetes():
         print(e)
         return jsonify({"error": f"Error while predicting Diabetes: {str(e)}"}), 500
 
-@app.route('/get/lungcancer', methods=['GET'])
-def get_lungcancer_objects():
-    lungcancer_objects = list(collection_name2.find())
-    return jsonify(lungcancer_objects)
 
 
-
-@app.route('/predict/lungcancer', methods=['POST'])
 def predict_lungcancer():
     data = request.json
     print(data)
@@ -213,6 +197,3 @@ def predict_lungcancer():
     print("Data of Lung Cancer stored successfully!")
     print(medical_report)
     return jsonify(medical_report), 200
-
-if __name__ == '__main__':
-    app.run(debug=True , port=5000) 
