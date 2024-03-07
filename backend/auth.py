@@ -210,9 +210,9 @@ def get_all_patients():
         
         patients = list(patient_collection.find({'doctor_id': current_user.id}))
         
-        patients_json = json_util.dumps(patients)
+        patients = json_util.dumps(patients)
         
-        return patients_json, 200
+        return patients, 200
     except Exception as e:
         print(e)
         return jsonify({'error': 'Internal server error'}), 500
