@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Swal from 'sweetalert2';
 
-const Form = () => {
+const Form = (props) => {
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -43,6 +43,7 @@ const Form = () => {
       address: "",
       phone_number: "",
     });
+    props.handleClose();
   };
 
   return (

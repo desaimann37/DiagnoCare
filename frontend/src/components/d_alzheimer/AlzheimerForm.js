@@ -1,11 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../d_braintumor/btform.css";
 import "./toast.css";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import loader from "../../assets/Spinner-2.gif";
 import { jsPDF } from "jspdf";
+import {
+  Container,
+  Typography,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Grid,
+} from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Link } from "react-router-dom";
+import Form from "../Form";
+import { styled } from "@mui/material/styles";
 
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
 
 const AlzheimerForm = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +47,41 @@ const AlzheimerForm = () => {
   const [Treatment, setTreatment] = useState();
   const [Recommendation, setRecommendation] = useState();
   const [loading, setLoading] = useState(false);
+
+  const [patients, setPatients] = useState([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    const fetchTests = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:5000/auth/patients",
+          config
+        );
+        setPatients(response.data);
+      } catch (error) {
+        console.error("Error fetching tests:", error);
+      }
+    };
+    fetchTests();
+  }, []);
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    window.location='/alzheimer'
+    setOpen(false);
+  };
 
   const handleChange = (e) => {
     const { name, files } = e.target;
@@ -138,102 +204,178 @@ const AlzheimerForm = () => {
   };
 
   return (
-    <div className="d-form-container">
-      {/* <ToastContainer
-        className="Toastify__toast-container"
-        toastClassName="Toastify__toast"
-        bodyClassName="Toastify__toast-body"
-      /> */}
-      <div className="d-form-text-section">
-        <div className="col-xxl-8 col-xl-9 col-lg-9 col-md-7 col-sm-9">
-          <div className="card-body p-5">
-            <h1 className="fs-10 card-title fw-bold mb-5">
-              Alzheimer's Detection
-            </h1>
-            <form
-              method="POST"
-              className="needs-validation"
-              noValidate
-              autoComplete="off"
-              onSubmit={handleSubmit}
+    <>
+      <BootstrapDialog
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+      >
+        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+          Modal title
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent dividers>
+          <Form handleClose={handleClose}/>
+        </DialogContent>
+      </BootstrapDialog>
+      <Container style={{ marginTop: "100px" }}>
+        <Grid
+          container
+          spacing={3}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Grid item>
+            <Typography variant="h4" component="h1" gutterBottom>
+              Test List
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Button
+              component={Link}
+              onClick={handleClickOpen}
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />}
             >
-              <div className="mb-3">
-                <label className="mb-2 label-large" htmlFor="AlzheimerImage">
-                  Upload MRI Photo <span>*</span>
-                </label>
-                <input
-                  id="AlzheimerImage"
-                  type="file"
-                  accept="image/*"
-                  className="form-control"
-                  name="AlzheimerImage"
-                  onChange={handleChange}
-                  required
-                />
-                <div className="invalid-feedback">Image is required</div>
-              </div>
-
-              <div className="align-items-center">
-                <button type="submit" className="btn btn-primary">
-                  Detect Disease
-                </button>
-              </div>
-            </form>
-            <br />
-            {loading && (
-              <div className="loader-container">
-                <img src={loader} alt="Loader" className="loader" />
-              </div>
-            )}
-            {!loading &&
-              Symptoms &&
-              predicted_category &&
-              Treatment &&
-              Recommendation && (
-                <>
-                  <h1>Report</h1>
-                  <br />
-
-                  <div className="prediction-result">
-                    <h2>Predicted Category :</h2>
-                    <h5>{predicted_category}</h5>
-                  </div>
-                  <br />
-
-                  <div className="prediction-result">
-                    <h2>Symptoms :</h2>
-                    <h5>{Symptoms}</h5>
-                  </div>
-                  <br />
-
-                  <div className="prediction-result">
-                    <h2>Treatment :</h2>
-                    <h5>{Treatment}</h5>
-                  </div>
-                  <br />
-
-                  <div className="prediction-result">
-                    <h2>Recommendation :</h2>
-                    <h5>{Recommendation}</h5>
-                  </div>
-                  <br />
-
-                  <div className="align-items-center">
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={handleDownloadPDF}
+              Add Patient
+            </Button>
+          </Grid>
+        </Grid>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>#</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {patients.map((patient, index) => (
+                <TableRow key={patient._id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{patient.name}</TableCell>
+                  <TableCell>
+                    <Button
+                      component={Link}
+                      to={`/test/${patient._id}`}
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<VisibilityIcon />}
                     >
-                      Download Report PDF
-                    </button>
-                  </div>
-                </>
+                      View
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Container>
+      <div className="d-form-container">
+        <div className="d-form-text-section">
+          <div className="col-xxl-8 col-xl-9 col-lg-9 col-md-7 col-sm-9">
+            <div className="card-body p-5">
+              <h1 className="fs-10 card-title fw-bold mb-5">
+                Alzheimer's Detection
+              </h1>
+              <form
+                method="POST"
+                className="needs-validation"
+                noValidate
+                autoComplete="off"
+                onSubmit={handleSubmit}
+              >
+                <div className="mb-3">
+                  <label className="mb-2 label-large" htmlFor="AlzheimerImage">
+                    Upload MRI Photo <span>*</span>
+                  </label>
+                  <input
+                    id="AlzheimerImage"
+                    type="file"
+                    accept="image/*"
+                    className="form-control"
+                    name="AlzheimerImage"
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="invalid-feedback">Image is required</div>
+                </div>
+
+                <div className="align-items-center">
+                  <button type="submit" className="btn btn-primary">
+                    Detect Disease
+                  </button>
+                </div>
+              </form>
+              <br />
+              {loading && (
+                <div className="loader-container">
+                  <img src={loader} alt="Loader" className="loader" />
+                </div>
               )}
+              {!loading &&
+                Symptoms &&
+                predicted_category &&
+                Treatment &&
+                Recommendation && (
+                  <>
+                    <h1>Report</h1>
+                    <br />
+
+                    <div className="prediction-result">
+                      <h2>Predicted Category :</h2>
+                      <h5>{predicted_category}</h5>
+                    </div>
+                    <br />
+
+                    <div className="prediction-result">
+                      <h2>Symptoms :</h2>
+                      <h5>{Symptoms}</h5>
+                    </div>
+                    <br />
+
+                    <div className="prediction-result">
+                      <h2>Treatment :</h2>
+                      <h5>{Treatment}</h5>
+                    </div>
+                    <br />
+
+                    <div className="prediction-result">
+                      <h2>Recommendation :</h2>
+                      <h5>{Recommendation}</h5>
+                    </div>
+                    <br />
+
+                    <div className="align-items-center">
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={handleDownloadPDF}
+                      >
+                        Download Report PDF
+                      </button>
+                    </div>
+                  </>
+                )}
+            </div>
           </div>
         </div>
+        <div className="steps-container"></div>
       </div>
-      <div className="steps-container"></div>
-    </div>
+    </>
   );
 };
 
