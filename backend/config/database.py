@@ -1,7 +1,10 @@
 from pymongo import MongoClient
+import os
+from dotenv import load_dotenv
 
-
-client = MongoClient("mongodb+srv://dm_37:SWKIOAkzdQgoWn68@cluster0.u4wm1ik.mongodb.net/sdp_backend")
+load_dotenv()
+MONGO_URI = os.getenv("MONGO_URI")
+client = MongoClient(MONGO_URI)
 # Send a ping to confirm a successful connection
 try:
     client.admin.command('ping')
