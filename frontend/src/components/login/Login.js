@@ -30,6 +30,7 @@ const Login = (props)=>{
       const response = await axios.post(`http://127.0.0.1:5000/auth/${endpoint}`, formData);
       console.log(response.data);
       localStorage.setItem("user",response.data)
+      localStorage.setItem("token",response.data.tokens.access)
       console.log(localStorage.getItem("user"))
       
       setIsRegister(true);

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-// import api from "../api.js";
+import axios from "axios";
+import Swal from 'sweetalert2';
 
 const Form = () => {
   const [formData, setFormData] = useState({
-    Name: "",
-    PatientId: "",
-    Address: "",
+    name: "",
+    address: "",
+    phone_number: "",
   });
 
   const handleChange = (e) => {
@@ -18,15 +19,30 @@ const Form = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
 
-    // Clear form fields after submission
+    const token = localStorage.getItem('token');
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    };
+    const response = await axios.post('http://127.0.0.1:5000/auth/patients', formData, config);
+
+    if (response.status === 200) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Patient added successfully',
+      });
+    }
+
     setFormData({
-      Name: "",
-      PatientId: "",
-      Address: "",
+      name: "",
+      address: "",
+      phone_number: "",
     });
-    window.location.href = "/";
   };
 
   return (
@@ -46,35 +62,16 @@ const Form = () => {
             >
               <div className="mb-3 d-flex">
                 <div className="mr-3 flex-grow-1">
-                  <label className="mb-2 label-large" htmlFor="PatientId">
-                    Patient Id <span>*</span>
-                  </label>
-                  <input
-                    id="PatientId"
-                    placeholder="Enter patient id"
-                    type="text"
-                    className="form-control"
-                    name="PatientId"
-                    value={formData.PatientId}
-                    onChange={handleChange}
-                    required
-                  />
-                  <div className="invalid-feedback">Patient Id is required</div>
-                </div>
-              </div>
-
-              <div className="mb-3 d-flex">
-                <div className="mr-3 flex-grow-1">
-                  <label className="mb-2 label-large" htmlFor="Name">
+                  <label className="mb-2 label-large" htmlFor="name">
                     Name <span>*</span>
                   </label>
                   <input
-                    id="Name"
+                    id="name"
                     placeholder="Enter name of the patient"
                     type="text"
                     className="form-control"
-                    name="Name"
-                    value={formData.Name}
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
                     required
                   />
@@ -84,16 +81,16 @@ const Form = () => {
 
               <div className="mb-3 d-flex">
                 <div className="mr-3 flex-grow-1">
-                  <label className="mb-2 label-large" htmlFor="Address">
+                  <label className="mb-2 label-large" htmlFor="address">
                     Address <span>*</span>
                   </label>
                   <input
-                    id="Address"
-                    placeholder="Enter Address of the patient"
+                    id="address"
+                    placeholder="Enter address of the patient"
                     type="text"
                     className="form-control"
-                    name="Address"
-                    value={formData.Address}
+                    name="address"
+                    value={formData.address}
                     onChange={handleChange}
                     required
                   />
@@ -101,9 +98,28 @@ const Form = () => {
                 </div>
               </div>
 
+              <div className="mb-3 d-flex">
+                <div className="mr-3 flex-grow-1">
+                  <label className="mb-2 label-large" htmlFor="phone_number">
+                    Phone Number <span>*</span>
+                  </label>
+                  <input
+                    id="phone_number"
+                    placeholder="Enter phone number of the patient"
+                    type="text"
+                    className="form-control"
+                    name="phone_number"
+                    value={formData.phone_number}
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="invalid-feedback">Phone number is required</div>
+                </div>
+              </div>
+
               <div className="align-items-center">
                 <button type="submit" className="btn btn-primary">
-                  Next 
+                  Next
                 </button>
               </div>
             </form>

@@ -22,6 +22,7 @@
     "react-sf-building-blocks": "^1.0.87",
     "react-toastify": "^10.0.4",
     "shortid": "^2.2.16",
+    "sweetalert2": "^11.10.6",
     "tailwind": "^4.0.0",
     "vanta": "^0.5.24",
     "web-vitals": "^2.1.4"
