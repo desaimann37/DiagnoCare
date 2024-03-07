@@ -7,7 +7,6 @@ import { jsPDF } from "jspdf";
 const ACCESS_TOKEN =
   "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwOTc0NTg0MSwianRpIjoiOTFiYzkxY2MtNDI4MC00NzI3LWI2NjQtN2U4ZmM2ZWI1ZDUyIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImFiYyIsIm5iZiI6MTcwOTc0NTg0MSwiZXhwIjoxNzA5ODMyMjQxLCJpc19zdGFmZiI6dHJ1ZX0.9_kGfP5Gs3VXYhZvRzJ6utUD2IqngIp1qJq_7IrGv3U"
 const DiabetesForm = () => {
-  const [doctors, setDoctors] = useState([]);
   const [Symptoms, setSymptoms] = useState();
   const [predicted_category, setpredicted_category] = useState();
   const [Treatment, setTreatment] = useState();
@@ -28,27 +27,6 @@ const DiabetesForm = () => {
     Sex: "",
     Age: "",
   });
-
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
-
-  const fetchDoctors = () => {
-    fetch("http://127.0.0.1:5000/users/doctor/list?page=1&per_page=100", {
-      headers: {
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && data) {
-          setDoctors(data);
-        } else {
-          console.error("Invalid response from server:", data);
-        }
-      })
-      .catch((error) => console.error("Error fetching doctors:", error));
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -152,14 +130,6 @@ const DiabetesForm = () => {
   return (
     <>
       <div>
-        <ul>
-          {doctors.map((doctor) => (
-            <li key={doctor.id}>
-              <div>{doctor.name}</div>
-              <div>{doctor.email}</div>
-            </li>
-          ))}
-        </ul>
       </div>
       <div className="d-form-container">
         <div className="d-form-text-section">

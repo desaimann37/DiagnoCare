@@ -143,11 +143,15 @@ def predict_diabetes():
         Sex = int(data['Sex'])
         Age = int(data['Age'])
         prediction = classifier1.predict([[HighBP, HighChol, CholCheck, BMI, Stroke, HeartDiseaseorAttack, Sex, Age]])
-        categories = ["No Diabetes" , "Diabetes"]
+        categories = ["No Diabetes" , "Pre Diabetes", "Diabetes"]
         if prediction[0] == 0:
             predicted_category = categories[0]
-        else:
+        
+        elif prediction[0] == 1:
             predicted_category = categories[1]
+
+        else:
+            predicted_category = categories[2]
         
         print(predicted_category)
         
