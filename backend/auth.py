@@ -186,6 +186,23 @@ def update_patient(patient_id):
         return jsonify({'message': 'Patient updated successfully'}), 200
     except Exception as e:
         print(e)
+        return jsonify({'error': 'Internal server error'}), 
+
+# Select a particular patient
+@auth_bp.route('/patient/<patient_id>', methods=['GET'])
+@jwt_required()
+def select_patient(patient_id):
+    try:
+        patient = patient_collection.find_one({'_id': ObjectId(patient_id), 'doctor_id': current_user.id})
+
+        if not patient:
+            return jsonify({'message': 'Patient not found'}), 404
+
+        patient_json = json_util.dumps(patient)
+        return patient_json, 200
+    
+    except Exception as e:
+        print(e)
         return jsonify({'error': 'Internal server error'}), 500
 
 # Delete patient

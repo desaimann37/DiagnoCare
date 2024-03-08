@@ -16,6 +16,7 @@ import {
   TableHead,
   TableRow,
   Grid,
+  Checkbox
 } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -28,6 +29,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Link } from "react-router-dom";
 import Form from "../Form";
 import { styled } from "@mui/material/styles";
+import Paper from '@mui/material/Paper';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -50,6 +52,7 @@ const AlzheimerForm = () => {
 
   const [patients, setPatients] = useState([]);
 
+  
   useEffect(() => {
     const token = localStorage.getItem("token");
     const config = {
@@ -203,6 +206,43 @@ const AlzheimerForm = () => {
     });
   };
 
+  const [selectedRow, setSelectedRow] = useState(null);
+  const[ selectedPatient, setSelectedPatient] = useState(null);
+
+  const handleRowSelect = async(index, id) => {
+    if (selectedRow === index) {
+      setSelectedRow(null); // Deselect if already selected
+      
+    } else {
+      setSelectedRow(index); // Select the clicked row
+      console.log("Row selected:", index);
+      id = id['$oid'];
+      try {
+      const token = localStorage.getItem("token");
+      const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      }};
+        const response = await axios.get(
+          `http://127.0.0.1:5000/auth/patient/${id}`,
+          config
+        );
+        setSelectedPatient({
+          name : response.data.name,
+          address : response.data.address,
+          phone : response.data.phone_number});
+        console.log(response.data.name);
+        console.log(response.data.address);
+        console.log(response.data.phone_number);
+       
+        
+      } catch (error) {
+        console.error("Error fetching tests:", error);
+      }
+    }
+  };
+
   return (
     <>
       <BootstrapDialog
@@ -238,7 +278,7 @@ const AlzheimerForm = () => {
         >
           <Grid item>
             <Typography variant="h4" component="h1" gutterBottom>
-              Test List
+              Patients List
             </Typography>
           </Grid>
           <Grid item>
@@ -253,36 +293,77 @@ const AlzheimerForm = () => {
             </Button>
           </Grid>
         </Grid>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>#</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {patients.map((patient, index) => (
-                <TableRow key={patient._id}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{patient.name}</TableCell>
-                  <TableCell>
-                    <Button
-                      component={Link}
-                      to={`/test/${patient._id}`}
-                      variant="outlined"
-                      color="primary"
-                      startIcon={<VisibilityIcon />}
-                    >
-                      View
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <TableContainer sx={{ maxHeight: 250 }} component={Paper}>
+      <Table stickyHeader aria-label="sticky table">
+        <TableHead>
+          <TableRow>
+            <TableCell></TableCell>
+            <TableCell><b>#</b></TableCell>
+            <TableCell><b>Name</b></TableCell>
+            <TableCell><b>Actions</b></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {patients.map((patient, index) => (
+            <TableRow key={patient._id}>
+              <TableCell>
+                <Checkbox
+                  checked={selectedRow === index}
+                  onChange={() => handleRowSelect(index, patient._id)}
+                />
+              </TableCell>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{patient.name}</TableCell>
+              <TableCell>
+                <Button
+                  component={Link}
+                  to={`/test/${patient._id}`}
+                  variant="outlined"
+                  color="primary"
+                  startIcon={<VisibilityIcon />}
+                >
+                  View
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+
+    {selectedPatient &&<div>
+     <Container style={{ marginTop: "100px" }}>
+     <Grid>
+       <Grid item>
+         <Typography variant="h4" component="h1" marginLeft={'-3%'} gutterBottom>
+           Selected Patient details
+         </Typography>
+       </Grid>
+       </Grid>
+      </Container>
+      <div>
+      <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell><b>Name</b></TableCell>
+            <TableCell><b>Address</b></TableCell>
+            <TableCell><b>Phone Number</b></TableCell>
+          </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell>{selectedPatient['name']}</TableCell>
+              <TableCell>{selectedPatient['address']}</TableCell>
+              <TableCell>{selectedPatient['phone']}</TableCell>
+            </TableRow>
+          </TableBody>
+         
+      </Table>
+    </TableContainer>
+    </div>
+    </div>
+    }
       </Container>
       <div className="d-form-container">
         <div className="d-form-text-section">
