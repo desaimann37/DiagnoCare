@@ -8,6 +8,7 @@ import numpy as np
 from extension import db
 from auth import auth_bp
 from users import user_bp
+from store import store_bp
 from flask_jwt_extended import JWTManager
 from predict import predict_alzheimer,predict_braintumor,predict_diabetes,predict_lungcancer
 
@@ -29,6 +30,7 @@ jwt.init_app(app)
 # Register blue_print : 
 app.register_blueprint(auth_bp , url_prefix='/auth')
 app.register_blueprint(user_bp , url_prefix='/users')
+app.register_blueprint(store_bp, url_prefix='/store')
 
 class CustomUser:
     def __init__(self, user_dict):
@@ -84,7 +86,7 @@ def missing_token_callback(error):
 def endpoint_predict_alzheimer():
     return predict_alzheimer()
 
-@app.route('/predict/braintumor', methods=['POST'])
+@app.route('/predict_braintumor', methods=['POST'])
 def endpoint_predict_braintumor():
     return predict_braintumor()
 

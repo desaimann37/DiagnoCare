@@ -11,6 +11,7 @@ import Alzheimer from "./components/d_alzheimer/Alzheimer";
 import BrainTumor from "./components/d_braintumor/BrainTumor";
 import PatientForm from "./components/Form";
 import Account from "./components/layout/Account";
+import UploadForm from "./components/UploadForm";
 // import CircularDemo from "./components/home/Cards";
 // import CircularDemo from "./components/home/Cards"
 
@@ -47,6 +48,7 @@ function App() {
                 <Route path="braintumor" element={<BrainTumor />} />
                 <Route path="form" element={<PatientForm />} />
                 <Route path="account" element={<Account />} />
+                <Route path="store" element={<UploadForm />} />
               </Route>
             </Routes>
           </>

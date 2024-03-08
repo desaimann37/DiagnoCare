@@ -120,7 +120,7 @@ const Form = (props) => {
 
               <div className="align-items-center">
                 <button type="submit" className="btn btn-primary">
-                  Next
+                  Submit
                 </button>
               </div>
             </form>

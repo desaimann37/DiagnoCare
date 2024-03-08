@@ -3,7 +3,7 @@ import "./form.css";
 import api from "../../api.js";
 import loader from "../../assets/Spinner-2.gif";
 import { jsPDF } from "jspdf";
-import "jspdf-autotable";
+// import "jspdf-autotable";
 
 const ACCESS_TOKEN =
   "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwOTc0NTg0MSwianRpIjoiOTFiYzkxY2MtNDI4MC00NzI3LWI2NjQtN2U4ZmM2ZWI1ZDUyIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImFiYyIsIm5iZiI6MTcwOTc0NTg0MSwiZXhwIjoxNzA5ODMyMjQxLCJpc19zdGFmZiI6dHJ1ZX0.9_kGfP5Gs3VXYhZvRzJ6utUD2IqngIp1qJq_7IrGv3U"
