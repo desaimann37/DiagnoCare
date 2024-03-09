@@ -10,6 +10,7 @@ mongo = MongoClient(MONGO_URI)
 db = mongo.get_database()
 backend = db['sdp_backend']
 auth_collection = backend['auth']
+store_collection = backend['store']
 patient_collection = backend['patient']
 jwt = JWTManager()
 
