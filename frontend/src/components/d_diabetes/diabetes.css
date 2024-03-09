@@ -1,5 +1,5 @@
 
-  .assessment-page {
+  /*.assessment-page {
     background-image: url(../../assets/bg2.png);
     background-size: cover;
   background-position: center;
@@ -18,7 +18,7 @@
   
   .assessment-page .hero-image {
     width: 50%;
-    border-radius: 10px; /* Rounded corners */
+    border-radius: 10px; 
   }
   
   .assessment-page .hero-content {
@@ -50,4 +50,74 @@
   
   .assessment-page .start-assessment-btn:hover {
     background-color: var(--black);
-  }
+  }*/
+
+  .diabetes-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.diabetes-text-container {
+    width: 45%;
+    padding: 4%;
+}
+
+.diabetes-text-container h1{
+    font-size: 60px;
+    font-family: "Inter", sans-serif;
+    font-weight: 800;
+    color: var(--title-blue);
+}
+
+.diabetes-text-container h1 span{
+    color: var(--roczen-plus);
+}
+
+.diabetes-text-container p{
+    font-size: 22px;
+    font-family: "Inter", sans-serif;
+    font-weight: 100;
+    color: var(--content-grey);
+}
+
+.diabetes-image-container {
+    width: 55%;
+}
+
+.diabetes-image-container img{
+    width: 110%;
+}
+@media (max-width: 768px) {
+    .diabetes-container {
+        flex-direction: column;
+    }
+
+    .diabetes-text-container,
+    .diabetes-image-container {
+        width: 100%;
+    }
+    .diabetes-image-container img{
+        width: 100%;
+    }
+}
+
+.diabetes-animated-text {
+    opacity: 0;
+    transform: translateY(-50px);
+    animation: slideIn 0.5s forwards;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

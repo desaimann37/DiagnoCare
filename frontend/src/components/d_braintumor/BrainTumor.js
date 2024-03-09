@@ -1,24 +1,35 @@
-import React from 'react'
-import img from '../../assets/doc_home.jpg'
+import React, { useEffect, useState } from "react";
+import brainTumour from "../../assets/brainTumour.jpg";
 import BrainTumorForm from './BrainTumorForm'
 
 const BrainTumor = () => {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
   return (
     <>
-    <div className="assessment-page">
-      <section className="hero">
-        <img src={img} className="hero-image" />
-        <div className="hero-content">
-        <h1>Brain Tumor Assessment</h1>
-          <p>
-            Perform a comprehensive assessment for Brain Tumor. Gather patient
-            information and analyze symptoms to make informed decisions and
-            provide effective treatment plans.
-          </p>
-          <button className="start-assessment-btn">Start Assessment</button>
+    <div className="diabetes-container">
+        <div className="diabetes-image-container">
+          <img src={brainTumour} alt="Your Image" />
         </div>
-      </section>
-    </div>
+        <div className="diabetes-text-container">
+          {loaded && (
+            <div className="diabetes-animated-text">
+              <h1>
+                Diagnosing <span>Brain Tumour</span> with Machine-Learning
+              </h1>
+              <br />
+              <p className="diabetes-big-font">
+                Perform a comprehensive assessment for Brain Tumour. Gather patient
+                information and analyze symptoms to make informed decisions and
+                provide effective treatment plans.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
       <BrainTumorForm/>
 </>
 )

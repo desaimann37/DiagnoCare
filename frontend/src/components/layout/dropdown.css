@@ -1,20 +1,12 @@
-:root {
---font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans,
-	Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
---light-gray: #f2f2f2;
---text-color: #333;
---primary: #ff34b2;
---danger: #cf1616;
-}
-/* 
------------------
-Dropdown Styles 
------------------
-*/
 .dropdown-container {
 	display: inline-block;
 	padding: 10px;
-    z-index: 100;
+	z-index: 100;
+	position: fixed;
+	top: 0;
+	right: 0;
+	padding: 17px;
+
 	.dropdown {
 		position: relative;
 
@@ -53,10 +45,10 @@ Dropdown Styles
 
 				&::after {
 					content: "\e5c5";
-					font-family: "Material Symbols Outlined";
-					font-weight: normal;
-					font-style: normal;
-					font-size: 1.5rem;
+					font-size: 22px;
+					font-family: "Inter", sans-serif;
+					font-weight: 100;
+					color: #243E63;
 					line-height: 1;
 					letter-spacing: normal;
 					text-transform: none;
@@ -114,7 +106,7 @@ Dropdown Styles
 					color: var(--text-color);
 
 					&:hover {
-						color: var(--primary);
+						color: var(--roczen-blue);
 					}
 				}
 
@@ -134,7 +126,7 @@ Dropdown Styles
 					 * removes border from Li after the divider element
 					 * best used in combination with top borders on other LIs 
 					 */
-					& ~ li {
+					&~li {
 						border: none;
 					}
 				}
@@ -143,3 +135,8 @@ Dropdown Styles
 	}
 }
 
+@media (max-width: 768px) {
+	.dropdown-container {
+		padding: 17px;
+	}
+}

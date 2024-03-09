@@ -58,17 +58,7 @@ const Dropdown = () => {
               <span className="material-symbols-outlined">Account</span>
             </Link>
           </li>
-          <li>
-            <Link to="#">
-              <span className="material-symbols-outlined">Settings</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="#">
-              <span className="material-symbols-outlined">Help</span>
-            </Link>
-          </li>
-          <li className="divider"></li>
+          {/* <li className="divider"></li> */}
           <li>
             {LoggedinObj && LoggedinObj.user && (
               <Link to="#">

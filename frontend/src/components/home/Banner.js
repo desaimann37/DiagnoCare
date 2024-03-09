@@ -2,11 +2,17 @@ import React from "react";
 import "./banner.css";
 import "./gradientbg.css";
 import Cards from "./Cards";
+import Home1 from "./Home1";
+import Home2 from "./Home2";
+import Home3 from "./Home3";
 
 const Banner = () => {
   return (
     <>
-      <div className="centered-container">
+    <Home1/>
+    <Home2/>
+    <Home3/>
+      {/* <div className="centered-container">
       <div className="corner-image left-bottom"></div>
       <div className="corner-image right-top"></div>
         <h1>Precision Diagnosis with Industry-Leading Expertise</h1>
@@ -45,9 +51,9 @@ const Banner = () => {
           <div className="g5"></div>
           <div className="interactive"></div>
         </div>
-      </div>
+      </div> */}
 
-      <Cards/>
+      {/* <Cards/> */}
     </>
   );
 };
