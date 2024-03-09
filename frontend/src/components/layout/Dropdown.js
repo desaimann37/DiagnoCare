@@ -21,14 +21,10 @@ const Dropdown = () => {
     })
     .then(response => {
       if (response.ok) {
-        // Clear logged-in user data and token from localStorage
         localStorage.removeItem('loggedin_obj');
         localStorage.removeItem('user');
-        // Redirect or perform any other action after successful logout
-        // For example, redirecting to the login page
         window.location.href = '/login';
       } else {
-        // Handle error response from the backend
         console.error('Logout failed:', response.statusText);
       }
     })
@@ -57,7 +53,6 @@ const Dropdown = () => {
               </p>
             )}
           </li>
-          {/* Menu links */}
           <li>
             <Link to="/account">
               <span className="material-symbols-outlined">Account</span>
@@ -73,7 +68,6 @@ const Dropdown = () => {
               <span className="material-symbols-outlined">Help</span>
             </Link>
           </li>
-          {/* Optional divider */}
           <li className="divider"></li>
           <li>
             {LoggedinObj && LoggedinObj.user && (

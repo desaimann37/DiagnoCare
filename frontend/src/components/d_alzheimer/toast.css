@@ -1,17 +1,40 @@
-/* Custom toast container styles */
 .Toastify__toast-container {
     font-family: Arial, sans-serif;
     font-size: 18px;
   }
   
-  /* Custom toast notification styles */
   .Toastify__toast {
     border-radius: 6px;
     font-size: 20px;
   }
   
-  /* Custom toast notification body styles */
   .Toastify__toast-body {
     padding: 10px 15px;
   }
   
+  .square-containers {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: 80%;
+}
+
+.square-container {
+  width: calc(33.33% - 20px);
+  padding-top: calc(33.33% - 20px);
+  background-color: #f0f6ff; 
+  border-radius: 20px; 
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); 
+  overflow: hidden;
+}
+
+.square-content {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container-text {
+  font-size: 1.5rem;
+}
