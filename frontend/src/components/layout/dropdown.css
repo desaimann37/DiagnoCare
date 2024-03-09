@@ -121,11 +121,6 @@
 				&.divider {
 					border: none;
 					border-bottom: 1px solid var(--text-color);
-
-					/* 
-					 * removes border from Li after the divider element
-					 * best used in combination with top borders on other LIs 
-					 */
 					&~li {
 						border: none;
 					}

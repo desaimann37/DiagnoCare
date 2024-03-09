@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "../d_braintumor/btform.css";
-import "./toast.css";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import loader from "../../assets/Spinner-2.gif";
@@ -27,15 +25,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Link } from "react-router-dom";
-import Form from "../Form";
+import AddPatient from "../AddPatient";
 import { styled } from "@mui/material/styles";
-import Paper from '@mui/material/Paper';
+import Paper from "@mui/material/Paper";
 import Cards from "../home/Cards";
 import UploadForm from "../UploadForm";
 import ViewPdfButton from "../ViewPdfButton";
 // const mongoose = require('mongoose')
 // const fs = require('fs');
-
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -51,7 +48,7 @@ const AlzheimerForm = () => {
     AlzheimerImage: null,
   });
   const [selectedRow, setSelectedRow] = useState(null);
-  const[ selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedPatient, setSelectedPatient] = useState(null);
   const [Symptoms, setSymptoms] = useState();
   const [predicted_category, setpredicted_category] = useState();
   const [Treatment, setTreatment] = useState();
@@ -59,34 +56,38 @@ const AlzheimerForm = () => {
   const [loading, setLoading] = useState(false);
   const [patients, setPatients] = useState([]);
   const [combinedData, setCombinedData] = useState(null);
-
-  // const combined_data = {}
+  const [open, setOpen] = useState(false);
 
   const handlePdfUpload = (pdfData) => {
-    // Handle the uploaded PDF data as needed
-    console.log('PDF Data:', pdfData);
+    console.log("PDF Data:", pdfData);
   };
-  
+
   useEffect(() => {
     console.log(selectedPatient);
     // Check if selectedPatient is not null before accessing its properties
     if (selectedPatient) {
       // combining Patient Data with Report :
-        let combined_data = {
-          'symptom': Symptoms,
-          'predicted_category': predicted_category,
-          'Treatment': Treatment,
-          'Recommendation': Recommendation,
-          'patient_details': {
-            'name': selectedPatient.name,
-            'address': selectedPatient.address,
-            'phone': selectedPatient.phone,
-          }
-        }
-        setCombinedData(combined_data);
-        console.log(combined_data)  //This object contains all data required to generate report
-      }
-    }, [selectedPatient, Symptoms, predicted_category, Treatment, Recommendation]);
+      let combined_data = {
+        symptom: Symptoms,
+        predicted_category: predicted_category,
+        Treatment: Treatment,
+        Recommendation: Recommendation,
+        patient_details: {
+          name: selectedPatient.name,
+          address: selectedPatient.address,
+          phone: selectedPatient.phone,
+        },
+      };
+      setCombinedData(combined_data);
+      console.log(combined_data); //This object contains all data required to generate report
+    }
+  }, [
+    selectedPatient,
+    Symptoms,
+    predicted_category,
+    Treatment,
+    Recommendation,
+  ]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -109,10 +110,7 @@ const AlzheimerForm = () => {
       }
     };
     fetchTests();
-    
   }, []);
-
-  const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -166,26 +164,39 @@ const AlzheimerForm = () => {
     }
   };
 
+  const handleUploadPDf = async () => {
+    const formData = new FormData();
+    formData.append('pdf', formData.AlzheimerImage);
+    formData.append('selectedPatient', JSON.stringify(selectedPatient));
+
+    try {
+      const response = await axios.post('http://localhost:5000/store/report', formData,
+      {headers: {
+        'Content-Type': 'multipart/form-data' // Ensure correct content type
+      }});
+      console.log('PDF uploaded successfully...');
+    } catch (error) {
+      console.error('Error uploading PDF:', error);
+    }
+  };
+
   const handleDownloadPDF = async () => {
     if (!combinedData) {
       console.error("Combined data is not available.");
       return;
     }
-  
+
     const doc = new jsPDF();
-  
+
     const maxWidth = 300;
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
-  
+
     const predicted_categoryLines = doc.splitTextToSize(
       combinedData.predicted_category,
       maxWidth
     );
-    const SymptomsLines = doc.splitTextToSize(
-      combinedData.symptom,
-      maxWidth
-    );
+    const SymptomsLines = doc.splitTextToSize(combinedData.symptom, maxWidth);
     const TreatmentLines = doc.splitTextToSize(
       combinedData.Treatment,
       maxWidth
@@ -198,18 +209,18 @@ const AlzheimerForm = () => {
       `Patient Details:\nName: ${combinedData.patient_details.name}\nAddress: ${combinedData.patient_details.address}\nPhone: ${combinedData.patient_details.phone}`,
       maxWidth
     );
-  
+
     doc.setFont("helvetica");
     doc.setFontSize(20);
-  
+
     let yPos = 30;
     doc.text("REPORT", 87, yPos);
-  
+
     const imageBase64 = await getImageBase64(formData.AlzheimerImage);
     doc.addImage(imageBase64, "JPG", 10, 40, 60, 60);
-  
+
     doc.setFontSize(12);
-  
+
     yPos += 80;
     doc.setTextColor(255, 0, 0);
     doc.text("Disease name:", 10, yPos);
@@ -217,42 +228,42 @@ const AlzheimerForm = () => {
     doc.setTextColor(0, 0, 0);
     doc.text("Alzheimer", 10, yPos);
     yPos += 12;
-  
+
     doc.setTextColor(255, 0, 0);
     doc.text("Predicted Category of Disease:", 10, yPos);
     yPos += 7;
     doc.setTextColor(0, 0, 0);
     doc.text(predicted_categoryLines, 10, yPos);
     yPos += predicted_categoryLines.length * 12;
-  
+
     doc.setTextColor(255, 0, 0);
     doc.text("Symptoms:", 10, yPos);
     yPos += 7;
     doc.setTextColor(0, 0, 0);
     doc.text(SymptomsLines, 10, yPos);
     yPos += SymptomsLines.length * 12;
-  
+
     doc.setTextColor(255, 0, 0);
     doc.text("Treatment:", 10, yPos);
     yPos += 7;
     doc.setTextColor(0, 0, 0);
     doc.text(TreatmentLines, 10, yPos);
     yPos += TreatmentLines.length * 10;
-  
+
     doc.setTextColor(255, 0, 0);
     doc.text("Recommendation:", 10, yPos);
     yPos += 7;
     doc.setTextColor(0, 0, 0);
     doc.text(RecommendationLines, 10, yPos);
     yPos += RecommendationLines.length * 10;
-  
+
     doc.setTextColor(255, 0, 0);
     doc.text("Patient Details:", 10, yPos);
     yPos += 7;
     doc.setTextColor(0, 0, 0);
     doc.text(patientDetailsLines, 10, yPos);
     doc.save(combinedData.patient_details.name + "_AlzheimerReport.pdf");
-  
+    handleUploadPDf()
   };
 
   const getImageBase64 = (file) => {
@@ -264,7 +275,7 @@ const AlzheimerForm = () => {
     });
   };
 
-  const handleRowSelect = async(index, id) => {
+  const handleRowSelect = async (index, id) => {
     if (selectedRow === index) {
       setSelectedRow(null); // Deselect if already selected
     } else {
@@ -283,10 +294,14 @@ const AlzheimerForm = () => {
           `http://127.0.0.1:5000/auth/patient/${id}`,
           config
         );
+        console.log(response);
         setSelectedPatient({
-          name : response.data.name,
-          address : response.data.address,
-          phone : response.data.phone_number});
+          patient_id : response.data._id.$oid,
+          name: response.data.name,
+          address: response.data.address,
+          phone: response.data.phone_number,
+        });
+        console.log(selectedPatient);
       } catch (error) {
         console.error("Error fetching tests:", error);
       }
@@ -295,15 +310,19 @@ const AlzheimerForm = () => {
 
   return (
     <>
-       <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+      <BootstrapDialog
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+      >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Modal title
+          Add Patient
         </DialogTitle>
         <IconButton
           aria-label="close"
           onClick={handleClose}
           sx={{
-            position: 'absolute',
+            position: "absolute",
             right: 8,
             top: 8,
             color: (theme) => theme.palette.grey[500],
@@ -312,11 +331,14 @@ const AlzheimerForm = () => {
           <CloseIcon />
         </IconButton>
         <DialogContent dividers>
-          <Form handleClose={handleClose} />
+          <AddPatient handleClose={handleClose} />
         </DialogContent>
       </BootstrapDialog>
 
-      
+      <div className="d-form-text-section">
+        <h1 className="fs-10 mb-5 align-items-center">Alzheimer's</h1>
+      </div>
+
       <Container style={{ marginTop: "100px" }}>
         <Grid
           container
@@ -330,39 +352,39 @@ const AlzheimerForm = () => {
             </Typography>
           </Grid>
           <Grid item>
-            <Button
-              component={Link}
-              onClick={handleClickOpen}
-              variant="contained"
-              color="primary"
-              startIcon={<AddIcon />}
-            >
+            <button onClick={handleClickOpen} className="btn btn-primary">
               Add Patient
-            </Button>
+            </button>
           </Grid>
         </Grid>
-        <TableContainer sx={{ maxHeight: 250 }} component={Paper}>
-      <Table stickyHeader aria-label="sticky table">
-        <TableHead>
-          <TableRow>
-            <TableCell></TableCell>
-            <TableCell><b>#</b></TableCell>
-            <TableCell><b>Name</b></TableCell>
-            <TableCell><b>Actions</b></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {patients.map((patient, index) => (
-            <TableRow key={patient._id}>
-              <TableCell>
-                <Checkbox
-                  checked={selectedRow === index}
-                  onChange={() => handleRowSelect(index, patient._id)}
-                />
-              </TableCell>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell>{patient.name}</TableCell>
-              {/* <TableCell>
+        <TableContainer sx={{ maxHeight: 650 }} component={Paper}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell>
+                  <b>#</b>
+                </TableCell>
+                <TableCell>
+                  <b>Name</b>
+                </TableCell>
+                <TableCell>
+                  <b>Actions</b>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {patients.map((patient, index) => (
+                <TableRow key={patient._id}>
+                  <TableCell>
+                    <Checkbox
+                      checked={selectedRow === index}
+                      onChange={() => handleRowSelect(index, patient._id)}
+                    />
+                  </TableCell>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{patient.name}</TableCell>
+                  {/* <TableCell>
                 <Button
                   component={Link}
                   to={`/test/${patient._id}`}
@@ -374,16 +396,17 @@ const AlzheimerForm = () => {
                 </Button>
               </TableCell> */}
 
-              <TableCell>
-                {/* Add the ViewPdfButton component with the patient ID */}
-                <ViewPdfButton pdfName={patient.name + "_AlzheimerReport.pdf" } />
-              </TableCell>
-
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                  <TableCell>
+                    <ViewPdfButton
+                      // pdfName={patient.name + "_AlzheimerReport.pdf"}
+                      pdfName={patient._id.$oid}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
         {selectedPatient && (
           <div>
@@ -434,9 +457,6 @@ const AlzheimerForm = () => {
         <div className="d-form-text-section">
           <div className="col-xxl-8 col-xl-9 col-lg-9 col-md-7 col-sm-9">
             <div className="card-body p-5">
-              <h1 className="fs-10 card-title fw-bold mb-5">
-                Alzheimer's Detection
-              </h1>
               <form
                 method="POST"
                 className="needs-validation"
@@ -527,9 +547,8 @@ const AlzheimerForm = () => {
         {/* Add the UploadForm component here */}
         <UploadForm onPdfUpload={handlePdfUpload} />
       </div>
-      
     </>
   );
-                }
+};
 
 export default AlzheimerForm;

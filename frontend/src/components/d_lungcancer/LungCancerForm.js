@@ -124,8 +124,8 @@ const LungCancerForm = () => {
       <div className="d-form-text-section">
         <div className="col-xxl-8 col-xl-9 col-lg-9 col-md-7 col-sm-9">
           <div className="card-body p-4">
-            <h1 className="fs-10 card-title fw-bold mb-4">
-              Lung Cancer Prediction
+            <h1 className="fs-10 mb-5 align-items-center">
+              Lung Cancer
             </h1>
             <form
               method="POST"

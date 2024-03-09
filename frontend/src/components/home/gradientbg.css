@@ -242,15 +242,17 @@ body {
   .btn-primary {
     background-color: var(--roczen-blue);
     color: #fff;
-    padding: 15px 30px;
-    font-size: 16px;
+    padding: 13px 33px;
+    font-size: 19px;
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
     text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    border-radius: 30px;
+    transition: background-color 0.3s ease; 
   }
   
   .btn-primary:hover {
-    background-color: var(--black);
+    background-color: var(--black); 
   }
   
   /* Add this media query for responsiveness */

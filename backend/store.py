@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request 
-from bson import Binary
+from bson import Binary,ObjectId, json_util
 from pymongo import MongoClient
-from extension import store_collection
+from extension import store_collection, patient_collection
 from flask import send_file
 import io
 
@@ -10,8 +10,10 @@ store_bp = Blueprint('store', __name__)
 @store_bp.route('/report', methods=['POST'])
 def store_report():
     if 'pdf' not in request.files:
+        print(request.files)
         return jsonify({'error': 'No file part'})
-
+    
+    selected_patient = request.form.get('selectedPatient')
     pdf_file = request.files['pdf']
 
     if pdf_file.filename == '':
@@ -31,8 +33,8 @@ def store_report():
 
 
 
-@store_bp.route('/get_pdf/<filename>', methods=['GET'])
-def get_pdf(filename):
+@store_bp.route('/open_pdf/<filename>', methods=['GET'])
+def open_pdf(filename):
     # Fetch the PDF data based on the filename
     print(filename)
     pdf_data = store_collection.find_one({'filename': filename})
@@ -41,3 +43,28 @@ def get_pdf(filename):
         return send_file(io.BytesIO(pdf_data['data']), mimetype='application/pdf')
     else:
         return jsonify({'error': 'PDF not found'})
+
+@store_bp.route('/get_pdf_pid/<patientId>', methods=['GET'])
+def get_pdf(patientId):
+    patient = patient_collection.find_one({'_id': ObjectId(patientId)})
+    patient['_id'] = str(patient['_id'])
+    
+    if not patient:
+        return jsonify({'error': 'Patient not found'})
+
+    patient_name = patient.get('name')
+    if not patient_name:
+        return jsonify({'error': 'Patient name not found'})
+
+    pdf_data_cursor = store_collection.find({'filename': {'$regex': f"{patient_name}_"}})
+
+    pdf_data_list = []
+    for document in pdf_data_cursor:
+        filename = document['filename']
+        print(filename)
+        pdf_data_list.append(filename)
+
+    if patient:
+        return jsonify({"document":pdf_data_list , "patient" : patient})
+    else:
+        return jsonify({'error': 'No PDFs found for the patient'})

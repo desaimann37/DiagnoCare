@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import "./btform.css";
 import { jsPDF } from "jspdf";
 import loader from "../../assets/Spinner-2.gif";
 
@@ -145,8 +144,8 @@ const BrainTumorForm = () => {
       <div className="d-form-text-section">
         <div className="col-xxl-8 col-xl-9 col-lg-9 col-md-7 col-sm-9">
           <div className="card-body p-5">
-            <h1 className="fs-10 card-title fw-bold mb-5">
-              BrainTumor Detection
+            <h1 className="fs-10 mb-5 align-items-center">
+              BrainTumor
             </h1>
             <form
               method="POST"

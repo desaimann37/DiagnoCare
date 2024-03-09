@@ -1,8 +1,35 @@
 import { useState } from 'react';
 import axios from 'axios';
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import AddPatient from "./AddPatient";
+import { styled } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import ShowPdfs from './ShowPdfs';
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
 
 const ViewPdfButton = ({ pdfName }) => {
   const [pdfData, setPdfData] = useState('');
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    window.location = "/alzheimer";
+    setOpen(false);
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
   const handleViewPdf = async () => {
     try {
@@ -36,9 +63,36 @@ const ViewPdfButton = ({ pdfName }) => {
   };
 
   return (
-    <button type="button" className="btn btn-secondary" onClick={handleViewPdf}>
+    <>
+    <BootstrapDialog
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+      >
+        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+          Add Patient
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent dividers>
+          <ShowPdfs handleClose={handleClose} pdfName = {pdfName} />
+        </DialogContent>
+      </BootstrapDialog>
+    {/* <button type="button" className="btn btn-secondary" onClick={handleViewPdf}> */}
+    <button type="button" className="btn btn-secondary" onClick={handleClickOpen}>
       View PDF
     </button>
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios'; 
-import farmImage from '../../assets/doctor-bg1.png';
+import doc3 from '../../assets/doc3.jpg';
 import './login.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -53,7 +53,7 @@ const Login = (props)=>{
   return (
     <div className="login-container">
       <div className="login-image-section">
-        <img src={farmImage} alt="hello" />
+        <img src={doc3} alt="hello" />
       </div>
       <div className="login-text-section">
         <div className="col-xxl-8 col-xl-9 col-lg-9 col-md-7 col-sm-9">

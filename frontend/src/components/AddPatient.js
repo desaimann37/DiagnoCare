@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Swal from 'sweetalert2';
 
-const Form = (props) => {
+const AddPatient = (props) => {
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -49,11 +49,11 @@ const Form = (props) => {
   return (
     <div className="d-form-container">
       <div className="d-form-text-section">
-        <div className="col-xxl-8 col-xl-9 col-lg-9 col-md-7 col-sm-9">
+        <div className="col-xxl-12 col-xl-9 col-lg-9 col-md-7 col-sm-9">
           <div className="card-body p-5">
-            <h1 className="fs-10 card-title fw-bold mb-4">
+            <h3 className="fs-10 mb-4">
               Add Patient Details
-            </h1>
+            </h3>
             <form
               method="POST"
               className="needs-validation"
@@ -131,4 +131,4 @@ const Form = (props) => {
   );
 };
 
-export default Form;
+export default AddPatient;
