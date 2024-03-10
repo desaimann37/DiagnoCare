@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import './showpdf.css'
 
 const ShowPdfs = (props) => {
   const [pdfData, setPdfData] = useState("");
@@ -64,27 +65,28 @@ const ShowPdfs = (props) => {
   };
   return (
     <>
-      <div>
-        {patientData && (
-          <div>
-            <h2>Patient Details</h2>
-            <p>Patient Name: {patientData.name}</p>
-            <p>Patient Address: {patientData.address}</p>
-            <p>Patient Phone: {patientData.phone_number}</p>
-          </div>
-        )}
-
-        <h2>Patient PDFs</h2>
-        <div>
-          {pdfs && pdfs.map((pdf, index) => (
-            <div key={index}>
-              <p>PDF Name: {pdf}</p>
-              <button onClick={() => openPdf(pdf)}>Open PDF</button>
-            </div>
-          ))}
-        </div>
+  <div className="patient-details-container">
+    {patientData && (
+      <div className="patient-pdfs-section">
+        <h2 style={{ fontSize: '40px', fontFamily: 'Inter, sans-serif', fontWeight: 800, color: 'var(--title-blue)' }}>Patient Details</h2>
+        < p style={{ fontSize: '20px', fontFamily: 'Inter, sans-serif', fontWeight: 200, color: 'var(--content-grey)' }}>Patient Name: {patientData.name}
+        <br/>Patient Address: {patientData.address}
+        <br/>Patient Phone: {patientData.phone_number}</p>
       </div>
-    </>
+    )}
+
+    <div className="patient-pdfs-section">
+    <h2 style={{ fontSize: '40px', fontFamily: 'Inter, sans-serif', fontWeight: 800, color: 'var(--title-blue)' }}>Patient Reports</h2>
+      {pdfs && pdfs.map((pdf, index) => (
+        <div key={index} className="pdf-item">
+          <p style={{ fontSize: '20px', fontFamily: 'Inter, sans-serif', fontWeight: 200, color: 'var(--content-grey)' }}>PDF Name: {pdf}</p>
+          <button className="btn btn2-primary" onClick={() => openPdf(pdf)}>Open PDF</button>
+        </div>
+      ))}
+    </div>
+  </div>
+</>
+
   );
 };
 

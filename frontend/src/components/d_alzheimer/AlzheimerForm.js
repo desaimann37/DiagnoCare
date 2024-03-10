@@ -31,6 +31,7 @@ import Paper from "@mui/material/Paper";
 import Cards from "../home/Cards";
 import UploadForm from "../UploadForm";
 import ViewPdfButton from "../ViewPdfButton";
+import Swal from "sweetalert2";
 // const mongoose = require('mongoose')
 // const fs = require('fs');
 
@@ -132,10 +133,22 @@ const AlzheimerForm = () => {
     e.preventDefault();
 
     if (!formData.AlzheimerImage) {
-      toast.error("Please upload an image.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please upload an image.",
+      });
       return;
     }
 
+    if (!selectedPatient) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please select a patient.",
+      });
+      return;
+    }
     try {
       setLoading(true);
 
@@ -164,19 +177,24 @@ const AlzheimerForm = () => {
     }
   };
 
-  const handleUploadPDf = async () => {
+  const handleUploadPDf = async (pdfname) => {
     const formData = new FormData();
-    formData.append('pdf', formData.AlzheimerImage);
-    formData.append('selectedPatient', JSON.stringify(selectedPatient));
+    formData.append("pdf", pdfname);
+    formData.append("selectedPatient", JSON.stringify(selectedPatient));
 
     try {
-      const response = await axios.post('http://localhost:5000/store/report', formData,
-      {headers: {
-        'Content-Type': 'multipart/form-data' // Ensure correct content type
-      }});
-      console.log('PDF uploaded successfully...');
+      const response = await axios.post(
+        "http://localhost:5000/store/report",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Ensure correct content type
+          },
+        }
+      );
+      console.log("PDF uploaded successfully...");
     } catch (error) {
-      console.error('Error uploading PDF:', error);
+      console.error("Error uploading PDF:", error);
     }
   };
 
@@ -263,7 +281,8 @@ const AlzheimerForm = () => {
     doc.setTextColor(0, 0, 0);
     doc.text(patientDetailsLines, 10, yPos);
     doc.save(combinedData.patient_details.name + "_AlzheimerReport.pdf");
-    handleUploadPDf()
+
+    handleUploadPDf(combinedData.patient_details.name + "_AlzheimerReport.pdf");
   };
 
   const getImageBase64 = (file) => {
@@ -296,7 +315,7 @@ const AlzheimerForm = () => {
         );
         console.log(response);
         setSelectedPatient({
-          patient_id : response.data._id.$oid,
+          patient_id: response.data._id.$oid,
           name: response.data.name,
           address: response.data.address,
           phone: response.data.phone_number,
@@ -339,7 +358,7 @@ const AlzheimerForm = () => {
         <h1 className="fs-10 mb-5 align-items-center">Alzheimer's</h1>
       </div>
 
-      <Container style={{ marginTop: "100px" }}>
+      <Container style={{ marginTop: "100px", maxWidth: "1400px" }}>
         <Grid
           container
           spacing={3}
@@ -348,7 +367,7 @@ const AlzheimerForm = () => {
         >
           <Grid item>
             <Typography variant="h4" component="h1" gutterBottom>
-              Patients List
+              <h1 className="patient-list">Patients List</h1>
             </Typography>
           </Grid>
           <Grid item>
@@ -357,98 +376,66 @@ const AlzheimerForm = () => {
             </button>
           </Grid>
         </Grid>
-        <TableContainer sx={{ maxHeight: 650 }} component={Paper}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell>
-                  <b>#</b>
-                </TableCell>
-                <TableCell>
-                  <b>Name</b>
-                </TableCell>
-                <TableCell>
-                  <b>Actions</b>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {patients.map((patient, index) => (
-                <TableRow key={patient._id}>
-                  <TableCell>
-                    <Checkbox
-                      checked={selectedRow === index}
-                      onChange={() => handleRowSelect(index, patient._id)}
-                    />
-                  </TableCell>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{patient.name}</TableCell>
-                  {/* <TableCell>
-                <Button
-                  component={Link}
-                  to={`/test/${patient._id}`}
-                  variant="outlined"
-                  color="primary"
-                  startIcon={<VisibilityIcon />}
-                >
-                  View
-                </Button>
-              </TableCell> */}
+        <div className="align-center">
+          <div className="diabetes-row">
+            {patients.map((patient, index) => (
+              <div key={patient._id} className="diabetes-column">
+                <div className="diabetes-icon-container">
+                  <Checkbox
+                    checked={selectedRow === index}
+                    onChange={() => handleRowSelect(index, patient._id)}
+                  />
+                </div>
+                <div className="diabetes-content">
+                  <h1>Name : {patient.name}</h1>
+                  <p>
+                    Address : {patient.address}
+                    <br />
+                    Phone No. : {patient.phone_number}
+                  </p>
+                </div>
 
-                  <TableCell>
-                    <ViewPdfButton
-                      // pdfName={patient.name + "_AlzheimerReport.pdf"}
-                      pdfName={patient._id.$oid}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                <ViewPdfButton
+                  // pdfName={patient.name + "_AlzheimerReport.pdf"}
+                  pdfName={patient._id.$oid}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        <br />
 
         {selectedPatient && (
-          <div>
-            <Container style={{ marginTop: "100px" }}>
-              <Grid>
-                <Grid item>
-                  <Typography
-                    variant="h4"
-                    component="h1"
-                    marginLeft={"-3%"}
-                    gutterBottom
-                  >
-                    Selected Patient details
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Container>
-            <div>
-              <TableContainer component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>
-                        <b>Name</b>
-                      </TableCell>
-                      <TableCell>
-                        <b>Address</b>
-                      </TableCell>
-                      <TableCell>
-                        <b>Phone Number</b>
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>{selectedPatient["name"]}</TableCell>
-                      <TableCell>{selectedPatient["address"]}</TableCell>
-                      <TableCell>{selectedPatient["phone"]}</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
+          <div
+            className=""
+            style={{
+              backgroundColor: "#d9f0fe",
+              borderRadius: "12px",
+              padding: "20px",
+            }}
+          >
+            <div
+              key={selectedPatient._id}
+              className=""
+              style={{
+                padding: "15px",
+                width: "300px",
+              }}
+            >
+              <h2>Selected Patient</h2>
+              <div className="diabetes-content">
+                <h1>Name : {selectedPatient.name}</h1>
+                <p>
+                  Address : {selectedPatient.address}
+                  <br />
+                  Phone No. : {selectedPatient.phone}
+                </p>
+              </div>
+
+              <ViewPdfButton
+                // pdfName={patient.name + "_AlzheimerReport.pdf"}
+                pdfName={selectedPatient.patient_id}
+              />
             </div>
           </div>
         )}
@@ -534,18 +521,20 @@ const AlzheimerForm = () => {
                         Download Report PDF
                       </button>
                     </div>
+                    <br/>
+
+                    {/* Uploading Report to DB */}
+
+                    <div className="align-items-center">
+                      {/* Add the UploadForm component here */}
+                      <UploadForm onPdfUpload={handlePdfUpload} />
+                    </div>
                   </>
                 )}
             </div>
           </div>
         </div>
         <div className="steps-container"></div>
-      </div>
-      {/* Uploading Report to DB */}
-
-      <div className="align-items-center">
-        {/* Add the UploadForm component here */}
-        <UploadForm onPdfUpload={handlePdfUpload} />
       </div>
     </>
   );

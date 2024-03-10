@@ -10,10 +10,9 @@ store_bp = Blueprint('store', __name__)
 @store_bp.route('/report', methods=['POST'])
 def store_report():
     if 'pdf' not in request.files:
-        print(request.files)
-        return jsonify({'error': 'No file part'})
-    
-    selected_patient = request.form.get('selectedPatient')
+        print("no pdf")
+        return jsonify({'error': 'No file part'}),400
+
     pdf_file = request.files['pdf']
 
     if pdf_file.filename == '':
@@ -29,6 +28,7 @@ def store_report():
 
         return jsonify({'message': 'File stored in MongoDB successfully'})
     except Exception as e:
+        print(e)
         return jsonify({'error': f'Error storing PDF in MongoDB: {str(e)}'})
 
 
