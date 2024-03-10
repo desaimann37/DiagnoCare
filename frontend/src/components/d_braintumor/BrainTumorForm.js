@@ -91,7 +91,7 @@ const BrainTumorForm = () => {
   };
 
   const handleClose = () => {
-    window.location = "/alzheimer";
+    window.location = "/diabetes";
     setOpen(false);
   };
 

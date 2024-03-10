@@ -107,7 +107,7 @@ const LungCancerForm = () => {
     setOpen(true);
   };
   const handleClose = () => {
-    window.location = "/alzheimer";
+    window.location = "/lungcancer";
     setOpen(false);
   };
 
@@ -316,7 +316,7 @@ const LungCancerForm = () => {
 
       {/* Totle...*/}
       <div className="d-form-text-section">
-        <h1 className="fs-10 mb-5 align-items-center">Alzheimer's</h1>
+        <h1 className="fs-10 mb-5 align-items-center">Lung Cancer</h1>
       </div>
 
       {/* Displaying List of Patients...*/}
@@ -409,7 +409,6 @@ const LungCancerForm = () => {
         <div className="d-form-text-section">
           <div className="col-xxl-8 col-xl-9 col-lg-9 col-md-7 col-sm-9">
             <div className="card-body p-4">
-              <h1 className="fs-10 mb-5 align-items-center">Lung Cancer</h1>
               <form
                 method="POST"
                 className="needs-validation"

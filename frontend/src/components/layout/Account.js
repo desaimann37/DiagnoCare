@@ -1,21 +1,113 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import loader from "../../assets/Spinner-2.gif";
+import { jsPDF } from "jspdf";
+import { Container, Typography, Grid, Checkbox } from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import { styled } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import AddPatient from "../AddPatient";
+import UploadForm from "../UploadForm";
+import ViewPdfButton from "../ViewPdfButton";
+import Swal from "sweetalert2";
+
+import user from "../../assets/user.jpg";
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
 
 const Account = () => {
   const [accounts, setAccounts] = useState([]);
   const [newAccountName, setNewAccountName] = useState('');
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [patients, setPatients] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    const fetchPatients = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:5000/auth/patients",
+          config
+        );
+        setPatients(response.data);
+      } catch (error) {
+        console.error("Error fetching tests:", error);
+      }
+    };
+    fetchPatients();
+  }, []);
 
   useEffect(() => {
     // Fetch account list from the backend
-    const ACCESS_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwOTQ4MjYxNCwianRpIjoiZmFjZWIxMGQtNjA3OS00NzlmLTkxYzMtODdjMGViODNjMDRlIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImFiYyIsIm5iZiI6MTcwOTQ4MjYxNCwiY3NyZiI6IjE3ZGVjOWJjLTRiZmUtNDUzYi1hZDE1LTRmNjNiNDhmMGY2OCIsImV4cCI6MTcwOTU2OTAxNCwiaXNfc3RhZmYiOnRydWV9.eOk7QmhZ8MK8lIa7jPXd-8SMVxLJ2JnN2qi_HiGD_hg';
     fetch('http://127.0.0.1:5000/users/doctor/list?page=1&per_page=100' , {
       headers:{
-        'Authorization' : `Bearer ${ACCESS_TOKEN}`,
+        'Authorization' : `Bearer ${localStorage.getItem('access_token')}`,
       },
     })
       .then(response => response.json())
       .then(data => setAccounts(data))
       .catch(error => console.error('Error fetching accounts:', error));
   }, []);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    window.location = "/alzheimer";
+    setOpen(false);
+  };
+
+  const handleRowSelect = async (index, id) => {
+    if (selectedRow === index) {
+      setSelectedRow(null); // Deselect if already selected
+    } else {
+      setSelectedRow(index); // Select the clicked row
+      console.log("Row selected:", index);
+      id = id["$oid"];
+      try {
+        const token = localStorage.getItem("token");
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        };
+        const response = await axios.get(
+          `http://127.0.0.1:5000/auth/patient/${id}`,
+          config
+        );
+        console.log(response);
+        setSelectedPatient({
+          patient_id: response.data._id.$oid,
+          name: response.data.name,
+          address: response.data.address,
+          phone: response.data.phone_number,
+        });
+        console.log(selectedPatient);
+      } catch (error) {
+        console.error("Error fetching tests:", error);
+      }
+    }
+  };
 
   const handleAddAccount = () => {
     // Create a new account on the backend
@@ -69,29 +161,77 @@ const Account = () => {
 
   return (
     <div>
-      <h2>Patient's List</h2>
-      <ul>
-        {accounts.map(account => (
-          <li key={account.id}>
-            {account.name}{' '}
-            <button onClick={() => handleUpdateAccount(account.id, prompt('Enter new account name:', account.name))}>
-              Update
-            </button>
-            <button onClick={() => handleDeleteAccount(account.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+      {/* Add Patient Dialog Box...*/}
+      <BootstrapDialog
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+      >
+        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+          Add Patient
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent dividers>
+          <AddPatient handleClose={handleClose} />
+        </DialogContent>
+      </BootstrapDialog>
 
-      <div>
-        <h2>Add New Patient</h2>
-        <input
-          type="text"
-          placeholder="Enter Your name"
-          value={newAccountName}
-          onChange={e => setNewAccountName(e.target.value)}
-        />
-        <button onClick={handleAddAccount}>Add Account</button>
-      </div>
+      {/* Displaying List of Patients...*/}
+      <Container style={{ marginTop: "100px", maxWidth: "1400px" }}>
+        <Grid
+          container
+          spacing={3}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Grid item>
+            <Typography variant="h4" component="h1" gutterBottom>
+              <h1 className="patient-list">Patients List</h1>
+            </Typography>
+          </Grid>
+          <Grid item>
+            <button onClick={handleClickOpen} className="btn btn-primary">
+              Add Patient
+            </button>
+          </Grid>
+        </Grid>
+        <div className="align-center">
+          <div className="diabetes-row">
+            {patients.map((patient, index) => (
+              <div key={patient._id} className="diabetes-column">
+                <div className="diabetes-icon-container">
+                  <img src={user} alt="user"/>
+                </div>
+                <div className="diabetes-content">
+                  <h1>Name : {patient.name}</h1>
+                  <p>
+                    Address : {patient.address}
+                    <br />
+                    Phone No. : {patient.phone_number}
+                  </p>
+                </div>
+
+                <ViewPdfButton
+                  // pdfName={patient.name + "_AlzheimerReport.pdf"}
+                  pdfName={patient._id.$oid}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        <br />
+      </Container>
     </div>
   );
 };
