@@ -1,39 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import loader from "../../assets/Spinner-2.gif";
 import { jsPDF } from "jspdf";
-import {
-  Container,
-  Typography,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Grid,
-  Checkbox,
-} from "@mui/material";
+import { Container, Typography, Grid, Checkbox } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
+import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import AddIcon from "@mui/icons-material/Add";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Link } from "react-router-dom";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
 import AddPatient from "../AddPatient";
-import { styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
-import Cards from "../home/Cards";
 import UploadForm from "../UploadForm";
 import ViewPdfButton from "../ViewPdfButton";
 import Swal from "sweetalert2";
-// const mongoose = require('mongoose')
-// const fs = require('fs');
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -48,26 +27,20 @@ const AlzheimerForm = () => {
   const [formData, setFormData] = useState({
     AlzheimerImage: null,
   });
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [selectedPatient, setSelectedPatient] = useState(null);
   const [Symptoms, setSymptoms] = useState();
   const [predicted_category, setpredicted_category] = useState();
   const [Treatment, setTreatment] = useState();
   const [Recommendation, setRecommendation] = useState();
   const [loading, setLoading] = useState(false);
-  const [patients, setPatients] = useState([]);
   const [combinedData, setCombinedData] = useState(null);
   const [open, setOpen] = useState(false);
-
-  const handlePdfUpload = (pdfData) => {
-    console.log("PDF Data:", pdfData);
-  };
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [patients, setPatients] = useState([]);
 
   useEffect(() => {
     console.log(selectedPatient);
-    // Check if selectedPatient is not null before accessing its properties
     if (selectedPatient) {
-      // combining Patient Data with Report :
       let combined_data = {
         symptom: Symptoms,
         predicted_category: predicted_category,
@@ -99,7 +72,7 @@ const AlzheimerForm = () => {
       },
     };
 
-    const fetchTests = async () => {
+    const fetchPatients = async () => {
       try {
         const response = await axios.get(
           "http://127.0.0.1:5000/auth/patients",
@@ -110,8 +83,12 @@ const AlzheimerForm = () => {
         console.error("Error fetching tests:", error);
       }
     };
-    fetchTests();
+    fetchPatients();
   }, []);
+
+  const handlePdfUpload = (pdfData) => {
+    console.log("PDF Data:", pdfData);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -149,6 +126,7 @@ const AlzheimerForm = () => {
       });
       return;
     }
+
     try {
       setLoading(true);
 
@@ -206,80 +184,55 @@ const AlzheimerForm = () => {
 
     const doc = new jsPDF();
 
-    const maxWidth = 300;
+    const { name, phone, address } = combinedData.patient_details;
+    const imageBase64 = await getImageBase64(formData.AlzheimerImage);
+
+    const tableData = [
+      { header: "Doctor Name:", content: JSON.parse(localStorage.getItem('loggedin_obj')).user.name }, 
+      { header: "Doctor EmailId:", content: JSON.parse(localStorage.getItem('loggedin_obj')).user.email }, 
+      { header: "Patient Name:", content: name }, 
+      { header: "Phone:", content: phone },
+      { header: "Address:", content: address },
+      { header: "Disease name:", content: "Alzheimer's" },
+      { header: "Predicted Category of Disease:", content: predicted_category }, 
+      { header: "Symptoms:", content: Symptoms },
+      { header: "Treatment:", content: Treatment }, 
+      { header: "Recommendation:", content: Recommendation }, 
+    ];
+
+    // Set font style and size for title
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
 
-    const predicted_categoryLines = doc.splitTextToSize(
-      combinedData.predicted_category,
-      maxWidth
-    );
-    const SymptomsLines = doc.splitTextToSize(combinedData.symptom, maxWidth);
-    const TreatmentLines = doc.splitTextToSize(
-      combinedData.Treatment,
-      maxWidth
-    );
-    const RecommendationLines = doc.splitTextToSize(
-      combinedData.Recommendation,
-      maxWidth
-    );
-    const patientDetailsLines = doc.splitTextToSize(
-      `Patient Details:\nName: ${combinedData.patient_details.name}\nAddress: ${combinedData.patient_details.address}\nPhone: ${combinedData.patient_details.phone}`,
-      maxWidth
-    );
+    // Add title
+    doc.text("REPORT", 87, 30);
 
-    doc.setFont("helvetica");
-    doc.setFontSize(20);
-
-    let yPos = 30;
-    doc.text("REPORT", 87, yPos);
-
-    const imageBase64 = await getImageBase64(formData.AlzheimerImage);
     doc.addImage(imageBase64, "JPG", 10, 40, 60, 60);
 
+    // Set font style and size for content
+    doc.setFont("helvetica");
     doc.setFontSize(12);
 
-    yPos += 80;
-    doc.setTextColor(255, 0, 0);
-    doc.text("Disease name:", 10, yPos);
-    yPos += 7;
-    doc.setTextColor(0, 0, 0);
-    doc.text("Alzheimer", 10, yPos);
-    yPos += 12;
+    // Set initial y position for table
+    let yPos = 105;
 
-    doc.setTextColor(255, 0, 0);
-    doc.text("Predicted Category of Disease:", 10, yPos);
-    yPos += 7;
-    doc.setTextColor(0, 0, 0);
-    doc.text(predicted_categoryLines, 10, yPos);
-    yPos += predicted_categoryLines.length * 12;
+    // Add table using autoTable plugin
+    doc.autoTable({
+      startY: yPos,
+      head: [
+        [
+          { content: "Field", styles: { textColor: [255, 0, 0] } },
+          { content: "Value", styles: { textColor: [0, 0, 0] } },
+        ],
+      ], // Table header with custom styles
+      body: tableData.map((row) => [row.header, row.content]), // Table body with data
+      theme: "grid", // Table theme
+      styles: { halign: "left", valign: "middle" }, // Table styles
+      columnStyles: { 0: { fontStyle: "bold" } }, // Column styles
+      margin: { left: 10, right: 10 }, // Table margin
+    });
 
-    doc.setTextColor(255, 0, 0);
-    doc.text("Symptoms:", 10, yPos);
-    yPos += 7;
-    doc.setTextColor(0, 0, 0);
-    doc.text(SymptomsLines, 10, yPos);
-    yPos += SymptomsLines.length * 12;
-
-    doc.setTextColor(255, 0, 0);
-    doc.text("Treatment:", 10, yPos);
-    yPos += 7;
-    doc.setTextColor(0, 0, 0);
-    doc.text(TreatmentLines, 10, yPos);
-    yPos += TreatmentLines.length * 10;
-
-    doc.setTextColor(255, 0, 0);
-    doc.text("Recommendation:", 10, yPos);
-    yPos += 7;
-    doc.setTextColor(0, 0, 0);
-    doc.text(RecommendationLines, 10, yPos);
-    yPos += RecommendationLines.length * 10;
-
-    doc.setTextColor(255, 0, 0);
-    doc.text("Patient Details:", 10, yPos);
-    yPos += 7;
-    doc.setTextColor(0, 0, 0);
-    doc.text(patientDetailsLines, 10, yPos);
+    // Save the PDF with filename "DiabetesReport.pdf"
     doc.save(combinedData.patient_details.name + "_AlzheimerReport.pdf");
 
     handleUploadPDf(combinedData.patient_details.name + "_AlzheimerReport.pdf");
@@ -329,6 +282,7 @@ const AlzheimerForm = () => {
 
   return (
     <>
+      {/* Add Patient Dialog Box...*/}
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
@@ -354,10 +308,12 @@ const AlzheimerForm = () => {
         </DialogContent>
       </BootstrapDialog>
 
+      {/* Totle...*/}
       <div className="d-form-text-section">
         <h1 className="fs-10 mb-5 align-items-center">Alzheimer's</h1>
       </div>
 
+      {/* Displaying List of Patients...*/}
       <Container style={{ marginTop: "100px", maxWidth: "1400px" }}>
         <Grid
           container
@@ -405,6 +361,7 @@ const AlzheimerForm = () => {
         </div>
         <br />
 
+        {/* Displayng Selected Patient...*/}
         {selectedPatient && (
           <div
             className=""
@@ -440,6 +397,8 @@ const AlzheimerForm = () => {
           </div>
         )}
       </Container>
+
+      {/* Form to upload Image...*/}
       <div className="d-form-container">
         <div className="d-form-text-section">
           <div className="col-xxl-8 col-xl-9 col-lg-9 col-md-7 col-sm-9">
@@ -474,9 +433,12 @@ const AlzheimerForm = () => {
                 </div>
               </form>
               <br />
+              <br />
               {loading && (
                 <div className="loader-container">
                   <img src={loader} alt="Loader" className="loader" />
+                  <br />
+                  <div className="loader-container">Genrating Report...</div>
                 </div>
               )}
               {!loading &&
@@ -521,10 +483,9 @@ const AlzheimerForm = () => {
                         Download Report PDF
                       </button>
                     </div>
-                    <br/>
+                    <br />
 
                     {/* Uploading Report to DB */}
-
                     <div className="align-items-center">
                       {/* Add the UploadForm component here */}
                       <UploadForm onPdfUpload={handlePdfUpload} />
@@ -534,7 +495,6 @@ const AlzheimerForm = () => {
             </div>
           </div>
         </div>
-        <div className="steps-container"></div>
       </div>
     </>
   );
