@@ -11,6 +11,10 @@ import Alzheimer from "./components/d_alzheimer/Alzheimer";
 import BrainTumor from "./components/d_braintumor/BrainTumor";
 import Account from "./components/layout/Account";
 import UploadForm from "./components/UploadForm";
+import Layout from "./Patient/Layout/Layout";
+import Doctors from "./Patient/DoctorList/Doctors";
+import Chatbot from "./components/chatwidget/Chatbot";
+import Home from "./Patient/Home/Home";
 // import CircularDemo from "./components/home/Cards";
 // import CircularDemo from "./components/home/Cards"
 
@@ -47,6 +51,11 @@ function App() {
                 <Route path="braintumor" element={<BrainTumor />} />
                 <Route path="account" element={<Account />} />
                 <Route path="store" element={<UploadForm />} />
+              </Route>
+              <Route path="/p-layout" element={<Layout />} >
+                <Route index element={<Home/>} />
+                <Route path="doctors" element={<Doctors/>} />
+                <Route path="chatbot" element={<Chatbot/>} />
               </Route>
             </Routes>
           </>

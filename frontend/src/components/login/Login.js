@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
-import axios from 'axios'; 
-import doc3 from '../../assets/doc3.jpg';
-import './login.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from "react";
+import axios from "axios";
+import doc3 from "../../assets/doc3.jpg";
+import "./login.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-const Login = (props)=>{
-
+const Login = (props) => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
   });
 
   const [isRegister, setIsRegister] = useState(false);
@@ -18,32 +17,39 @@ const Login = (props)=>{
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    }); 
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const endpoint = isRegister ? 'signup' : 'login';
+    const endpoint = isRegister ? "signup" : "login";
 
     try {
-      const response = await axios.post(`http://127.0.0.1:5000/auth/${endpoint}`, formData);
+      const response = await axios.post(
+        `http://127.0.0.1:5000/auth/${endpoint}`,
+        formData
+      );
       console.log(response.data);
-      localStorage.setItem("user",response.data)
-      localStorage.setItem("token",response.data.tokens.access)
-      console.log(localStorage.getItem("user"))
-      
+      localStorage.setItem("user", response.data);
+      localStorage.setItem("token", response.data.tokens.access);
+      console.log(localStorage.getItem("user"));
+
       setIsRegister(true);
-      const user_obj = response.data
-      //pass this user_obj to parent component 
+      const user_obj = response.data;
+      //pass this user_obj to parent component
 
       props.onUserLogin(user_obj);
-      window.location.href = '/';
+      if (response.data.user.role == "doctor") {
+        window.location.href = "/";
+      } else {
+        window.location.href = "/p-layout";
+      }
     } catch (error) {
       // setError('Invalid credentials');
       // Handle error, e.g., show error message
     }
-  //Redirect User to Home page!!
+    //Redirect User to Home page!!
   };
 
   const toggleForm = () => {
@@ -58,7 +64,9 @@ const Login = (props)=>{
       <div className="login-text-section">
         <div className="col-xxl-8 col-xl-9 col-lg-9 col-md-7 col-sm-9">
           <div className="card-body p-5">
-            <h1 className="fs-10 card-title fw-bold mb-4">{isRegister ? 'Register' : 'Login'}</h1>
+            <h1 className="fs-10 card-title fw-bold mb-4">
+              {isRegister ? "Register" : "Login"}
+            </h1>
             <form
               method="POST"
               className="needs-validation"
@@ -67,22 +75,43 @@ const Login = (props)=>{
               onSubmit={handleSubmit}
             >
               {isRegister && (
-                <div className="mb-3">
-                  <label className="mb-2 label-large " htmlFor="name">
-                    Name <span>*</span>
-                  </label>
-                  <input
-                    id="name"
-                    placeholder="Enter your name"
-                    type="text"
-                    className="form-control"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
-                  <div className="invalid-feedback">Name is required</div>
-                </div>
+                <>
+                  <div className="mb-3">
+                    <label className="mb-2 label-large " htmlFor="name">
+                      Name <span>*</span>
+                    </label>
+                    <input
+                      id="name"
+                      placeholder="Enter your name"
+                      type="text"
+                      className="form-control"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                    />
+                    <div className="invalid-feedback">Name is required</div>
+                  </div>
+
+                  <div className="mb-3 ">
+                  <label className="mb-2 label-large" htmlFor="Role">
+                      Role <span>*</span>
+                    </label>
+                    <select
+                      id="Role"
+                      className="form-control custom-dropdown"
+                      name="Role"
+                      value={formData.Role}
+                      onChange={handleChange}
+                      requir
+                    >
+                      {/* <option value="">Select an option</option> */}
+                      <option value="1">Doctor</option>
+                      <option value="0">Patient</option>
+                    </select>
+                    <div className="invalid-feedback">Role is required</div>
+                  </div>
+                </>
               )}
 
               <div className="mb-3">
@@ -91,8 +120,8 @@ const Login = (props)=>{
                 </label>
                 <input
                   id="email"
-                    placeholder="Enter your Email address "
-                    type="email"
+                  placeholder="Enter your Email address "
+                  type="email"
                   className="form-control"
                   name="email"
                   value={formData.email}
@@ -112,8 +141,8 @@ const Login = (props)=>{
                 <input
                   id="password"
                   type="password"
-                    placeholder="Enter Password"
-                    className="form-control"
+                  placeholder="Enter Password"
+                  className="form-control"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
@@ -124,7 +153,7 @@ const Login = (props)=>{
 
               <div className="align-items-center">
                 <button type="submit" className="btn btn-primary">
-                  {isRegister ? 'Register' : 'Login'}
+                  {isRegister ? "Register" : "Login"}
                 </button>
               </div>
             </form>
@@ -132,14 +161,14 @@ const Login = (props)=>{
               <div className="text-center">
                 {isRegister ? (
                   <>
-                    Already have an account?{' '}
+                    Already have an account?{" "}
                     <span className="text-dark underline" onClick={toggleForm}>
                       Login
                     </span>
                   </>
                 ) : (
                   <>
-                    Don't have an account?{' '}
+                    Don't have an account?{" "}
                     <span className="text-dark underline" onClick={toggleForm}>
                       Create One
                     </span>
@@ -147,12 +176,11 @@ const Login = (props)=>{
                 )}
               </div>
             </div>
-
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Login;

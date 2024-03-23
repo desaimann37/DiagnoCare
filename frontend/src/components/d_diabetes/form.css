@@ -14,6 +14,24 @@
   text-align: center;
 }
 
+.form-control {
+  padding: 15px;
+  font-size: 1rem;
+  border-radius: 55px;
+  color: var(--black);
+}
+
+.form-control:focus {
+  border-color: var(--black);
+  box-shadow: none;
+  border-radius: 20px;
+  border-radius: 55px;
+}
+
+.form-control::placeholder {
+  color: var(--grey-accent);
+}
+
 .d-form-container {
   display: flex;
   /* height: 90vh; */
@@ -55,27 +73,9 @@
     color: var(--black);
   }
 
-  .form-control::placeholder {
-    color: var(--grey-accent);
-  }
-
-  .form-control {
-    padding: 15px;
-    font-size: 1rem;
-    border-radius: 55px;
-    color: var(--black);
-  }
-
   span {
     color: red;
     font-weight: 700;
-  }
-
-  .form-control:focus {
-    border-color: var(--black);
-    box-shadow: none;
-    border-radius: 20px;
-    border-radius: 55px;
   }
 
   .underline {
@@ -105,14 +105,15 @@
   transform: translateY(-50px);
   animation: slideIn 0.5s forwards;
 }
-.diabetes-animated-text h1{
+
+.diabetes-animated-text h1 {
   font-size: 60px;
   font-family: "Inter", sans-serif;
   font-weight: 800;
   color: var(--title-blue);
 }
 
-.diabetes-animated-text p{
+.diabetes-animated-text p {
   font-size: 25px;
   font-family: "Inter", sans-serif;
   font-weight: 200;
@@ -124,19 +125,20 @@
   margin: 0 auto;
 }
 
-.diabetes-animated-text h1 span, .diabetes-column span{
+.diabetes-animated-text h1 span,
+.diabetes-column span {
   color: var(--roczen-plus);
 }
 
 @keyframes slideIn {
   from {
-      opacity: 0;
-      transform: translateY(-50px);
+    opacity: 0;
+    transform: translateY(-50px);
   }
 
   to {
-      opacity: 1;
-      transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -162,7 +164,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  border-style:solid;
+  border-style: solid;
   border-width: 0.8px;
   border-color: rgba(199, 199, 199, 0.595);
   background-color: #ffffff;
@@ -182,7 +184,7 @@
   /* text-align: center; */
 }
 
-.diabetes-content h1{
+.diabetes-content h1 {
   /* margin-top: 1rem; */
   color: var(--title-blue);
   font-size: 21px;
@@ -190,7 +192,7 @@
   font-weight: 500;
 }
 
-.diabetes-content p{
+.diabetes-content p {
   color: var(--content-grey);
   font-size: 20px;
   font-family: "Inter", sans-serif;
@@ -198,16 +200,15 @@
   line-height: 1.4;
 }
 
-.loader-container{
+.loader-container {
   display: flex;
   justify-content: center;
 }
 
 @media (max-width: 768px) {
   .diabetes-row {
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 }
-

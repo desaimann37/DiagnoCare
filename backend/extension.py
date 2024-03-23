@@ -12,6 +12,7 @@ backend = db['sdp_backend']
 auth_collection = backend['auth']
 store_collection = backend['store']
 patient_collection = backend['patient']
+appointment_collection = backend['appointment']
 jwt = JWTManager()
 
 
