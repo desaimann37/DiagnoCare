@@ -10,7 +10,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import AddPatient from "../AddPatient";
-import UploadForm from "../UploadForm";
 import ViewPdfButton from "../ViewPdfButton";
 import Swal from "sweetalert2";
 
@@ -86,10 +85,6 @@ const AlzheimerForm = () => {
     fetchPatients();
   }, []);
 
-  const handlePdfUpload = (pdfData) => {
-    console.log("PDF Data:", pdfData);
-  };
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -155,25 +150,45 @@ const AlzheimerForm = () => {
     }
   };
 
-  const handleUploadPDf = async (pdfname) => {
+  const handleUploadPDF = async(pdfData) => {
     const formData = new FormData();
-    formData.append("pdf", pdfname);
-    formData.append("selectedPatient", JSON.stringify(selectedPatient));
-
+    
+    const filename = `${combinedData.patient_details.name}_AlzheimerReport.pdf`;
+  
+    formData.append("pdf", pdfData, filename);
+  
     try {
-      const response = await axios.post(
+       const response =  await axios.post(
         "http://localhost:5000/store/report",
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data", // Ensure correct content type
+            "Content-Type": "multipart/form-data", 
           },
         }
       );
-      console.log("PDF uploaded successfully...");
-    } catch (error) {
-      console.error("Error uploading PDF:", error);
+    if (response.status === 200) {
+      Swal.fire({
+        icon: "success",
+        title: "Successful",
+        text: "PDF downloaded and stored successfully!",
+        showConfirmButton: true,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error uploading PDF",
+        text: "An error occurred while uploading the PDF.",
+      });
     }
+  } catch (error) {
+    console.error("Error uploading PDF:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Error uploading PDF",
+      text: "An error occurred while uploading the PDF.",
+    });
+  }
   };
 
   const handleDownloadPDF = async () => {
@@ -232,10 +247,10 @@ const AlzheimerForm = () => {
       margin: { left: 10, right: 10 }, // Table margin
     });
 
-    // Save the PDF with filename "DiabetesReport.pdf"
-    doc.save(combinedData.patient_details.name + "_AlzheimerReport.pdf");
-
-    handleUploadPDf(combinedData.patient_details.name + "_AlzheimerReport.pdf");
+     // Save the PDF "
+     const pdfData = doc.output("blob");
+     handleUploadPDF(pdfData);
+     doc.save(combinedData.patient_details.name + "_AlzheimerReport.pdf");
   };
 
   const getImageBase64 = (file) => {
@@ -308,7 +323,7 @@ const AlzheimerForm = () => {
         </DialogContent>
       </BootstrapDialog>
 
-      {/* Totle...*/}
+      {/* Title...*/}
       <div className="d-form-text-section">
         <h1 className="fs-10 mb-5 align-items-center">Alzheimer's</h1>
       </div>
@@ -332,6 +347,7 @@ const AlzheimerForm = () => {
             </button>
           </Grid>
         </Grid>
+        <div style={{ maxHeight: "260px", overflowY: "auto", marginTop: "20px" }}>
         <div className="align-center">
           <div className="diabetes-row">
             {patients.map((patient, index) => (
@@ -358,6 +374,7 @@ const AlzheimerForm = () => {
               </div>
             ))}
           </div>
+        </div>
         </div>
         <br />
 
@@ -482,13 +499,6 @@ const AlzheimerForm = () => {
                       >
                         Download Report PDF
                       </button>
-                    </div>
-                    <br />
-
-                    {/* Uploading Report to DB */}
-                    <div className="align-items-center">
-                      {/* Add the UploadForm component here */}
-                      <UploadForm onPdfUpload={handlePdfUpload} />
                     </div>
                   </>
                 )}

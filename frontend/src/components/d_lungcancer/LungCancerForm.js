@@ -10,7 +10,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import AddPatient from "../AddPatient";
-import UploadForm from "../UploadForm";
 import ViewPdfButton from "../ViewPdfButton";
 import Swal from "sweetalert2";
 import api from "../../api.js";
@@ -99,9 +98,6 @@ const LungCancerForm = () => {
     fetchPatients();
   }, []);
 
-  const handlePdfUpload = (pdfData) => {
-    console.log("PDF Data:", pdfData);
-  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -123,20 +119,20 @@ const LungCancerForm = () => {
     e.preventDefault();
 
       console.log("Form Data:", formData);
-      if (!formData) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Please upload an image.",
-        });
-        return;
-      }
-
       if (!selectedPatient) {
         Swal.fire({
           icon: "error",
           title: "Error",
           text: "Please select a patient.",
+        });
+        return;
+      }
+
+      if (!formData.Age || !formData.AirPollution || !formData.ClubbingofFingerNails || !formData.DryCough || !formData.Fatigue || !formData.FrequentCold || !formData.Gender || !formData.ShortnessofBreath || !formData.Smoking|| !formData.SwallowingDifficulty|| !formData.WeightLoss|| !formData.Wheezing) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Please Fill Up All The Fields.",
         });
         return;
       }
@@ -160,26 +156,47 @@ const LungCancerForm = () => {
     }
   };
 
-  const handleUploadPDf = async (pdfname) => {
+  const handleUploadPDF = async(pdfData) => {
     const formData = new FormData();
-    formData.append("pdf", pdfname);
-    formData.append("selectedPatient", JSON.stringify(selectedPatient));
-
+    
+    const filename = `${combinedData.patient_details.name}_LungCancerReport.pdf`;
+  
+    formData.append("pdf", pdfData, filename);
+  
     try {
-      const response = await axios.post(
+       const response =  await axios.post(
         "http://localhost:5000/store/report",
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data", // Ensure correct content type
+            "Content-Type": "multipart/form-data", 
           },
         }
       );
-      console.log("PDF uploaded successfully...");
-    } catch (error) {
-      console.error("Error uploading PDF:", error);
+    if (response.status === 200) {
+      Swal.fire({
+        icon: "success",
+        title: "Successful",
+        text: "PDF downloaded and stored successfully!",
+        showConfirmButton: true,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error uploading PDF",
+        text: "An error occurred while uploading the PDF.",
+      });
     }
+  } catch (error) {
+    console.error("Error uploading PDF:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Error uploading PDF",
+      text: "An error occurred while uploading the PDF.",
+    });
+  }
   };
+  
 
   const handleDownloadPDF = async () => {
     if (!combinedData) {
@@ -249,8 +266,10 @@ const LungCancerForm = () => {
       margin: { left: 10, right: 10 }, // Table margin
     });
   
-    // Save the PDF with filename "<Patient Name>_LungCancerReport.pdf"
-    doc.save(name + "_LungCancerReport.pdf");
+     // Save the PDF "
+     const pdfData = doc.output("blob");
+     handleUploadPDF(pdfData);
+     doc.save(combinedData.patient_details.name + "_LungCancerReport.pdf");
   };
   
   const handleRowSelect = async (index, id) => {
@@ -338,6 +357,7 @@ const LungCancerForm = () => {
             </button>
           </Grid>
         </Grid>
+        <div style={{ maxHeight: "260px", overflowY: "auto", marginTop: "20px" }}>
         <div className="align-center">
           <div className="diabetes-row">
             {patients.map((patient, index) => (
@@ -358,12 +378,12 @@ const LungCancerForm = () => {
                 </div>
 
                 <ViewPdfButton
-                  // pdfName={patient.name + "_AlzheimerReport.pdf"}
                   pdfName={patient._id.$oid}
                 />
               </div>
             ))}
           </div>
+        </div>
         </div>
         <br />
 
@@ -717,13 +737,7 @@ const LungCancerForm = () => {
                         Download Report PDF
                       </button>
                     </div>
-                    <br />
-
-                    {/* Uploading Report to DB */}
-                    <div className="align-items-center">
-                      {/* Add the UploadForm component here */}
-                      <UploadForm onPdfUpload={handlePdfUpload} />
-                    </div>
+                   
                   </>
                 )}
             </div>

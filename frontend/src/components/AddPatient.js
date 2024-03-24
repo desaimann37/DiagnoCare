@@ -21,7 +21,6 @@ const AddPatient = (props) => {
     e.preventDefault();
 
     const token = localStorage.getItem('token');
-
     const config = {
       headers: {
         'Authorization': `Bearer ${token}`,

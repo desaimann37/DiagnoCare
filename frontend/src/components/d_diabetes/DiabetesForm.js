@@ -10,12 +10,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import AddPatient from "../AddPatient";
-import UploadForm from "../UploadForm";
 import ViewPdfButton from "../ViewPdfButton";
 import Swal from "sweetalert2";
 import api from "../../api.js";
 import "./form.css";
 import "jspdf-autotable";
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -101,9 +101,7 @@ const DiabetesForm = () => {
     fetchPatients();
   }, []);
 
-  const handlePdfUpload = (pdfData) => {
-    console.log("PDF Data:", pdfData);
-  };
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -123,16 +121,6 @@ const DiabetesForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!formData) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Please upload an image.",
-      });
-      return;
-    }
-
     if (!selectedPatient) {
       Swal.fire({
         icon: "error",
@@ -141,6 +129,16 @@ const DiabetesForm = () => {
       });
       return;
     }
+
+    if (!formData.Age || !formData.BMI || !formData.CholCheck || !formData.HeartDiseaseorAttack || !formData.HighBP || !formData.HighChol || !formData.Sex || !formData.Stroke) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please Fill Up All The Fields.",
+      });
+      return;
+    }
+    
     try {
       setLoading(true);
 
@@ -161,86 +159,47 @@ const DiabetesForm = () => {
     }
   };
 
-  const handleUploadPDf = async (pdfname) => {
+  const handleUploadPDF = async(pdfData) => {
     const formData = new FormData();
-    formData.append("pdf", pdfname);
-    formData.append("selectedPatient", JSON.stringify(selectedPatient));
-
+    
+    const filename = `${combinedData.patient_details.name}_DiabetesReport.pdf`;
+  
+    formData.append("pdf", pdfData, filename);
+  
     try {
-      const response = await axios.post(
+       const response =  await axios.post(
         "http://localhost:5000/store/report",
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data", // Ensure correct content type
+            "Content-Type": "multipart/form-data", 
           },
         }
       );
-      console.log("PDF uploaded successfully...");
-    } catch (error) {
-      console.error("Error uploading PDF:", error);
+    if (response.status === 200) {
+      Swal.fire({
+        icon: "success",
+        title: "Successful",
+        text: "PDF downloaded and stored successfully!",
+        showConfirmButton: true,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error uploading PDF",
+        text: "An error occurred while uploading the PDF.",
+      });
     }
+  } catch (error) {
+    console.error("Error uploading PDF:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Error uploading PDF",
+      text: "An error occurred while uploading the PDF.",
+    });
+  }
   };
-
-  // const handleDownloadPDF = async () => {
-  //   const doc = new jsPDF();
-
-  //   const maxWidth = 300;
-  //   doc.setFont("helvetica", "bold");
-  //   doc.setFontSize(20);
-
-  //   const predicted_categoryLines = doc.splitTextToSize(
-  //     predicted_category,
-  //     maxWidth
-  //   );
-  //   const SymptomsLines = doc.splitTextToSize(Symptoms, maxWidth);
-  //   const TreatmentLines = doc.splitTextToSize(Treatment, maxWidth);
-  //   const RecommendationLines = doc.splitTextToSize(Recommendation, maxWidth);
-
-  //   doc.setFont("helvetica");
-  //   doc.setFontSize(20);
-
-  //   let yPos = 30;
-  //   doc.text("REPORT", 87, yPos);
-  //   doc.setFontSize(12);
-
-  //   yPos += 12;
-  //   doc.setTextColor(255, 0, 0);
-  //   doc.text("Disease name:", 10, yPos);
-  //   yPos += 7;
-  //   doc.setTextColor(0, 0, 0);
-  //   doc.text("Diabetes", 10, yPos);
-  //   yPos += 12;
-
-  //   doc.setTextColor(255, 0, 0);
-  //   doc.text("Predicted Category of Disease:", 10, yPos);
-  //   yPos += 7;
-  //   doc.setTextColor(0, 0, 0);
-  //   doc.text(predicted_categoryLines, 10, yPos);
-  //   yPos += predicted_categoryLines.length * 12;
-
-  //   doc.setTextColor(255, 0, 0);
-  //   doc.text("Symptoms:", 10, yPos);
-  //   yPos += 7;
-  //   doc.setTextColor(0, 0, 0);
-  //   doc.text(SymptomsLines, 10, yPos);
-  //   yPos += SymptomsLines.length * 12;
-
-  //   doc.setTextColor(255, 0, 0);
-  //   doc.text("Treatment:", 10, yPos);
-  //   yPos += 7;
-  //   doc.setTextColor(0, 0, 0);
-  //   doc.text(TreatmentLines, 10, yPos);
-  //   yPos += TreatmentLines.length * 10;
-
-  //   doc.setTextColor(255, 0, 0);
-  //   doc.text("Recommendation:", 10, yPos);
-  //   yPos += 7;
-  //   doc.setTextColor(0, 0, 0);
-  //   doc.text(RecommendationLines, 10, yPos);
-
-  //   doc.save("DiabetesReport.pdf");
-  // };
+  
 
   const handleDownloadPDF = async () => {
     if (!combinedData) {
@@ -307,8 +266,10 @@ const DiabetesForm = () => {
       margin: { left: 10, right: 10 }, // Table margin
     });
 
-    // Save the PDF with filename "DiabetesReport.pdf"
-    doc.save(combinedData.patient_details.name + "_Diabetes.pdf");
+    // Save the PDF "
+    const pdfData = doc.output("blob");
+    handleUploadPDF(pdfData);
+    doc.save(combinedData.patient_details.name + "_DiabetesReport.pdf");
   };
 
   const handleRowSelect = async (index, id) => {
@@ -346,7 +307,6 @@ const DiabetesForm = () => {
 
   return (
     <>
-      {/* Add Patient Dialog Box...*/}
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
@@ -372,12 +332,12 @@ const DiabetesForm = () => {
         </DialogContent>
       </BootstrapDialog>
 
-      {/* Totle...*/}
+
       <div className="d-form-text-section">
         <h1 className="fs-10 mb-5 align-items-center">Diabetes</h1>
       </div>
 
-      {/* Displaying List of Patients...*/}
+   
       <Container style={{ marginTop: "100px", maxWidth: "1400px" }}>
         <Grid
           container
@@ -396,6 +356,7 @@ const DiabetesForm = () => {
             </button>
           </Grid>
         </Grid>
+      <div style={{ maxHeight: "260px", overflowY: "auto", marginTop: "20px" }}>
         <div className="align-center">
           <div className="diabetes-row">
             {patients.map((patient, index) => (
@@ -416,12 +377,12 @@ const DiabetesForm = () => {
                 </div>
 
                 <ViewPdfButton
-                  // pdfName={patient.name + "_AlzheimerReport.pdf"}
                   pdfName={patient._id.$oid}
                 />
               </div>
             ))}
           </div>
+        </div>
         </div>
         <br />
 
@@ -454,7 +415,6 @@ const DiabetesForm = () => {
               </div>
 
               <ViewPdfButton
-                // pdfName={patient.name + "_AlzheimerReport.pdf"}
                 pdfName={selectedPatient.patient_id}
               />
             </div>
@@ -701,12 +661,6 @@ const DiabetesForm = () => {
                       </button>
                     </div>
                     <br />
-
-                    {/* Uploading Report to DB */}
-                    <div className="align-items-center">
-                      {/* Add the UploadForm component here */}
-                      <UploadForm onPdfUpload={handlePdfUpload} />
-                    </div>
                   </>
                 )}
             </div>
