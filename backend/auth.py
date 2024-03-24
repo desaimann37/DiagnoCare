@@ -19,9 +19,17 @@ auth_bp = Blueprint('auth' , __name__)
 def api_signup():
     try:
         data = request.get_json()
+        print(data)
         name = data.get('name')
         email = data.get('email')
         password = data.get('password')
+        role = data.get('Role', 'doctor')
+        if(role == '0'):
+            role = 'patient'
+        else:
+            role = 'doctor' 
+
+        print(role)
 
         if not name:
             return jsonify({'message': 'Name is required'}), 400
@@ -43,7 +51,8 @@ def api_signup():
         user = {
             'name': name,
             'email': email,
-            'password': hash_password
+            'password': hash_password,
+            'role': role 
         }
         auth_collection.insert_one(user)
 
@@ -71,6 +80,7 @@ def api_login():
         data = request.get_json()
         email = data.get('email')
         password = data.get('password')
+        role = data.get('role')
 
         if not email:
             return jsonify({'message': 'Email is required'}), 400
@@ -89,17 +99,43 @@ def api_login():
 
                 # Passwords match
                 user['_id'] = str(user['_id'])  # Convert ObjectId to string
-                response = jsonify(
-                    {
-                        'message': 'Login successful', 
+
+                # Check the user's role
+                user_role = user.get('role', 'doctor')  # Default role is 'user'
+                if user_role == 'doctor':
+                    # Additional logic for admin role
+                    # For example, you could include additional data in the response
+                    response_data = {
+                        'message': 'Doctor login successful',
                         'user': user,
-                        'tokens' : {
-                            "access": access_token,
-                            "refresh": refresh_token,
+                        'tokens': {
+                            'access': access_token,
+                            'refresh': refresh_token
                         }
                     }
-                )
-                print("start...")
+                else:
+                    response_data = {
+                        'message': 'Patient login successful',
+                        'user': user,
+                        'tokens': {
+                            'access': access_token,
+                            'refresh': refresh_token
+                        }
+                    }
+                
+                # response = jsonify(
+                #     {
+                #         'message': 'Login successful', 
+                #         'user': user,
+                #         'tokens' : {
+                #             "access": access_token,
+                #             "refresh": refresh_token,
+                #         }
+                #     }
+                # )
+
+                response = jsonify(response_data)
+
                 # set_access_cookies(response, access_token)
                 response.set_cookie('auth_cookie', value=access_token, httponly=True, secure=True, max_age=custom_expiration_time.total_seconds())
                 print("end...")

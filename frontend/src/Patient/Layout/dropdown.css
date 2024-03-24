@@ -1,0 +1,137 @@
+.p-dropdown-container {
+	display: inline-block;
+	padding: 10px;
+	z-index: 100;
+	position: fixed;
+	top: 0;
+	right: 0;
+	padding: 17px;
+
+	.p-dropdown {
+		position: relative;
+
+		&[open] .with-down-arrow::after {
+			content: "\e5c7";
+		}
+
+		&[open] summary {
+			background: #ffffff10;
+		}
+
+		summary {
+			list-style: none;
+			display: inline-block;
+			cursor: pointer;
+			border-radius: 6px;
+
+			&.avatar {
+				border-radius: 50px;
+
+				img {
+					width: 40px;
+					height: 40px;
+					border-radius: 50px;
+					display: inline-block;
+					margin: 0;
+				}
+			}
+
+			.p-with-down-arrow {
+				display: inline-flex;
+				padding: 5px;
+				align-items: center;
+				color: #fff;
+				line-height: 1;
+
+				&::after {
+					content: "\e5c5";
+					font-size: 22px;
+					font-family: "Inter", sans-serif;
+					font-weight: 100;
+					color: #243E63;
+					line-height: 1;
+					letter-spacing: normal;
+					text-transform: none;
+					display: inline-block;
+					white-space: nowrap;
+					word-wrap: normal;
+					direction: ltr;
+					-webkit-font-smoothing: antialiased;
+				}
+			}
+		}
+
+		&.left ul {
+			left: 0;
+		}
+
+		&.right ul {
+			right: 0;
+		}
+
+		ul {
+			padding: 0;
+			margin: 0;
+			box-shadow: 0 0 10px #00000030;
+			min-width: max-content;
+			position: absolute;
+			top: 100%;
+			border-radius: 10px;
+			background-color: #fff;
+			z-index: 2;
+
+			li {
+				list-style-type: none;
+				display: block;
+				/* If you use divider & borders, it's best to use top borders */
+				/*border-top: 1px solid #ccc;*/
+
+				&:first-of-type {
+					border: none;
+					background-color: var(--light-gray);
+				}
+
+				p {
+					padding: 10px 15px;
+					margin: 0;
+				}
+
+				a {
+					display: flex;
+					align-items: center;
+					justify-content: flex-start;
+					padding: 10px 15px;
+					text-decoration: none;
+					line-height: 1;
+					color: var(--text-color);
+
+					&:hover {
+						color: var(--roczen-blue);
+					}
+				}
+
+				&:first-of-type {
+					border-radius: 10px 10px 0 0;
+				}
+
+				&:last-of-type {
+					border-radius: 0 0 10px 10px;
+				}
+
+				&.divider {
+					border: none;
+					border-bottom: 1px solid var(--text-color);
+					&~li {
+						border: none;
+					}
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: 768px) {
+	.p-dropdown-container {
+		padding: 17px;
+	}
+}

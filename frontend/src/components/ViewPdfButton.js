@@ -26,7 +26,6 @@ const ViewPdfButton = ({ pdfName }) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
-    window.location = "/alzheimer";
     setOpen(false);
   };
 
