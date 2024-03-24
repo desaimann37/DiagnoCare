@@ -15,6 +15,8 @@ import Layout from "./Patient/Layout/Layout";
 import Doctors from "./Patient/DoctorList/Doctors";
 import Chatbot from "./components/chatwidget/Chatbot";
 import Home from "./Patient/Home/Home";
+import Services from "./Patient/Sevices/Services";
+import DoctorDetail from "./Patient/DoctorList/DoctorDetail";
 // import CircularDemo from "./components/home/Cards";
 // import CircularDemo from "./components/home/Cards"
 
@@ -55,7 +57,9 @@ function App() {
               <Route path="/p-layout" element={<Layout />} >
                 <Route index element={<Home/>} />
                 <Route path="doctors" element={<Doctors/>} />
+                <Route path="doctors/:id"element={<DoctorDetail/>} />
                 <Route path="chatbot" element={<Chatbot/>} />
+                <Route path="services" element={<Services/>} />
               </Route>
             </Routes>
           </>

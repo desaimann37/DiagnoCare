@@ -37,7 +37,10 @@ const Layout = () => {
                 <Link to="/p-layout">Home</Link>
               </li>
               <li>
-                <Link to="/p-layout/doctors">Doctors</Link>
+                <Link to="/p-layout/services">Services</Link>
+              </li>
+              <li>
+                <Link to="/p-layout/doctors">Find a Doctor</Link>
               </li>
               <li>
                 <Link to="/p-layout/chatbot">ChatBot</Link>
@@ -57,13 +60,13 @@ const Layout = () => {
 const calculateLeftPosition = (pathname) => {
   switch (pathname) {
     case '/p-layout':
-      return 6;
+      return 1;
+    case '/p-layout/services':
+      return 23.9;
     case '/p-layout/doctors':
-      return 39;
+      return 53.2;
     case '/p-layout/chatbot':
-      return 76.2;
-    case '/alzheimer':
-      return 62.5;
+      return 82.9;
     case '/braintumor':
       return 85;
     default:
