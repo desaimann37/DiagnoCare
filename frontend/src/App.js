@@ -10,7 +10,6 @@ import LungCancer from "./components/d_lungcancer/LungCancer";
 import Alzheimer from "./components/d_alzheimer/Alzheimer";
 import BrainTumor from "./components/d_braintumor/BrainTumor";
 import Account from "./components/layout/Account";
-import UploadForm from "./components/UploadForm";
 import Layout from "./Patient/Layout/Layout";
 import Doctors from "./Patient/DoctorList/Doctors";
 import Chatbot from "./components/chatwidget/Chatbot";
@@ -50,7 +49,6 @@ function App() {
                 <Route path="alzheimer" element={<Alzheimer />} />
                 <Route path="braintumor" element={<BrainTumor />} />
                 <Route path="account" element={<Account />} />
-                <Route path="store" element={<UploadForm />} />
               </Route>
               <Route path="/p-layout" element={<Layout />} >
                 <Route index element={<Home/>} />
