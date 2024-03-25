@@ -13,6 +13,7 @@ auth_collection = backend['auth']
 store_collection = backend['store']
 patient_collection = backend['patient']
 appointment_collection = backend['appointment']
+doctor_collection = backend['doctor']
 jwt = JWTManager()
 
 

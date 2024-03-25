@@ -10,7 +10,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import AddPatient from "../AddPatient";
-import UploadForm from "../UploadForm";
 import ViewPdfButton from "../ViewPdfButton";
 import Swal from "sweetalert2";
 

@@ -11,6 +11,7 @@ import ShowPdfs from "./ShowPdfs";
 import { Button } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -94,6 +95,7 @@ const ViewPdfButton = ({ pdfName }) => {
         </IconButton>
         <DialogContent dividers>
           <ShowPdfs handleClose={handleClose} pdfName={pdfName} />
+          
         </DialogContent>
       </BootstrapDialog>
       {/* <button type="button" className="btn btn-secondary" onClick={handleViewPdf}> */}

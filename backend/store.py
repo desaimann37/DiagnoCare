@@ -43,6 +43,18 @@ def open_pdf(filename):
         return send_file(io.BytesIO(pdf_data['data']), mimetype='application/pdf')
     else:
         return jsonify({'error': 'PDF not found'})
+    
+@store_bp.route('/delete_pdf/<filename>', methods=['DELETE'])
+def delete_pdf(filename):
+    print(filename)
+    try:
+       store_collection.delete_one({ 'filename': filename });
+       return ("Success")
+       
+    except Exception as e:
+        print(e)
+        return jsonify({'error': f'Error storing PDF in MongoDB: {str(e)}'})
+    
 
 @store_bp.route('/get_pdf_pid/<patientId>', methods=['GET'])
 def get_pdf(patientId):

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import './showpdf.css'
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from "@mui/material/IconButton";
 
 const ShowPdfs = (props) => {
   const [pdfData, setPdfData] = useState("");
@@ -63,6 +65,22 @@ const ShowPdfs = (props) => {
       console.error("Error fetching PDF:", error);
     }
   };
+
+  const handleDelete = async(pdf)=>{
+   console.log(pdf);
+   try {
+    const response = await axios.delete(
+      `http://localhost:5000/store/delete_pdf/${pdf}`
+    );
+
+    // Update the state to remove the deleted PDF
+    setPdfs(prevPdfs => prevPdfs.filter(item => item !== pdf));
+    
+    console.log(response);
+   }catch (error) {
+    console.error("Error fetching PDF:", error);
+  }
+  }
   return (
     <>
   <div className="patient-details-container">
@@ -81,7 +99,11 @@ const ShowPdfs = (props) => {
         <div key={index} className="pdf-item">
           <p style={{ fontSize: '20px', fontFamily: 'Inter, sans-serif', fontWeight: 200, color: 'var(--content-grey)' }}>PDF Name: {pdf}</p>
           <button className="btn btn2-primary" onClick={() => openPdf(pdf)}>Open PDF</button>
+          <IconButton aria-label="delete" style={{ marginLeft: '45%' }} onClick={() => handleDelete(pdf)}>
+              <DeleteIcon />
+          </IconButton>
         </div>
+      
       ))}
     </div>
   </div>

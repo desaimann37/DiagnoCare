@@ -9,6 +9,7 @@ from extension import db
 from auth import auth_bp
 from users import user_bp
 from store import store_bp
+from doctor import doctor_bp
 from flask_jwt_extended import JWTManager
 from predict import predict_alzheimer,predict_braintumor,predict_diabetes,predict_lungcancer
 
@@ -31,6 +32,7 @@ jwt.init_app(app)
 app.register_blueprint(auth_bp , url_prefix='/auth')
 app.register_blueprint(user_bp , url_prefix='/users')
 app.register_blueprint(store_bp, url_prefix='/store')
+app.register_blueprint(doctor_bp, url_prefix='/doctor')
 
 class CustomUser:
     def __init__(self, user_dict):

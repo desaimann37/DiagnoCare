@@ -11,7 +11,7 @@ from flask_jwt_extended import (
                                 get_jwt_identity,
                                 set_access_cookies,
                                 current_user
-                            )
+                            )   
 auth_bp = Blueprint('auth' , __name__)
 
 # Signup Logic : 
@@ -255,7 +255,9 @@ def delete_patient(patient_id):
     except Exception as e:
         print(e)
         return jsonify({'error': 'Internal server error'}), 500
+    
 
+#Get all patients
 @auth_bp.route('/patients', methods=['GET'])
 @jwt_required()
 def get_all_patients():
