@@ -13,6 +13,7 @@
     "fs": "^0.0.1-security",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
+    "mdb-react-ui-kit": "^7.2.0",
     "mongoose": "^8.2.1",
     "primereact": "^10.5.1",
     "razorpay": "^2.9.2",

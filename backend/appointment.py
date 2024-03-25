@@ -7,23 +7,7 @@ mail = Mail()
 
 appointments = []
 
-def send_email(app, recipient, subject, body):
-    print(app.config['MAIL_SERVER'])
-    print(app.config['MAIL_PORT'])
-    print(app.config['MAIL_USE_TLS'])
-    print(app.config['MAIL_USERNAME'])
-    print(app.config['MAIL_PASSWORD'])
-    with app.app_context():
-        msg = Message(subject=subject,
-                      sender=app.config['MAIL_USERNAME'],
-                      recipients=['ishapaghdal@gmail.com'])
-        msg.body = body
-        try:
-            mail.send(msg)
-            return True
-        except Exception as e:
-            print(f"Failed to send email: {str(e)}")
-            return False
+
 
 @appointment_bp.route('/request', methods=['POST'])
 def request_appointment():

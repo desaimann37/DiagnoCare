@@ -6,8 +6,9 @@
 .update-profile-left-component {
   width: 260px;
   margin: 20px;
-  padding: 10px;
-  color: var(--title-blue);
+  height:fit-content;
+  padding: 15px;
+  /* color: var(--title-blue); */
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0.9, 0.9, 0.7, 0.3);
 }
@@ -20,22 +21,22 @@
 .vertical-card a {
   text-decoration: none;
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 7px;
   border: none;
-  font-size: 16px;
+  font-size: 18px;
   text-align: center;
   border-radius: 4px;
 }
 
-.vertical-card a:hover {
+/* .vertical-card a:hover {
   padding: 10px;
-  color: #4c61b8;
+  color: var(--roczen-blue);
   background-color: #d8dff7;
   color: var(--roczen-blue);
-}
+} */
 
 .logout-button {
-  background-color: transparent;
+  background-color: var(--roczen-blue);
   color: var(--white);
   border: none;
   cursor: pointer;
@@ -56,16 +57,16 @@
 
 .selected-tab {
   padding: 10px;
-  color: #4c61b8;
+  color: var(--roczen-blue);
   background-color: #d8dff7;
   border-radius: 4px;
 }
 
-.selected-tab:hover {
+/* .selected-tab:hover {
   padding: 10px;
   color: var(--roczen-blue);
   background-color: #d8dff7;
-}
+} */
 
 @media screen and (max-width: 1026px) {
   .update-profile-container {
