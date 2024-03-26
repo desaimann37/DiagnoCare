@@ -3,10 +3,13 @@ import { useParams } from "react-router-dom";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import axios from "axios";
 import './doctorDetail.css'
+import PacmanLoader from "react-spinners/PacmanLoader";
+import LoadingPage from "../LoadingPage";
+
 
 const DoctorDetail = () => {
   const [doctors, setDoctors] = useState(null);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const [activeSection, setActiveSection] = useState("about");
   const [selectedStars, setSelectedStars] = useState(0);
@@ -23,6 +26,21 @@ const DoctorDetail = () => {
 
   const handleReviewChange = (event) => {
     setReviewText(event.target.value);
+  };
+
+  const handleSendMail = async () => {
+    try {
+      setLoading(true);
+      await axios.get("http://127.0.0.1:5000/send-mail");
+      alert("Email sent successfully");
+
+      // Navigate to '/loading' after email is sent
+    } catch (error) {
+      console.error("Error sending email:", error);
+      alert("Failed to send email");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmitFeedback = () => {
@@ -57,20 +75,14 @@ const DoctorDetail = () => {
     getDoctorDetails();
   }, []);
 
-  // Render loading message while fetching data
   if (loading) {
-    return <div>Loading...</div>;
+    return <><center><LoadingPage /></center></>
   }
 
-  // Find the doctor with the specified id
   const doctor = doctors.find((doctor) => doctor.doctor_id === id);
-  console.log(doctor.rating)
-  console.log(typeof(id))
-  // If doctor is not found, display a message
   if (!doctor) {
     return <div className="doctor-detail">Doctor not found</div>;
   }
-
 
   return (
     <>
@@ -128,7 +140,8 @@ const DoctorDetail = () => {
           </div>
         </div>
 
-        {/* ---About and Feedback-- */}
+        <center><button onClick={handleSendMail}><h2>Send Mail</h2></button></center>
+        
         <br />
         <div className="doctor-nav">
           <div
@@ -149,7 +162,6 @@ const DoctorDetail = () => {
         <div className="nav-line"></div>
 
         <div className="doctor-section">
-          {console.log(activeSection)}
           {activeSection == "about" ? (
             <div className="about-section">
               <br />
@@ -180,7 +192,6 @@ const DoctorDetail = () => {
                   <h5>
                     <span>{doctor.experience}</span>
                   </h5>
-                  {/* You can add additional information here if needed */}
                 </div>
               )}
                 </div>
@@ -239,7 +250,7 @@ const DoctorDetail = () => {
                   <button
                     className="submit-feedback-button"
                     onClick={handleSubmitFeedback}
-                  >
+                    >
                     Submit Feedback
                   </button>
                 </div>
@@ -252,4 +263,5 @@ const DoctorDetail = () => {
   );
 };
 
-export default DoctorDetail;
+export default DoctorDetail;    
+  

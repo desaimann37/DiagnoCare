@@ -22,6 +22,7 @@ import PaymentForm from "./Patient/Payment/PaymentForm";
 // import CircularDemo from "./components/home/Cards"
 
 import './style.css'
+import LoadingPage from "./Patient/LoadingPage";
 //import "primereact/resources/themes/lara-light-cyan/theme.css";
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
                 <Route path="braintumor" element={<BrainTumor />} />
                 <Route path="account" element={<Account />} />
               </Route>
+              <Route path="/loading" element={<LoadingPage />} />
               <Route path="/p-layout" element={<Layout />} >
                 <Route index element={<Home/>} />
                 <Route path="doctors" element={<Doctors/>} />
