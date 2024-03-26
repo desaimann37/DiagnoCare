@@ -1,50 +1,43 @@
-import React from 'react';
+// import React, { useState, useEffect } from 'react';
 import './doctors.css';
+import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import StarHalfRoundedIcon from '@mui/icons-material/StarHalfRounded';
+import axios from 'axios'; // Import axios for making HTTP requests
 
 const Doctors = ({ history }) => {
-  // Temporary array of doctors
-  const doctors = [
-    {
-      id: 1,
-      name: 'Dr. John Doe',
-      Bio: 'I am a Cardiologist',
-      image: 'https://www.shutterstock.com/image-photo/profile-photo-attractive-family-doc-600nw-1724693776.jpg',
-      specialty: 'Cardiologist',
-      rating: 4.5,
-      price: 400
-    },
-    {
-      id: 2,
-      name: 'Dr. Jane Smith',
-      Bio: 'I am a Cardiologist',
-      image: 'https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg',
-      specialty: 'Pediatrician',
-      rating: 4.8,
-      price: 400
-    },
-    {
-      id: 3,
-      name: 'Dr. Michael Johnson',
-      Bio: 'I am a Cardiologist',
-      image: 'https://t4.ftcdn.net/jpg/01/37/44/03/240_F_137440378_5mMBNu4Xyxaj25zD8Ag8NQWsOkYKDeq8.jpg',
-      specialty: 'Dermatologist',
-      rating: 4.3,
-      price: 400
-    },
-    {
-      id: 4,
-      name: 'Dr. Michael Johnson',
-      Bio: 'I am a Cardiologist',
-      image: 'https://t4.ftcdn.net/jpg/01/37/44/03/240_F_137440378_5mMBNu4Xyxaj25zD8Ag8NQWsOkYKDeq8.jpg',
-      specialty: 'Dermatologist',
-      rating: 4.3,
-      price: 400
-    },
-  ];
+  const [doctors, setDoctors] = useState([]);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    // Function to fetch doctors data
+    const fetchDoctors = async () => {
+      try {
+        // Make GET request to your API endpoint
+        const response = await axios.get(
+          "http://127.0.0.1:5000/doctor/doctors",
+          config
+        );
+ 
+        // Set the fetched data to the state
+        setDoctors(response.data);
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+      }
+    };
+
+    // Call the fetchDoctors function when the component mounts
+    fetchDoctors();
+  }, []); // Empty dependency array to ensure the effect runs only once on component mount
+
+  
+ 
   const handleDoctorClick = (id) => {
     history.push(`/${id}`);
   };
@@ -52,12 +45,12 @@ const Doctors = ({ history }) => {
   return (
     <div className="doctors-container">
       {doctors.map(doctor => (
-        <Link to={`${doctor.id}`} key={doctor.id}>
+        
+        <Link to={`/${doctor.doctor_id}`} key={doctor.doctor_id}>
           <div className="doctorCard" >
-            <img className="courseImg" src={doctor.image} alt="courseImg"></img>
+            <img className="courseImg" src={`data:image/jpeg;base64,${doctor.photo}`} alt="Doctor Image"/>
             <h3>{doctor.name}</h3>
-            {/* <p>{doctor.Bio}</p> */}
-            <div className="bestsellerBadge">{doctor.specialty}</div>
+            <div className="bestsellerBadge">{doctor.specification}</div>
             <div className="ratingDiv">
               <span className="rating">{doctor.rating}
                 <StarRoundedIcon />
@@ -66,10 +59,9 @@ const Doctors = ({ history }) => {
                 <StarRoundedIcon />
                 <StarHalfRoundedIcon />
               </span>
-              {/* <span className="noOfDoctors">{doctor.rating}</span> */}
             </div>
             <div className="priceAndBadge">
-              <h4 className="price">₹{doctor.price}</h4>
+              <h4 className="price">₹{doctor.ticketPrice}</h4>
             </div>
           </div>
         </Link>

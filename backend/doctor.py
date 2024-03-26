@@ -1,3 +1,4 @@
+import json
 from flask import Blueprint, jsonify, request 
 from bson import Binary
 from pymongo import MongoClient
@@ -8,6 +9,7 @@ from flask_jwt_extended import (
                                 current_user,
                                 current_user
                             )
+import base64
 
 doctor_bp = Blueprint('doctor', __name__)
 
@@ -24,12 +26,12 @@ def add_doctor():
         doctor_id = current_user.id
         photo = file.read()
         role = data.get('role')
-        qualification = data.get('qualification')
+        qualifications = data.getlist('qualifications')  # Retrieve qualifications as a list of strings
+        timeslots = data.getlist('timeslots') 
         experience = data.get('experience')
-        timeslots = data.get('timeslots')
-        reviews = data.get('reviews')
-        averageRating = data.get('averageRating')
-        totalRating = data.get('totalRating')
+        # reviews = data.get('reviews')
+        # averageRating = data.get('averageRating')
+        # totalRating = data.get('totalRating')
         isApproved = data.get('isApproved')
         about = data.get('about')
         bio = data.get('bio')
@@ -44,12 +46,12 @@ def add_doctor():
         'doctor_id' : doctor_id,
         'photo' : Binary(photo),
         'role' : role,
-        'qualification' : qualification,
+        'qualifications' : qualifications,
         'experience' : experience,
         'timeslots' : timeslots,
-        'reviews' : reviews,
-        'averageRating' : averageRating,
-        'totalRating' : totalRating,
+        # 'reviews' : reviews,
+        # 'averageRating' : averageRating,
+        # 'totalRating' : totalRating,
         'isApproved' : isApproved,
         'about' : about,
         'bio' : bio,
@@ -67,7 +69,7 @@ def add_doctor():
         return jsonify({'error': 'Internal server error'}), 500
 
 
-#Get all patients
+#Get all doctors
 @doctor_bp.route('/doctors', methods=['GET'])
 @jwt_required()
 def get_all_doctors():
@@ -81,3 +83,5 @@ def get_all_doctors():
     except Exception as e:
         print(e)
         return jsonify({'error': 'Internal server error'}), 500
+    
+
