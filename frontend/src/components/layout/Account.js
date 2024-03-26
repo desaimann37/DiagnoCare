@@ -14,6 +14,7 @@ import ViewPdfButton from "../ViewPdfButton";
 import Swal from "sweetalert2";
 
 import user from "../../assets/user.jpg";
+import UpdateProfile from "./UpdateProfile";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -160,6 +161,7 @@ const Account = () => {
 
   return (
     <div>
+      <UpdateProfile/>
       {/* Add Patient Dialog Box...*/}
       <BootstrapDialog
         onClose={handleClose}

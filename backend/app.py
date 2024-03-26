@@ -102,5 +102,6 @@ def endpoint_predict_lungcancer():
 
 
 
+
 if __name__ == '__main__':
     app.run(debug=True)

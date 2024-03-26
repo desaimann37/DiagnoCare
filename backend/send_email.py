@@ -1,40 +1,38 @@
-from flask import Blueprint, request, jsonify
+from flask import Flask, jsonify
 from flask_mail import Mail, Message
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-# Configuring Flask-Mail
-mail = Mail()
+app = Flask(__name__)
+mail = Mail(app)
 
-email_bp = Blueprint('email' , __name__)
+# Configure mail settings
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'diagnocare31@gmail.com'
+app.config['MAIL_PASSWORD'] = 'emje szle ombn vgnp'
+app.config['MAIL_DEFAULT_SENDER'] = 'diagnocare31@gmail.com'
 
-@email_bp.route('/send-email', methods=['POST'])
+mail.init_app(app)
+
+@app.route('/send-mail', methods=['GET'])
 def send_email():
-    data = request.get_json()
-    recipient_email = data.get('email')
+    try:
+        to = 'ishapaghdal@gmail.com'
+        subject = 'Testing'
+        body = 'Email Sent with flask only'
 
-    if recipient_email:
-        sender_email = os.getenv('SENDER_EMAIL')
-        sender_password = os.getenv('SENDER_PASSWORD')
+        message = Message(subject=subject, recipients=[to], body=body)
 
-        if sender_email and sender_password:
-            try:
-                # Create a message object
-                msg = Message(subject="Dummy Text Email",
-                              sender=sender_email,
-                              recipients=[recipient_email])
+        mail.send(message)
 
-                # Set the body of the email
-                msg.body = "This is a dummy email sent from Flask."
+        return jsonify({'message': 'Email sent successfully'})
+    except Exception as e:
+        print('Error sending email:', str(e))
+        return jsonify({'error': 'Failed to send email'})
 
-                # Send the email
-                mail.send(msg)
-                return jsonify({"message": "Email sent successfully"}), 200
-            except Exception as e:
-                return jsonify({"message": f"Failed to send email: {str(e)}"}), 500
-        else:
-            return jsonify({"message": "Sender email or password not configured"}), 500
-    else:
-        return jsonify({"message": "Missing recipient email"}), 400
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)

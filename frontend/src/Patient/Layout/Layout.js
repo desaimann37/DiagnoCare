@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import "./layout.css";
 import Dropdown from "./Dropdown";
-import Footer from "../../components/footer/Footer"
+import Footer from "../../components/footer/Footer";
 
 const Layout = () => {
   const [showNavbar, setShowNavbar] = useState(false);
@@ -29,7 +29,7 @@ const Layout = () => {
             </b>
           </div>
           <div className="layout-menu-icon" onClick={handleShowNavbar}>
-            <MenuOpenIcon sx = {{fontSize: 45}}/>
+            <MenuOpenIcon sx={{ fontSize: 45 }} />
           </div>
           <div className={`layout-nav-elements  ${showNavbar && "active"}`}>
             <ul>
@@ -46,7 +46,10 @@ const Layout = () => {
                 <Link to="/p-layout/chatbot">ChatBot</Link>
               </li>
             </ul>
-            <div className="layout-active-link" style={{ left: `${calculateLeftPosition(location.pathname)}%` }}></div>
+            <div
+              className="layout-active-link"
+              style={{ left: `${calculateLeftPosition(location.pathname)}%` }}
+            ></div>
           </div>
         </div>
         <Dropdown obj1={LoggedinObj} />
@@ -59,15 +62,17 @@ const Layout = () => {
 
 const calculateLeftPosition = (pathname) => {
   switch (pathname) {
-    case '/p-layout':
+    case "/p-layout":
       return 1;
-    case '/p-layout/services':
+    case "/p-layout/services":
       return 23.9;
-    case '/p-layout/doctors':
+    case "/p-layout/doctors":
       return 53.2;
-    case '/p-layout/chatbot':
+    case "/p-layout/doctors/:id":
+      return 53.2;
+    case "/p-layout/chatbot":
       return 82.9;
-    case '/braintumor':
+    case "/braintumor":
       return 85;
     default:
       return 0;

@@ -16,10 +16,12 @@ import Chatbot from "./components/chatwidget/Chatbot";
 import Home from "./Patient/Home/Home";
 import Services from "./Patient/Sevices/Services";
 import DoctorDetail from "./Patient/DoctorList/DoctorDetail";
+import ProductDisplay from "./Patient/Payment/Payment";
+import PaymentForm from "./Patient/Payment/PaymentForm";
 // import CircularDemo from "./components/home/Cards";
 // import CircularDemo from "./components/home/Cards"
 
-
+import './style.css'
 //import "primereact/resources/themes/lara-light-cyan/theme.css";
 
 function App() {
@@ -58,6 +60,7 @@ function App() {
                 <Route path="doctors/:id"element={<DoctorDetail/>} />
                 <Route path="chatbot" element={<Chatbot/>} />
                 <Route path="services" element={<Services/>} />
+                <Route path="payment" element={<PaymentForm/>} />
               </Route>
             </Routes>
           </>
