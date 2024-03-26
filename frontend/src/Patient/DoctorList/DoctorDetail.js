@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import axios from "axios";
+import './doctorDetail.css'
 
 const DoctorDetail = () => {
   const [doctors, setDoctors] = useState(null);
@@ -76,7 +77,7 @@ const DoctorDetail = () => {
       <div className="doctor-margin">
         <div className="doctor-detail">
           <div className="doctor-info-container">
-            <img src={doctor.image} alt="Doctor" className="doctor-image" />
+          <img className="doctor-image" src={`data:image/jpeg;base64,${doctor.photo.$binary.base64}`} alt="Doctor Image"/>
             <div className="doctor-info">
               <div className="bestsellerBadge">{doctor.specialty}</div>
               <h3 className="doctor-name">{doctor.name}</h3>
