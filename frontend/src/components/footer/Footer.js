@@ -2,120 +2,49 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,
-  faTwitter,
-  faDribbble,
   faLinkedin,
+  faGithub,
+  faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
 import "./footer.css";
 
 const Footer = () => {
   return (
-    <footer className="site-footer">
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-12 col-md-6">
-            <h6>About</h6>
-            <p className="text-justify">
-              Discover the future of medical diagnostics with <i>DiagnoCare</i>.
-              Sign up today and elevate your diagnostic capabilities to new
-              heights. <i>DiagnoCare</i> is committed to advancing healthcare practices through innovation and expertise. Join us in revolutionizing disease diagnosis and providing the best possible care to your patients.
-            </p>
-          </div>
+    <html>
 
-          <div className="col-xs-6 col-md-3">
-            <h6>Categories</h6>
-            <ul className="footer-links">
-              <li>
-                <a href="http://scanfcode.com/category/c-language/">C</a>
-              </li>
-              <li>
-                <a href="http://scanfcode.com/category/front-end-development/">
-                  UI Design
-                </a>
-              </li>
-              <li>
-                <a href="http://scanfcode.com/category/back-end-development/">
-                  PHP
-                </a>
-              </li>
-              <li>
-                <a href="http://scanfcode.com/category/java-programming-language/">
-                  Java
-                </a>
-              </li>
-              <li>
-                <a href="http://scanfcode.com/category/android/">Android</a>
-              </li>
-              <li>
-                <a href="http://scanfcode.com/category/templates/">Templates</a>
-              </li>
-            </ul>
-          </div>
+<body className="b1">
+  <footer className="footer">
+    <div className="waves">
+      <div className="wave" id="wave1"></div>
+      <div className="wave" id="wave2"></div>
+      <div className="wave" id="wave3"></div>
+      <div className="wave" id="wave4"></div>
+    </div>
+    <ul className="social-icon">
+      <li className="social-icon__item"><a className="social-icon__link" href="#">
+      <FontAwesomeIcon icon={faInstagram} />
+        </a></li>
+      <li className="social-icon__item"><a className="social-icon__link" href="#">
+      <FontAwesomeIcon icon={faLinkedin} />
+        </a></li>
+      <li className="social-icon__item"><a className="social-icon__link" href="https://github.com/ishapaghdal301/DiagnoCare">
+      <FontAwesomeIcon icon={faGithub} />
+        </a></li>
+    </ul>
+    <ul className="menu">
+      <li className="menu__item"><a className="menu__link" href="/p-layout">Home</a></li>
+      <li className="menu__item"><a className="menu__link" href="/p-layout/doctors">Find a doctor</a></li>
+      <li className="menu__item"><a className="menu__link" href="/p-layout/services">Services</a></li>
 
-          <div className="col-xs-6 col-md-3">
-            <h6>Quick Links</h6>
-            <ul className="footer-links">
-              <li>
-                <a href="http://scanfcode.com/about/">About Us</a>
-              </li>
-              <li>
-                <a href="http://scanfcode.com/contact/">Contact Us</a>
-              </li>
-              <li>
-                <a href="http://scanfcode.com/contribute-at-scanfcode/">
-                  Contribute
-                </a>
-              </li>
-              <li>
-                <a href="http://scanfcode.com/privacy-policy/">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="http://scanfcode.com/sitemap/">Sitemap</a>
-              </li>
-            </ul>
-          </div>
-          <hr />
-        </div>
-      </div>
-      <div className="container">
-        <div className="row w-100">
-          <div className="col-md-8 col-sm-6 col-xs-12">
-            <p className="copyright-text">
-              Copyright &copy; 2017 All Rights Reserved by
-              <a href="#">Scanfcode</a>.
-            </p>
-          </div>
+    </ul>
+    <p>&copy;2024 DiagnoCare | All Rights Reserved</p>
+  </footer>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
 
-          <div className="col-md-4 col-sm-6 col-xs-12">
-            <ul className="social-icons">
-              <li>
-                <a className="facebook" href="#">
-                  <FontAwesomeIcon icon={faFacebook} />
-                </a>
-              </li>
-              <li>
-                <a className="twitter" href="#">
-                  <FontAwesomeIcon icon={faTwitter} />
-                </a>
-              </li>
-              <li>
-                <a className="dribbble" href="#">
-                  <FontAwesomeIcon icon={faDribbble} />
-                </a>
-              </li>
-              <li>
-                <a className="linkedin" href="#">
-                  <FontAwesomeIcon icon={faLinkedin} />
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
+</html>
+  )
 };
 
 export default Footer;

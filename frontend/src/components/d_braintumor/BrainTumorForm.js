@@ -450,15 +450,11 @@ const BrainTumorForm = () => {
                   </button>
                 </div>
               </form>
-              <br />
-              <br />
               {loading && (
                 <>
                   <div className="loader-container">
                     <img src={loader} alt="Loader" className="loader" />
                   </div>
-                  <br />
-                  <div className="loader-container">Genrating Report...</div>
                 </>
               )}
               {!loading &&

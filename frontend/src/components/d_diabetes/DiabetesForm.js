@@ -609,13 +609,9 @@ const DiabetesForm = () => {
                   </button>
                 </div>
               </form>
-              <br />
-              <br />
               {loading && (
                 <div className="loader-container">
                   <img src={loader} alt="Loader" className="loader" />
-                  <br />
-                  <div className="loader-container">Genrating Report...</div>
                 </div>
               )}
               {!loading &&
