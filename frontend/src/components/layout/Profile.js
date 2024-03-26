@@ -1,185 +1,369 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
+import {
+  CForm,
+  CCol,
+  CFormInput,
+  CButton,
+  CInputGroupText,
+  CInputGroup,
+  CFormTextarea,
+  CFormSelect,
+} from "@coreui/react";
+
 import "./profile.css";
 
-import {
-  MDBRow,
-  MDBCol,
-  MDBInput,
-  MDBBtn,
-  MDBDropdown,
-  MDBDropdownToggle,
-  MDBDropdownMenu,
-  MDBDropdownItem,
-} from "mdb-react-ui-kit";
+const ProfileForm = () => {
+  const [qualifications, setQualifications] = useState([]);
+  const [experiences, setExperiences] = useState([]);
+  const [aboutDoctor, setAboutDoctor] = useState("");
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [gender, setGender] = useState("");
+  const [specialization, setSpecialization] = useState("");
 
-// Temporary doctor object
-const doctor = {
-  id: 1,
-  name: "Dr. John Doe",
-  Bio: "I am a Cardiologist",
-  image:
-    "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
-  specialty: "Cardiologist",
-  rating: 4.5,
-  price: 400,
-  availableSlots: [
-    { day: "Monday", timing: "4:30pm-7:30pm" },
-    { day: "Wednesday", timing: "5:00pm-8:00pm" },
-  ],
-  about:
-    "Dr. John Doe is a highly experienced Cardiologist with expertise in treating various heart conditions.",
-  education: [
-    { year: "2008-2010", degree: "BSc degree in Neuroscience" },
-    { year: "2010-2014", degree: "PhD in Cardiology" },
-  ],
-  experience: [
-    {
-      year: "2003-2004",
-      position: "Intern",
-      location: "New York Hospital",
-    },
-    {
-      year: "2004-2006",
-      position: "Resident",
-      location: "Boston Medical Center",
-    },
-  ],
-  reviews: [
-    {
-      userName: "Alice",
-      userPhoto:
-        "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
-      date: "June 27, 2023",
-      text: "Great doctor!",
-    },
-    {
-      userName: "Bob",
-      userPhoto:
-        "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
-      date: "July 5, 2023",
-      text: "Very knowledgeable.",
-    },
-  ],
-};
+  const handleAddQualification = () => {
+    setQualifications((prevQualifications) => [
+      ...prevQualifications,
+      { startDate: "", endDate: "", degree: "", university: "" },
+    ]);
+  };
 
-const Profile = () => {
-  const [genderOpen, setGenderOpen] = useState(false);
-  const [specializationOpen, setSpecializationOpen] = useState(false);
-  const [priceOpen, setPriceOpen] = useState(false);
+  const handleDeleteQualification = (index) => {
+    setQualifications((prevQualifications) =>
+      prevQualifications.filter((_, i) => i !== index)
+    );
+  };
 
-  const selectData = useMemo(
-    () => [
-      { text: "Male", value: "male" },
-      { text: "Female", value: "female" },
-    ],
-    []
-  );
+  const handleAddExperience = () => {
+    setExperiences((prevExperiences) => [
+      ...prevExperiences,
+      { startDate: "", endDate: "", position: "", location: "" },
+    ]);
+  };
 
-  const specializationData = useMemo(
-    () => [
-      { text: "Cardiologist", value: "cardiologist" },
-      { text: "Pediatrician", value: "pediatrician" },
-      { text: "Orthopedic Surgeon", value: "orthopedic_surgeon" },
-    ],
-    []
-  );
+  const handleDeleteExperience = (index) => {
+    setExperiences((prevExperiences) =>
+      prevExperiences.filter((_, i) => i !== index)
+    );
+  };
 
-  const priceData = useMemo(
-    () => [
-      { text: "$100", value: 100 },
-      { text: "$200", value: 200 },
-      { text: "$300", value: 300 },
-    ],
-    []
-  );
+  const handleAddTimeSlot = () => {
+    setTimeSlots((prevTimeSlots) => [
+      ...prevTimeSlots,
+      { day: "", startTime: "", endTime: "" },
+    ]);
+  };
+
+  const handleDeleteTimeSlot = (index) => {
+    setTimeSlots((prevTimeSlots) =>
+      prevTimeSlots.filter((_, i) => i !== index)
+    );
+  };
+
+  const handleInputChange = (index, type, e) => {
+    const { name, value } = e.target;
+    if (type === "qualification") {
+      const newQualifications = [...qualifications];
+      newQualifications[index][name] = value;
+      setQualifications(newQualifications);
+    } else if (type === "timeSlot") {
+      const newTimeSlots = [...timeSlots];
+      newTimeSlots[index][name] = value;
+      setTimeSlots(newTimeSlots);
+    } else if (type === "about") {
+      setAboutDoctor(value);
+    } else if (type === "gender") {
+      setGender(value);
+    } else if (type === "specialization") {
+      setSpecialization(value);
+    }
+  };
+
   return (
-    <>
-      <div className="profile-title">
-        <h2>Profile Information</h2>
-      </div>
+    <CForm className="row g-3">
+      <CCol md={6}>
+        <CFormInput
+          type="text"
+          id="inputName"
+          label={
+            <span>
+              Name<span style={{ color: "red", fontSize: "17px" }}>*</span>
+            </span>
+          }
+          placeholder="Full name"
+        />
+      </CCol>
+      <CCol md={6}>
+        <CFormInput
+          type="email"
+          id="inputEmail"
+          label={
+            <span>
+              Email<span style={{ color: "red", fontSize: "17px" }}>*</span>
+            </span>
+          }
+          placeholder="Email Id"
+        />
+      </CCol>
+      <CCol md={6}>
+        <CFormInput
+          type="tel"
+          id="inputPhone"
+          label={
+            <span>
+              Phone<span style={{ color: "red", fontSize: "17px" }}>*</span>
+            </span>
+          }
+          placeholder="Phone number"
+        />
+      </CCol>
+      <CCol xs={6}>
+        <CFormInput
+          id="inputBio"
+          label={
+            <span>
+              Bio<span style={{ color: "red", fontSize: "17px" }}>*</span>
+            </span>
+          }
+          placeholder="Enter Bio"
+        />
+      </CCol>
 
-      <form>
-        <MDBRow className="mb-4">
-          <label> Name</label>
-          <MDBCol>
-            <MDBInput id="form6Example1" placeholder="name" />
-          </MDBCol>
-        </MDBRow>
+      <CCol md={4}>
+        <CFormSelect
+          id="inputGender"
+          label="Gender"
+          onChange={(e) => handleInputChange(0, "gender", e)}
+          value={gender}
+        >
+          <option value="">Choose...</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </CFormSelect>
+      </CCol>
+      <CCol md={4}>
+        <CFormSelect
+          id="inputSpecialization"
+          label="Specialization"
+          onChange={(e) => handleInputChange(0, "specialization", e)}
+          value={specialization}
+        >
+          <option value="">Choose...</option>
+          <option value="Cardiologist">Cardiologist</option>
+          <option value="Pediatrician">Pediatrician</option>
+          <option value="Orthopedic Surgeon">Orthopedic Surgeon</option>
+        </CFormSelect>
+      </CCol>
+      <CCol xs={4}>
+        <CFormInput
+          id="inputPrice"
+          label={
+            <span>
+              Price<span style={{ color: "red", fontSize: "17px" }}>*</span>
+            </span>
+          }
+          placeholder="Enter Price"
+        />
+      </CCol>
 
-        <label> Email</label>
-        <MDBRow className="mb-4">
-          <MDBCol>
-            <MDBInput type="email" id="form6Example2" placeholder="Email" />
-          </MDBCol>
-        </MDBRow>
+      <CCol md={12}>
+        <h5>Qualification*</h5>
+      </CCol>
 
-        <label> Phone</label>
-        <MDBRow className="mb-4">
-          <MDBCol>
-            <MDBInput type="tel" id="form6Example3" placeholder="Phone" />
-          </MDBCol>
-        </MDBRow>
+      {qualifications.map((qualification, index) => (
+        <React.Fragment key={index}>
+          <CCol md={6}>
+            <CFormInput
+              label="Start Date"
+              type="date"
+              name="startDate"
+              value={qualification.startDate}
+              onChange={(e) => handleInputChange(index, "qualification", e)}
+            />
+          </CCol>
+          <CCol md={6}>
+            <CFormInput
+              label="End Date"
+              type="date"
+              name="endDate"
+              value={qualification.endDate}
+              onChange={(e) => handleInputChange(index, "qualification", e)}
+            />
+          </CCol>
+          <CCol md={6}>
+            <CFormInput
+              type="text"
+              label="Degree"
+              name="degree"
+              value={qualification.degree}
+              placeholder="Degree"
+              onChange={(e) => handleInputChange(index, "qualification", e)}
+            />
+          </CCol>
+          <CCol md={6}>
+            <CFormInput
+              label="University"
+              type="text"
+              name="university"
+              value={qualification.university}
+              placeholder="University"
+              onChange={(e) => handleInputChange(index, "qualification", e)}
+            />
+          </CCol>
+          <CCol xs={12}>
+            <CButton
+              color="danger"
+              onClick={() => handleDeleteQualification(index)}
+            >
+              Delete
+            </CButton>
+          </CCol>
+        </React.Fragment>
+      ))}
 
-        <label> Bio</label>
-        <MDBRow className="mb-4">
-          <MDBCol>
-            <MDBInput textarea id="form6Example4" rows={4} placeholder="Bio" />
-          </MDBCol>
-        </MDBRow>
+      <CCol xs={12}>
+        <CButton color="primary" onClick={handleAddQualification}>
+          Add Qualification
+        </CButton>
+      </CCol>
 
-        <MDBRow className="mb-4">
-          <MDBCol>
-            <MDBDropdown>
-              <MDBDropdownToggle
-                color="light"
-                onClick={() => setGenderOpen(!genderOpen)}
-              >
-                Gender
-              </MDBDropdownToggle>
-              <MDBDropdownMenu show={genderOpen}>
-                {selectData.map((item, index) => (
-                  <MDBDropdownItem key={index}>{item.text}</MDBDropdownItem>
-                ))}
-              </MDBDropdownMenu>
-            </MDBDropdown>
-          </MDBCol>
-          <MDBCol>
-            <MDBDropdown>
-              <MDBDropdownToggle
-                color="light"
-                onClick={() => setSpecializationOpen(!specializationOpen)}
-              >
-                Specialization
-              </MDBDropdownToggle>
-              <MDBDropdownMenu show={specializationOpen}>
-                {specializationData.map((item, index) => (
-                  <MDBDropdownItem key={index}>{item.text}</MDBDropdownItem>
-                ))}
-              </MDBDropdownMenu>
-            </MDBDropdown>
-          </MDBCol>
-          <MDBCol>
-            <MDBDropdown>
-              <MDBDropdownToggle
-                color="light"
-                onClick={() => setPriceOpen(!priceOpen)}
-              >
-                Price
-              </MDBDropdownToggle>
-              <MDBDropdownMenu show={priceOpen}>
-                {priceData.map((item, index) => (
-                  <MDBDropdownItem key={index}>{item.text}</MDBDropdownItem>
-                ))}
-              </MDBDropdownMenu>
-            </MDBDropdown>
-          </MDBCol>
-        </MDBRow>
-        <MDBBtn type="submit" block>
+      <CCol md={12}>
+        <h5>Experience*</h5>
+      </CCol>
+      {experiences.map((experience, index) => (
+        <React.Fragment key={index}>
+          <CCol md={6}>
+            <CFormInput
+              label="Start Date"
+              type="date"
+              name="startDate"
+              value={experience.startDate}
+              onChange={(e) => handleInputChange(index, "experience", e)}
+            />
+          </CCol>
+          <CCol md={6}>
+            <CFormInput
+              label="End Date"
+              type="date"
+              name="endDate"
+              value={experience.endDate}
+              onChange={(e) => handleInputChange(index, "experience", e)}
+            />
+          </CCol>
+          <CCol md={6}>
+            <CFormInput
+              type="text"
+              label="Position"
+              name="position"
+              value={experience.position}
+              placeholder="Position"
+              onChange={(e) => handleInputChange(index, "experience", e)}
+            />
+          </CCol>
+          <CCol md={6}>
+            <CFormInput
+              label="Location"
+              type="text"
+              name="location"
+              value={experience.location}
+              placeholder="Location"
+              onChange={(e) => handleInputChange(index, "experience", e)}
+            />
+          </CCol>
+          <CCol xs={12}>
+            <CButton
+              color="danger"
+              onClick={() => handleDeleteExperience(index)}
+            >
+              Delete
+            </CButton>
+          </CCol>
+        </React.Fragment>
+      ))}
+
+      <CCol xs={12}>
+        <CButton color="primary" onClick={handleAddExperience}>
+          Add Experience
+        </CButton>
+      </CCol>
+
+      <CCol md={12}>
+        <h5>Time Slot*</h5>
+      </CCol>
+      {timeSlots.map((slot, index) => (
+        <React.Fragment key={index}>
+          <CCol md={4}>
+            <CFormInput
+              type="text"
+              label="Day"
+              name="day"
+              value={slot.day}
+              onChange={(e) => handleInputChange(index, "timeSlot", e)}
+            />
+          </CCol>
+          <CCol md={4}>
+            <CFormInput
+              type="time"
+              label="Starting Time"
+              name="startTime"
+              value={slot.startTime}
+              onChange={(e) => handleInputChange(index, "timeSlot", e)}
+            />
+          </CCol>
+          <CCol md={4}>
+            <CFormInput
+              type="time"
+              label="Ending Time"
+              name="endTime"
+              value={slot.endTime}
+              onChange={(e) => handleInputChange(index, "timeSlot", e)}
+            />
+          </CCol>
+          <CCol xs={12}>
+            <CButton color="danger" onClick={() => handleDeleteTimeSlot(index)}>
+              Delete
+            </CButton>
+          </CCol>
+        </React.Fragment>
+      ))}
+
+      <CCol xs={12}>
+        <CButton color="primary" onClick={handleAddTimeSlot}>
+          Add Time Slot
+        </CButton>
+      </CCol>
+      <CCol xs={12}>
+        <CFormTextarea
+          id="aboutDoctor"
+          label="About"
+          placeholder="Write about you..."
+          style={{ borderRadius: "8px" }}
+        />
+      </CCol>
+      <CCol xs={12} className="d-flex align-items-center">
+        <div className="avatar-container">
+          <img
+            src="https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg"
+            alt="Doctor"
+            className="avatar-image"
+          />
+        </div>
+
+        <CInputGroup className="ml-3">
+          <CFormInput
+            type="file"
+            id="profilePicture"
+            accept="image/*"
+            style={{ borderRadius: "8px" }}
+          />
+        </CInputGroup>
+      </CCol>
+      <CCol xs={12}>
+        <CButton color="primary" type="submit">
           Submit
-        </MDBBtn>
-      </form>
-    </>
+        </CButton>
+      </CCol>
+    </CForm>
   );
 };
 
-export default Profile;
+export default ProfileForm;
