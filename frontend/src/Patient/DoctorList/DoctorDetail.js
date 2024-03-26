@@ -1,14 +1,12 @@
-// DoctorDetail.jsx
-
-import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
-import StarHalfRoundedIcon from "@mui/icons-material/StarHalfRounded";
-import "./doctorDetail.css";
+import axios from "axios";
 
 const DoctorDetail = () => {
+  const [doctors, setDoctors] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
   const { id } = useParams();
-
   const [activeSection, setActiveSection] = useState("about");
   const [selectedStars, setSelectedStars] = useState(0);
   const [reviewText, setReviewText] = useState("");
@@ -33,227 +31,45 @@ const DoctorDetail = () => {
     setReviewText("");
   };
 
-  // Dummy array of doctors
-  const doctors = [
-    {
-      id: 1,
-      name: "Dr. John Doe",
-      Bio: "I am a Cardiologist",
-      image:
-        "https://www.shutterstock.com/image-photo/profile-photo-attractive-family-doc-600nw-1724693776.jpg",
-      specialty: "Cardiologist",
-      rating: 4.5,
-      price: 400,
-      availableSlots: [
-        { day: "Monday", timing: "4:30pm-7:30pm" },
-        { day: "Wednesday", timing: "5:00pm-8:00pm" },
-      ],
-      about:
-        "Dr. John Doe is a highly experienced Cardiologist with expertise in treating various heart conditions.",
-      education: [
-        { year: "2008-2010", degree: "BSc degree in Neuroscience" },
-        { year: "2010-2014", degree: "PhD in Cardiology" },
-      ],
-      experience: [
-        {
-          year: "2003-2004",
-          position: "Intern",
-          location: "New York Hospital",
-        },
-        {
-          year: "2004-2006",
-          position: "Resident",
-          location: "Boston Medical Center",
-        },
-      ],
-      reviews: [
-        {
-          userName: "Alice",
-          userPhoto:
-            "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
-          date: "June 27, 2023",
-          text: "Great doctor!",
-        },
-        {
-          userName: "Bob",
-          userPhoto:
-            "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
-          date: "July 5, 2023",
-          text: "Very knowledgeable.",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Dr. Jane Smith",
-      Bio: "I am a Cardiologist",
-      image:
-        "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
-      specialty: "Pediatrician",
-      rating: 4.8,
-      price: 400,
-      availableSlots: [
-        { day: "Monday", timing: "4:30pm-7:30pm" },
-        { day: "Wednesday", timing: "5:00pm-8:00pm" },
-      ],
-      about:
-        "Dr. John Doe is a highly experienced Cardiologist with expertise in treating various heart conditions.Dr. John Doe is a highly experienced Cardiologist with expertise in treating various heart conditions.Dr. John Doe is a highly experienced Cardiologist with expertise in treating various heart conditions.Dr. John Doe is a highly experienced Cardiologist with expertise in treating various heart conditions.Dr. John Doe is a highly experienced Cardiologist with expertise in treating various heart conditions.",
-      education: [
-        { year: "2008-2010", degree: "BSc degree in Neuroscience" },
-        { year: "2010-2014", degree: "PhD in Cardiology" },
-      ],
-      experience: [
-        {
-          year: "2003-2004",
-          position: "Intern",
-          location: "New York Hospital",
-        },
-        {
-          year: "2004-2006",
-          position: "Resident",
-          location: "Boston Medical Center",
-        },
-        {
-          year: "2004-2006",
-          position: "Resident",
-          location: "Boston Medical Center",
-        },
-        {
-          year: "2004-2006",
-          position: "Resident",
-          location: "Boston Medical Center",
-        },
-      ],
-      reviews: [
-        {
-          userName: "Alice",
-          userPhoto:
-            "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
-          date: "June 27, 2023",
-          text: "Great doctor!",
-          rating: 5,
-        },
-        {
-          userName: "Bob",
-          userPhoto:
-            "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
-          date: "July 5, 2023",
-          text: "Very knowledgeable.",
-          rating: 5,
-        },
-        {
-          userName: "Eve",
-          userPhoto:
-            "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
-          date: "July 5, 2023",
-          text: "Very knowledgeable.",
-          rating: 3,
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "Dr. Michael Johnson",
-      Bio: "I am a Cardiologist",
-      image:
-        "https://t4.ftcdn.net/jpg/01/37/44/03/240_F_137440378_5mMBNu4Xyxaj25zD8Ag8NQWsOkYKDeq8.jpg",
-      specialty: "Dermatologist",
-      rating: 4.3,
-      price: 400,
-      availableSlots: [
-        { day: "Monday", timing: "4:30pm-7:30pm" },
-        { day: "Wednesday", timing: "5:00pm-8:00pm" },
-      ],
-      about:
-        "Dr. John Doe is a highly experienced Cardiologist with expertise in treating various heart conditions.",
-      education: [
-        { year: "2008-2010", degree: "BSc degree in Neuroscience" },
-        { year: "2010-2014", degree: "PhD in Cardiology" },
-      ],
-      experience: [
-        {
-          year: "2003-2004",
-          position: "Intern",
-          location: "New York Hospital",
-        },
-        {
-          year: "2004-2006",
-          position: "Resident",
-          location: "Boston Medical Center",
-        },
-      ],
-      reviews: [
-        {
-          userName: "Alice",
-          userPhoto:
-            "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
-          date: "June 27, 2023",
-          text: "Great doctor!",
-        },
-        {
-          userName: "Bob",
-          userPhoto:
-            "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
-          date: "July 5, 2023",
-          text: "Very knowledgeable.",
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "Dr. Michael Johnson",
-      Bio: "I am a Cardiologist",
-      image:
-        "https://t4.ftcdn.net/jpg/01/37/44/03/240_F_137440378_5mMBNu4Xyxaj25zD8Ag8NQWsOkYKDeq8.jpg",
-      specialty: "Dermatologist",
-      rating: 4.3,
-      price: 440,
-      availableSlots: [
-        { day: "Monday", timing: "4:30pm-7:30pm" },
-        { day: "Wednesday", timing: "5:00pm-8:00pm" },
-      ],
-      about:
-        "Dr. John Doe is a highly experienced Cardiologist with expertise in treating various heart conditions.",
-      education: [
-        { year: "2008-2010", degree: "BSc degree in Neuroscience" },
-        { year: "2010-2014", degree: "PhD in Cardiology" },
-      ],
-      experience: [
-        {
-          year: "2003-2004",
-          position: "Intern",
-          location: "New York Hospital",
-        },
-        {
-          year: "2004-2006",
-          position: "Resident",
-          location: "Boston Medical Center",
-        },
-      ],
-      reviews: [
-        {
-          userName: "Alice",
-          userPhoto: "profile-photo.jpg",
-          date: "June 27, 2023",
-          text: "Great doctor!",
-        },
-        {
-          userName: "Bob",
-          userPhoto: "profile-photo.jpg",
-          date: "July 5, 2023",
-          text: "Very knowledgeable.",
-        },
-      ],
-    },
-  ];
+  useEffect(() => {
+    const getDoctorDetails = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("Token is missing.");
+          return;
+        }
+        const response = await axios.get(
+          'http://127.0.0.1:5000/doctor/doctors', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          }
+        );
+        setDoctors(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching doctor details:", error);
+      }
+    };
+
+    getDoctorDetails();
+  }, []);
+
+  // Render loading message while fetching data
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   // Find the doctor with the specified id
-  const doctor = doctors.find((doctor) => doctor.id === parseInt(id));
-
+  const doctor = doctors.find((doctor) => doctor.doctor_id === id);
+  console.log(doctor.rating)
+  console.log(typeof(id))
   // If doctor is not found, display a message
   if (!doctor) {
     return <div className="doctor-detail">Doctor not found</div>;
   }
+
 
   return (
     <>
@@ -282,23 +98,29 @@ const DoctorDetail = () => {
               </div>
               <br />
               <p className="doctor-specialty">
-                Specialaization in {doctor.specialty}
+                Specialaization in {doctor.specification}
               </p>
             </div>
           </div>
           <div className="booking-appointment-card">
             <h4 className="booking-price">
-              Booking Price: <span>₹{doctor.price}</span>
+              Booking Price: <span>₹{doctor.ticketPrice}</span>
             </h4>
             <br />
             <h5>Available Time Slots:</h5>
+            {doctor.availableSlots && (
             <ul>
-              {doctor.availableSlots.map((slot, index) => (
-                <li className="booking-price" key={index}>
-                  {slot.day}: <span>{slot.timing}</span>
-                </li>
-              ))}
+              {doctor.timeslots && (
+              <ul>
+                {doctor.timeslots.map((slot, index) => (
+                  <li className="booking-price" key={index}>
+                    {slot}
+                  </li>
+                ))}
+              </ul>
+            )}
             </ul>
+          )}
             <button className="book-appointment-button">
               Book Appointment
             </button>
@@ -337,32 +159,29 @@ const DoctorDetail = () => {
               <p>{doctor.about}</p>
 
               <br />
-              <h2>Education</h2>
+              <h2>Qualification</h2>
               <br />
+              {doctor.qualifications && (
               <ul>
-                {doctor.education.map((edu, index) => (
+                {doctor.qualifications.map((qualification, index) => (
                   <li key={index}>
-                    <span>{edu.year}</span>
-                    <br />
-                    {edu.degree}
-                    <br />
-                    <br />
+                    {qualification}
                   </li>
                 ))}
               </ul>
+            )}
 
               <div className="experience-section">
                 <h3>Experience</h3>
                 <div className="experience-cards">
-                  {doctor.experience.map((exp, index) => (
-                    <div className="experience-card" key={index}>
-                      <h5>
-                        <span>{exp.year}</span>
-                      </h5>
-                      <h5>{exp.position}</h5>
-                      <p>{exp.location}</p>
-                    </div>
-                  ))}
+                {doctor.experience && (
+                <div className="experience-card">
+                  <h5>
+                    <span>{doctor.experience}</span>
+                  </h5>
+                  {/* You can add additional information here if needed */}
+                </div>
+              )}
                 </div>
               </div>
             </div>

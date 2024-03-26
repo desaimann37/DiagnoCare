@@ -6,7 +6,7 @@ from extension import doctor_collection
 from flask_jwt_extended import jwt_required, current_user
 import base64
 
-doctor_bp = Blueprint('doctor', __name__)
+doctor_bp = Blueprint('p-layout', __name__)
 
 @doctor_bp.route('/add', methods=['POST'])
 @jwt_required()

@@ -36,9 +36,9 @@ const Doctors = ({ history }) => {
     fetchDoctors();
   }, []); // Empty dependency array to ensure the effect runs only once on component mount
 
-  const handleDoctorClick = (id) => {
-    history.push(`/${id}`);
-  };
+  // const handleDoctorClick = (id) => {
+  //   history.push(`/${id}`);
+  // };
 
   return (
     <div className="doctors-container">
