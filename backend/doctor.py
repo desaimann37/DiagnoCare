@@ -1,14 +1,9 @@
-import json
 from flask import Blueprint, jsonify, request 
 from bson import Binary
 from pymongo import MongoClient
 from bson import ObjectId, json_util
 from extension import doctor_collection
-from flask_jwt_extended import (
-                                jwt_required, 
-                                current_user,
-                                current_user
-                            )
+from flask_jwt_extended import jwt_required, current_user
 import base64
 
 doctor_bp = Blueprint('doctor', __name__)
@@ -26,12 +21,12 @@ def add_doctor():
         doctor_id = current_user.id
         photo = file.read()
         role = data.get('role')
-        qualifications = data.getlist('qualifications')  # Retrieve qualifications as a list of strings
-        timeslots = data.getlist('timeslots') 
+        qualification = data.get('qualification')
         experience = data.get('experience')
-        # reviews = data.get('reviews')
-        # averageRating = data.get('averageRating')
-        # totalRating = data.get('totalRating')
+        timeslots = data.get('timeslots')
+        reviews = data.get('reviews')
+        averageRating = data.get('averageRating')
+        totalRating = data.get('totalRating')
         isApproved = data.get('isApproved')
         about = data.get('about')
         bio = data.get('bio')
@@ -39,25 +34,28 @@ def add_doctor():
         specification = data.get('specification')
         ticketPrice = data.get('ticketPrice')
 
+        # Convert Binary image data to Base64
+        encoded_image = base64.b64encode(photo)
+
         doctor = {
-        'email' : email , 
-        'password' : password,
-        'name' : name ,
-        'doctor_id' : doctor_id,
-        'photo' : Binary(photo),
-        'role' : role,
-        'qualifications' : qualifications,
-        'experience' : experience,
-        'timeslots' : timeslots,
-        # 'reviews' : reviews,
-        # 'averageRating' : averageRating,
-        # 'totalRating' : totalRating,
-        'isApproved' : isApproved,
-        'about' : about,
-        'bio' : bio,
-        'phone' : phone,
-        'specification' : specification,
-        'ticketPrice' : ticketPrice
+            'email' : email , 
+            'password' : password,
+            'name' : name ,
+            'doctor_id' : doctor_id,
+            'photo' : encoded_image.decode('utf-8'),  # Convert bytes to string
+            'role' : role,
+            'qualification' : qualification,
+            'experience' : experience,
+            'timeslots' : timeslots,
+            'reviews' : reviews,
+            'averageRating' : averageRating,
+            'totalRating' : totalRating,
+            'isApproved' : isApproved,
+            'about' : about,
+            'bio' : bio,
+            'phone' : phone,
+            'specification' : specification,
+            'ticketPrice' : ticketPrice
         }
 
         doctor_collection.insert_one(doctor)
@@ -69,19 +67,23 @@ def add_doctor():
         return jsonify({'error': 'Internal server error'}), 500
 
 
-#Get all doctors
+# Get all patients
 @doctor_bp.route('/doctors', methods=['GET'])
 @jwt_required()
 def get_all_doctors():
     try:
+        # Retrieve all doctors
+        doctors = list(doctor_collection.find({}))
+
+        # Convert Binary image data to Base64 for each doctor
+        # for doctor in doctors:
+        #     if 'photo' in doctor:
+        #         doctor['photo'] = doctor['photo'].to_base64().decode('utf-8')
+
+        # Serialize the doctors list to JSON
+        doctors_json = json_util.dumps(doctors)
         
-         doctors = list(doctor_collection.find({'doctor_id': current_user.id}))
-        
-         doctors = json_util.dumps(doctors)
-        
-         return doctors, 200
+        return doctors_json, 200
     except Exception as e:
         print(e)
         return jsonify({'error': 'Internal server error'}), 500
-    
-
