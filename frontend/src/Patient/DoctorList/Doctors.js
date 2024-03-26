@@ -1,10 +1,9 @@
-// import React, { useState, useEffect } from 'react';
-import './doctors.css';
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import StarHalfRoundedIcon from '@mui/icons-material/StarHalfRounded';
-import axios from 'axios'; // Import axios for making HTTP requests
+import axios from 'axios'; 
+import './doctors.css'
 
 const Doctors = ({ history }) => {
   const [doctors, setDoctors] = useState([]);
@@ -16,6 +15,7 @@ const Doctors = ({ history }) => {
         Authorization: `Bearer ${token}`,
       },
     };
+    
     // Function to fetch doctors data
     const fetchDoctors = async () => {
       try {
@@ -24,7 +24,7 @@ const Doctors = ({ history }) => {
           "http://127.0.0.1:5000/doctor/doctors",
           config
         );
- 
+        
         // Set the fetched data to the state
         setDoctors(response.data);
       } catch (error) {
@@ -36,8 +36,6 @@ const Doctors = ({ history }) => {
     fetchDoctors();
   }, []); // Empty dependency array to ensure the effect runs only once on component mount
 
-  
- 
   const handleDoctorClick = (id) => {
     history.push(`/${id}`);
   };
@@ -45,10 +43,10 @@ const Doctors = ({ history }) => {
   return (
     <div className="doctors-container">
       {doctors.map(doctor => (
-        
-        <Link to={`/${doctor.doctor_id}`} key={doctor.doctor_id}>
-          <div className="doctorCard" >
-            <img className="courseImg" src={`data:image/jpeg;base64,${doctor.photo}`} alt="Doctor Image"/>
+        <Link to={`${doctor.doctor_id}`} key={doctor.doctor_id}>
+          <div className="doctorCard">
+            {/* Render the image directly using base64 data */}
+            <img className="courseImg" src={`data:image/jpeg;base64,${doctor.photo.$binary.base64}`} alt="Doctor Image"/>
             <h3>{doctor.name}</h3>
             <div className="bestsellerBadge">{doctor.specification}</div>
             <div className="ratingDiv">
