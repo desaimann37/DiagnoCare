@@ -325,7 +325,7 @@ const BrainTumorForm = () => {
         </DialogContent>
       </BootstrapDialog>
 
-      {/* Totle...*/}
+      {/* Title...*/}
       <div className="d-form-text-section">
         <h1 className="fs-10 mb-5 align-items-center">BrainTumor</h1>
       </div>

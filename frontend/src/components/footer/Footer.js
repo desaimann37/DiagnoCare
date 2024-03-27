@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,
@@ -8,7 +9,21 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import "./footer.css";
 
+
 const Footer = () => {
+
+  const [userRole, setUserRole] = useState("");
+
+  useEffect(() => {
+  
+    const storedObject = localStorage.getItem('loggedin_obj');
+    const parsedObject = JSON.parse(storedObject);
+
+    if (parsedObject && parsedObject.user && parsedObject.user.role) {
+      setUserRole(parsedObject.user.role);
+    }
+  }, []);
+
   return (
     <html>
 
@@ -31,12 +46,19 @@ const Footer = () => {
       <FontAwesomeIcon icon={faGithub} />
         </a></li>
     </ul>
-    <ul className="menu">
+    {userRole=="patient"?<ul className="menu">
       <li className="menu__item"><a className="menu__link" href="/p-layout">Home</a></li>
       <li className="menu__item"><a className="menu__link" href="/p-layout/doctors">Find a doctor</a></li>
       <li className="menu__item"><a className="menu__link" href="/p-layout/services">Services</a></li>
 
-    </ul>
+    </ul>: <ul className="menu">
+      <li className="menu__item"><a className="menu__link" href="/">Home</a></li>
+      <li className="menu__item"><a className="menu__link" href="//diabetes">Diabetes</a></li>
+      <li className="menu__item"><a className="menu__link" href="/lungcancer">LungCancer</a></li>
+      <li className="menu__item"><a className="menu__link" href="/alzheimer">Alzheimer's</a></li>
+      <li className="menu__item"><a className="menu__link" href="/braintumor">BrainTumor</a></li>
+
+    </ul>}
     <p>&copy;2024 DiagnoCare | All Rights Reserved</p>
   </footer>
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
