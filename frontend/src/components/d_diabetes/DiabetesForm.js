@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import api from "../../api.js";
 import "./form.css";
 import "jspdf-autotable";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -305,6 +306,30 @@ const DiabetesForm = () => {
     }
   };
 
+  const handleDelete = async (patient_id) => {
+    console.log(patient_id);
+    try {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.delete(
+        `http://localhost:5000/auth/delete_patient/${patient_id}`, 
+        config
+      );
+  
+      // Update the state to remove the deleted patient
+      setPatients(prevPatients => prevPatients.filter(item => item._id.$oid !== patient_id));
+      
+      console.log(response);
+    } catch (error) {
+      console.error("Error deleting patient:", error);
+    }
+  }
+  
+
   return (
     <>
       <BootstrapDialog
@@ -361,14 +386,22 @@ const DiabetesForm = () => {
           <div className="diabetes-row">
             {patients.map((patient, index) => (
               <div key={patient._id} className="diabetes-column">
-                <div className="diabetes-icon-container">
-                  <Checkbox
-                    checked={selectedRow === index}
-                    onChange={() => handleRowSelect(index, patient._id)}
-                  />
+                <div className="row-container">
+                   <div className="diabetes-icon-container">
+                     <Checkbox
+                     checked={selectedRow === index}
+                     onChange={() => handleRowSelect(index, patient._id)}
+                    />
+                  </div>
+                  <div className="delete-icon-container">
+                  <IconButton aria-label="delete"  onClick={() => handleDelete(patient._id.$oid)}>
+                     <DeleteIcon />
+                  </IconButton>
+                  </div>
                 </div>
+                
                 <div className="diabetes-content">
-                  <h1>Name : {patient.name}</h1>
+                  <h1>Name : {patient.name}</h1>  
                   <p>
                     Address : {patient.address}
                     <br />

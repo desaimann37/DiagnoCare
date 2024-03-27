@@ -58,7 +58,7 @@ const Doctors = ({ history }) => {
               </span>
             </div>
             <div className="priceAndBadge">
-              <h4 className="price">₹{doctor.ticketPrice}</h4>
+              <h4 className="price">₹{doctor.price}</h4>
             </div>
           </div>
         </Link>

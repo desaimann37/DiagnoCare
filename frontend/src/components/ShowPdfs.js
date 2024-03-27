@@ -67,7 +67,6 @@ const ShowPdfs = (props) => {
   };
 
   const handleDelete = async(pdf)=>{
-   console.log(pdf);
    try {
     const response = await axios.delete(
       `http://localhost:5000/store/delete_pdf/${pdf}`
@@ -78,7 +77,7 @@ const ShowPdfs = (props) => {
     
     console.log(response);
    }catch (error) {
-    console.error("Error fetching PDF:", error);
+    console.error("Error deleting PDF:", error);
   }
   }
   return (

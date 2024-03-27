@@ -12,6 +12,7 @@ import DialogContent from "@mui/material/DialogContent";
 import AddPatient from "../AddPatient";
 import ViewPdfButton from "../ViewPdfButton";
 import Swal from "sweetalert2";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -297,6 +298,29 @@ const BrainTumorForm = () => {
     });
   };
 
+  const handleDelete = async (patient_id) => {
+    console.log(patient_id);
+    try {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.delete(
+        `http://localhost:5000/auth/delete_patient/${patient_id}`, 
+        config
+      );
+  
+      // Update the state to remove the deleted patient
+      setPatients(prevPatients => prevPatients.filter(item => item._id.$oid !== patient_id));
+      
+      console.log(response);
+    } catch (error) {
+      console.error("Error deleting patient:", error);
+    }
+  }
+
   return (
     <>
       {/* Add Patient Dialog Box...*/}
@@ -325,7 +349,7 @@ const BrainTumorForm = () => {
         </DialogContent>
       </BootstrapDialog>
 
-      {/* Totle...*/}
+      {/* Title...*/}
       <div className="d-form-text-section">
         <h1 className="fs-10 mb-5 align-items-center">BrainTumor</h1>
       </div>
@@ -354,11 +378,18 @@ const BrainTumorForm = () => {
           <div className="diabetes-row">
             {patients.map((patient, index) => (
               <div key={patient._id} className="diabetes-column">
-                <div className="diabetes-icon-container">
-                  <Checkbox
-                    checked={selectedRow === index}
-                    onChange={() => handleRowSelect(index, patient._id)}
-                  />
+                <div className="row-container">
+                   <div className="diabetes-icon-container">
+                     <Checkbox
+                     checked={selectedRow === index}
+                     onChange={() => handleRowSelect(index, patient._id)}
+                    />
+                  </div>
+                  <div className="delete-icon-container">
+                  <IconButton aria-label="delete"  onClick={() => handleDelete(patient._id.$oid)}>
+                     <DeleteIcon />
+                  </IconButton>
+                  </div>
                 </div>
                 <div className="diabetes-content">
                   <h1>Name : {patient.name}</h1>
