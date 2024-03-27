@@ -212,3 +212,12 @@
     justify-content: center;
   }
 }
+
+.row-container {
+  display: flex; /* Use flexbox to align items */
+  align-items: center; /* Center items vertically */
+}
+
+.delete-icon-container {
+  margin-left: auto; /* Move the delete icon to the right */
+}

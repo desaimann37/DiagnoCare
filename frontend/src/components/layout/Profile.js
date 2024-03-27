@@ -92,7 +92,15 @@ const ProfileForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-  
+    if (!formData.about || !formData.bio || !formData.email || !formData.experiences || !formData.name || !formData.phone || !formData.photo || !formData.price || !formData.qualifications || !formData.specialization || !formData.timeslots) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please Fill Up All The Fields.",
+      });
+      return;
+    }
+
     const token = localStorage.getItem('token');
     const config = {
       headers: {
@@ -149,20 +157,20 @@ const ProfileForm = () => {
         });
       }
   
-      // // Reset form data after successful submission
-      // setFormData({
-      //   name: "",
-      //   email: "",
-      //   phone: "",
-      //   bio: "",
-      //   specialization: "",
-      //   price: "",
-      //   qualifications: [],
-      //   experiences: [],
-      //   timeslots: [],
-      //   about: "",
-      //   photo: null
-      // });
+      // Reset form data after successful submission
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        bio: "",
+        specialization: "",
+        price: "",
+        qualifications: [],
+        experiences: [],
+        timeslots: [],
+        about: "",
+        photo: null
+      });
     } catch (error) {
       console.error('Error occurred while submitting form:', error);
       // Handle error

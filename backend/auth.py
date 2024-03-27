@@ -242,7 +242,7 @@ def select_patient(patient_id):
         return jsonify({'error': 'Internal server error'}), 500
 
 # Delete patient
-@auth_bp.route('/patients/<patient_id>', methods=['DELETE'])
+@auth_bp.route('/delete_patient/<patient_id>', methods=['DELETE'])
 @jwt_required()
 def delete_patient(patient_id):
     try:
