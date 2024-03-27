@@ -93,12 +93,12 @@ def add_doctor():
         return jsonify({'error': 'Internal server error'}), 500
 
 
-<<<<<<< HEAD
+# <<<<<<< HEAD
 
-# Get all patients
-=======
-#Get all doctors
->>>>>>> 64e4f386753074efe3f4164b7e899c1ee89891bb
+# # Get all patients
+# =======
+# #Get all doctors
+# >>>>>>> 64e4f386753074efe3f4164b7e899c1ee89891bb
 @doctor_bp.route('/doctors', methods=['GET'])
 @jwt_required()
 def get_all_doctors():
