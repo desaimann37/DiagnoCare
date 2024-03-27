@@ -12,6 +12,7 @@ import DialogContent from "@mui/material/DialogContent";
 import AddPatient from "../AddPatient";
 import ViewPdfButton from "../ViewPdfButton";
 import Swal from "sweetalert2";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import user from "../../assets/user.jpg";
 import UpdateProfile from "./UpdateProfile";
@@ -159,6 +160,29 @@ const Account = () => {
       .catch(error => console.error('Error deleting account:', error));
   };
 
+  const handleDelete = async (patient_id) => {
+    console.log(patient_id);
+    try {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.delete(
+        `http://localhost:5000/auth/delete_patient/${patient_id}`, 
+        config
+      );
+  
+      // Update the state to remove the deleted patient
+      setPatients(prevPatients => prevPatients.filter(item => item._id.$oid !== patient_id));
+      
+      console.log(response);
+    } catch (error) {
+      console.error("Error deleting patient:", error);
+    }
+  }
+
   return (
     <div>
       <UpdateProfile/>
@@ -211,8 +235,15 @@ const Account = () => {
           <div className="diabetes-row">
             {patients.map((patient, index) => (
               <div key={patient._id} className="diabetes-column">
-                <div className="diabetes-icon-container">
-                  <img src={user} alt="user"/>
+                <div className="row-container">
+                   <div className="diabetes-icon-container">
+                   <img src={user} alt="user"/>
+                  </div>
+                  <div className="delete-icon-container">
+                  <IconButton aria-label="delete"  onClick={() => handleDelete(patient._id.$oid)}>
+                     <DeleteIcon />
+                  </IconButton>
+                  </div>
                 </div>
                 <div className="diabetes-content">
                   <h1>Name : {patient.name}</h1>
