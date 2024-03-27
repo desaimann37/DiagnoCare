@@ -3,6 +3,7 @@ from flask import Flask,request, jsonify
 from flask_cors import CORS
 from extension import jwt, auth_collection
 import tensorflow as tf
+from flask_mail import Mail, Message
 from PIL import Image
 import numpy as np
 from extension import db
@@ -15,6 +16,7 @@ from predict import predict_alzheimer,predict_braintumor,predict_diabetes,predic
 
 app = Flask(__name__)
 CORS(app)
+mail = Mail(app)
 
 """
 # Configure Flask-JWT-Extended
@@ -24,9 +26,22 @@ app.config['JWT_ACCESS_COOKIE_PATH'] = '/auth/login/'
 app.config['JWT_COOKIE_CSRF_PROTECT'] = True 
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)  # Custom expiration time
 """
+
+# Configure mail settings
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'diagnocare31@gmail.com'
+app.config['MAIL_PASSWORD'] = 'emje szle ombn vgnp'
+app.config['MAIL_DEFAULT_SENDER'] = 'diagnocare31@gmail.com'
+
 jwt = JWTManager(app)
 
 jwt.init_app(app)
+mail.init_app(app)
+
+
+
 
 # Register blue_print : 
 app.register_blueprint(auth_bp , url_prefix='/auth')
@@ -100,8 +115,28 @@ def endpoint_predict_diabetes():
 def endpoint_predict_lungcancer():
     return predict_lungcancer()
 
+@app.route('/send-mail', methods=['GET'])
+def send_email():
+    try:
+        to = 'desaimann37@gmail.com'
+        subject = 'Testing'
+        body = 'Email Sent with flask only'
 
+        # Create a Message object
+        message = Message(subject=subject, recipients=[to], body=body)
 
+        # Attach the zip file
+        with app.open_resource("C:\\Users\\Admin\\Downloads\\patient_data.zip") as zip_file:
+            message.attach("file.zip", "application/zip", zip_file.read())
+
+        # Send the email
+        mail.send(message)
+
+        return jsonify({'message': 'Email sent successfully'})
+    except Exception as e:
+        print('Error sending email:', str(e))
+        return jsonify({'error': 'Failed to send email'})
+    
 
 if __name__ == '__main__':
     app.run(debug=True)

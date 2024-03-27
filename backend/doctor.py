@@ -93,24 +93,22 @@ def add_doctor():
         return jsonify({'error': 'Internal server error'}), 500
 
 
+<<<<<<< HEAD
 
 # Get all patients
+=======
+#Get all doctors
+>>>>>>> 64e4f386753074efe3f4164b7e899c1ee89891bb
 @doctor_bp.route('/doctors', methods=['GET'])
 @jwt_required()
 def get_all_doctors():
     try:
-        # Retrieve all doctors
-        doctors = list(doctor_collection.find({}))
-
-        # Convert Binary image data to Base64 for each doctor
-        # for doctor in doctors:
-        #     if 'photo' in doctor:
-        #         doctor['photo'] = doctor['photo'].to_base64().decode('utf-8')
-
-        # Serialize the doctors list to JSON
-        doctors_json = json_util.dumps(doctors)
         
-        return doctors_json, 200
+         doctors = list(doctor_collection.find({}))
+        
+         doctors = json_util.dumps(doctors)
+        
+         return doctors, 200
     except Exception as e:
         print(e)
         return jsonify({'error': 'Internal server error'}), 500

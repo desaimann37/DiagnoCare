@@ -45,8 +45,7 @@ const Doctors = ({ history }) => {
       {doctors.map(doctor => (
         <Link to={`${doctor.doctor_id}`} key={doctor.doctor_id}>
           <div className="doctorCard">
-            {/* Render the image directly using base64 data */}
-            <img className="courseImg" src={`data:image/jpeg;base64,${doctor.photo}`} alt="Doctor Image"/>
+          <img className="courseImg" src={`data:image/jpeg;base64,${doctor.photo.$binary.base64}`} alt="Doctor Image"/>
             <h3>{doctor.name}</h3>
             <div className="bestsellerBadge">{doctor.specification}</div>
             <div className="ratingDiv">
