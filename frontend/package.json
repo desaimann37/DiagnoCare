@@ -28,6 +28,7 @@
     "react-router-dom": "^6.21.3",
     "react-scripts": "5.0.1",
     "react-sf-building-blocks": "^1.0.87",
+    "react-spinners": "^0.13.8",
     "react-toastify": "^10.0.4",
     "shortid": "^2.2.16",
     "sweetalert2": "^11.10.6",
