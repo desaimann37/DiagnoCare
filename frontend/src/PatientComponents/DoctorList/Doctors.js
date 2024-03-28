@@ -26,6 +26,7 @@ const Doctors = ({ history }) => {
         );
         
         // Set the fetched data to the state
+        console.log((response.data));
         setDoctors(response.data);
       } catch (error) {
         console.error('Error fetching doctors:', error);

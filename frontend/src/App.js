@@ -37,8 +37,10 @@ function App() {
       <BrowserRouter>
         {loggedinObj ? (
           <Routes>
-            {loggedinObj.user.role === "doctor" ? (
+            {loggedinObj.role === "doctor" ? (
+              
               <>
+              {console.log("role is doctor")}
                 <Route path="/doctor" element={<Dlayout />}>
                   <Route index element={<Banner />} />
                   <Route path="diabetes" element={<Diabetes />} />
@@ -49,6 +51,8 @@ function App() {
                 </Route>
               </>
             ) : (
+              <>
+              {console.log("role is patient")}
               <Route path="/patient" element={<Playout />}>
                 <Route index element={<Home />} />
                 <Route path="doctors" element={<Doctors />} />
@@ -57,6 +61,7 @@ function App() {
                 <Route path="services" element={<Services />} />
                 <Route path="payment" element={<PaymentButton />} />
               </Route>
+              </>
             )}
             <Route path="*" element={<NotFoundPage />} /> // Wildcard route for 404 page
           </Routes>

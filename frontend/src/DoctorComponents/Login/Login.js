@@ -30,17 +30,18 @@ const Login = (props) => {
         `http://127.0.0.1:5000/auth/${endpoint}`,
         formData
       );
-      console.log(response.data);
-      localStorage.setItem("user", response.data);
+      // console.log(response.data);
+      const userJsonString = response.data.user;
+      const user = JSON.parse(userJsonString);
+
+      localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("token", response.data.tokens.access);
-      console.log(localStorage.getItem("user"));
 
       setIsRegister(true);
-      const user_obj = response.data;
-      //pass this user_obj to parent component
+      const user_obj = user;
 
       props.onUserLogin(user_obj);
-      if (response.data.user.role == "doctor") {
+      if (user.role == "doctor") {
         window.location.href = "/doctor";
       } else {
         window.location.href = "/patient";
@@ -94,7 +95,7 @@ const Login = (props) => {
                   </div>
 
                   <div className="mb-3 ">
-                  <label className="mb-2 label-large" htmlFor="Role">
+                    <label className="mb-2 label-large" htmlFor="Role">
                       Role <span>*</span>
                     </label>
                     <select

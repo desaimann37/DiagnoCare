@@ -38,15 +38,15 @@ const Dropdown = () => {
     <div className="dropdown-container">
       <details className="dropdown right">
         <summary className="avatar">
-          <img src="https://gravatar.com/avatar/00000000000000000000000000000000?d=mp" alt="Avatar" />
+          <img src={`data:image/jpeg;base64,${LoggedinObj.photo.$binary.base64}`} alt="Avatar" />
         </summary>
         <ul>
           <li>
-            {LoggedinObj && LoggedinObj.user ? (
+            {LoggedinObj  ? (
               <p>
-                <span className="block bold">{LoggedinObj.user.name}</span>
+                <span className="block bold">{LoggedinObj.name}</span>
                 <br />
-                <span className="block italic">{LoggedinObj.user.email}</span>
+                <span className="block italic">{LoggedinObj.email}</span>
               </p>
             ) : (
               <p>
@@ -61,7 +61,7 @@ const Dropdown = () => {
           </li>
           {/* <li className="divider"></li> */}
           <li>
-            {LoggedinObj && LoggedinObj.user && (
+            {LoggedinObj && (
               <Link to="#">
                 <span onClick={handleLogout} className="material-symbols-outlined">
                   Logout

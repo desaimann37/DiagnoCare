@@ -19,7 +19,6 @@ auth_bp = Blueprint('auth' , __name__)
 def api_signup():
     try:
         data = request.get_json()
-        print(data)
         name = data.get('name')
         email = data.get('email')
         password = data.get('password')
@@ -28,8 +27,6 @@ def api_signup():
             role = 'patient'
         else:
             role = 'doctor' 
-
-        print(role)
 
         if not name:
             return jsonify({'message': 'Name is required'}), 400
@@ -40,10 +37,6 @@ def api_signup():
 
         user = auth_collection.find_one({'email': email})
 
-        # print(user['email'])
-        # print(email)
-
-        # Check weather input email is existing in out database or not? 
         if user and 'email' in user and email == user['email']:
             return jsonify({'message': 'Email Already Existed with this Email address!'}), 400
         
@@ -56,12 +49,11 @@ def api_signup():
         }
         auth_collection.insert_one(user)
 
-        # Define a custom expiration time (e.g., 1 day)
         custom_expiration_time = timedelta(days=1)
         access_token = create_access_token(identity=user['name'], expires_delta=custom_expiration_time)
         refresh_token = create_refresh_token(identity=user['name'], expires_delta=custom_expiration_time)
-        # Passwords match
-        user['_id'] = str(user['_id'])  # Convert ObjectId to string
+        
+        user['_id'] = str(user['_id']) 
 
         print("Signup successful")
 
@@ -92,19 +84,15 @@ def api_login():
         if user:
             hashed_password = user.get('password')
             if check_password_hash(hashed_password, password):
-                # Define a custom expiration time (e.g., 1 day)
                 custom_expiration_time = timedelta(days=1)
                 access_token = create_access_token(identity=user['name'], expires_delta=custom_expiration_time)
                 refresh_token = create_refresh_token(identity=user['name'], expires_delta=custom_expiration_time)
 
-                # Passwords match
-                user['_id'] = str(user['_id'])  # Convert ObjectId to string
-
-                # Check the user's role
-                user_role = user.get('role', 'doctor')  # Default role is 'user'
+                user['_id'] = str(user['_id']) 
+                
+                user_role = user.get('role', 'doctor') 
                 if user_role == 'doctor':
-                    # Additional logic for admin role
-                    # For example, you could include additional data in the response
+                    user = json_util.dumps(user)
                     response_data = {
                         'message': 'Doctor login successful',
                         'user': user,
@@ -114,6 +102,7 @@ def api_login():
                         }
                     }
                 else:
+                    user = json_util.dumps(user)
                     response_data = {
                         'message': 'Patient login successful',
                         'user': user,
@@ -122,23 +111,11 @@ def api_login():
                             'refresh': refresh_token
                         }
                     }
-                
-                # response = jsonify(
-                #     {
-                #         'message': 'Login successful', 
-                #         'user': user,
-                #         'tokens' : {
-                #             "access": access_token,
-                #             "refresh": refresh_token,
-                #         }
-                #     }
-                # )
 
                 response = jsonify(response_data)
 
                 # set_access_cookies(response, access_token)
                 response.set_cookie('auth_cookie', value=access_token, httponly=True, secure=True, max_age=custom_expiration_time.total_seconds())
-                print("end...")
                 return response,200
             else:
                 return jsonify({'message': 'Incorrect password'}), 401
