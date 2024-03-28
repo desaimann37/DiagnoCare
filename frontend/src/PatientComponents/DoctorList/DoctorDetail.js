@@ -42,12 +42,46 @@ const DoctorDetail = () => {
     }
   };
 
-  const handleSubmitFeedback = () => {
-    console.log("Selected Stars:", selectedStars);
-    console.log("Review Text:", reviewText);
-    setSelectedStars(0);
-    setReviewText("");
+  const handleSubmitFeedback = async () => {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+    };
+
+    try {
+      const review = {
+        doctor_id: id, 
+        rating: selectedStars,
+        review_content: reviewText
+      }
+      const response = await axios.post(
+        "http://127.0.0.1:5000/doctor/add_review",
+        review,
+        config
+      );
+      setReviewText("");
+      setSelectedStars(0);
+      if (response.ok) {
+        const data = await response.json();
+        setReviewText("");
+        setSelectedStars(0);
+      } else {
+        const errorData = await response.json();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
+
+  // const handleSubmitFeedback = () => {
+  //   console.log("Selected Stars:", selectedStars);
+  //   console.log("Review Text:", reviewText);
+  //   setSelectedStars(0);
+  //   setReviewText("");
+  // };
 
   useEffect(() => {
     const getDoctorDetails = async () => {
@@ -85,7 +119,7 @@ const DoctorDetail = () => {
     );
   }
 
-  const doctor = doctors.find((doctor) => doctor.doctor_id === id);
+  const doctor = doctors.find((doctor) => doctor._id.$oid === id);
   console.log(doctor);
   if (!doctor) {
     return <div className="doctor-detail">Doctor not found</div>;
@@ -196,7 +230,7 @@ const DoctorDetail = () => {
               <br />
 
               <ul>
-                {doctor.qualifications.map((edu, index) => {
+                {doctor.qualifications && doctor.qualifications.map((edu, index) => {
                   const startDate = new Date(edu.startDate.$date);
                   const endDate = new Date(edu.endDate.$date);
                   const startYear = startDate.getFullYear();
@@ -221,7 +255,7 @@ const DoctorDetail = () => {
               <div className="experience-section">
                 <h3>Experience</h3>
                 <div className="experience-cards">
-                  {doctor.experiences.map((exp, index) => {
+                  {doctor.experiences && doctor.experiences.map((exp, index) => {
                     const startDate = new Date(exp.startDate.$date);
                     const endDate = new Date(exp.endDate.$date);
                     const startYear = startDate.getFullYear();
@@ -249,21 +283,21 @@ const DoctorDetail = () => {
                   <div className="review" key={index}>
                     <div className="user-profile">
                       <img
-                        src={review.userPhoto}
+                        src={`data:image/jpeg;base64,${review.patient_photo.$binary.base64}`}
                         alt="User"
                         className="user-photo"
                       />
                     </div>
                     <div className="review-details">
-                      <h4 className="user-name">{review.userName}</h4>
-                      <p className="review-date">{review.date}</p>
+                      <h4 className="user-name">{review.patient_name}</h4>
+                      <p className="review-date">{review.review_date.$date}</p>
                       <div className="rating">
                         {Array.from({ length: review.rating }, (_, i) => (
                           <StarRoundedIcon key={i} />
                         ))}
                       </div>
                       <br />
-                      <p className="review-text">{review.text}</p>
+                      <p className="review-text">{review.review_content}</p>
                     </div>
                     <br />
                   </div>
