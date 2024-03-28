@@ -63,7 +63,7 @@ function App() {
               </Route>
               </>
             )}
-            <Route path="*" element={<NotFoundPage />} /> // Wildcard route for 404 page
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         ) : (
           <>

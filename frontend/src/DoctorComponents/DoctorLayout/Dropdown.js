@@ -38,7 +38,8 @@ const Dropdown = () => {
     <div className="dropdown-container">
       <details className="dropdown right">
         <summary className="avatar">
-          <img src={`data:image/jpeg;base64,${LoggedinObj.photo.$binary.base64}`} alt="Avatar" />
+          {LoggedinObj ? (<img src={`data:image/jpeg;base64,${LoggedinObj.photo.$binary.base64}`} alt="Avatar" />):
+          (<img src="https://gravatar.com/avatar/00000000000000000000000000000000?d=mp" alt="Avatar" />)}
         </summary>
         <ul>
           <li>
@@ -55,7 +56,7 @@ const Dropdown = () => {
             )}
           </li>
           <li>
-            <Link to="/account">
+            <Link to="/doctor/account">
               <span className="material-symbols-outlined">Account</span>
             </Link>
           </li>
