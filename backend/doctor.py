@@ -112,13 +112,23 @@ def add_doctor():
 # # Get all doctors
 @doctor_bp.route('/doctors', methods=['GET'])
 @jwt_required()
+def get_all_doctors():
+    try:
+        
+        doctors = list(auth_collection.find({'role' : 'doctor'}))
+        
+        doctors = json_util.dumps(doctors)
+        
+        return doctors, 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Internal server error'}), 500
+
+@doctor_bp.route('/profile', methods=['GET'])
+@jwt_required()
 def get_doctor_profile():
     try:
-
-        doctors = list(doctor_collection.find({}))
-
-        doctors = json_util.dumps(doctors)
-
+         
         doctor_data = auth_collection.find_one({'_id': ObjectId(current_user.id)})
         if doctor_data:
             # Ensure all fields are JSON serializable
@@ -129,7 +139,6 @@ def get_doctor_profile():
     except Exception as e:
         print(e)
         return jsonify({'error': 'Internal server error'}), 500
-
 
 @doctor_bp.route('/add_review', methods=['POST'])
 @jwt_required()

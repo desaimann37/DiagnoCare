@@ -38,7 +38,7 @@ const ProfileForm = () => {
         'Content-Type': 'multipart/form-data' // Change content type to multipart/form-data
       }
     };
-        const response = await axios.get('http://127.0.0.1:5000/doctor/doctors', config); 
+        const response = await axios.get('http://127.0.0.1:5000/doctor/profile', config); 
         console.log("response: ")
         console.log(response);
         const userData = response.data;
