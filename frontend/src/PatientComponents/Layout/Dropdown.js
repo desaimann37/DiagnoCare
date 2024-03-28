@@ -23,6 +23,7 @@ const Dropdown = () => {
       if (response.ok) {
         localStorage.removeItem('loggedin_obj');
         localStorage.removeItem('user');
+        localStorage.removeItem('token');
         window.location.href = '/login';
       } else {
         console.error('Logout failed:', response.statusText);
@@ -54,7 +55,7 @@ const Dropdown = () => {
             )}
           </li>
           <li>
-            <Link to="/account">
+            <Link to="/patient">
               <span className="p-material-symbols-outlined">Account</span>
             </Link>
           </li>

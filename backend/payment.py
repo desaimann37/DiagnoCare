@@ -25,11 +25,9 @@ def create_checkout_session():
     stripe.api_key = stripe_keys["secret_key"]
     try:
         data = request.get_json()
-        # Extract customer name and address from request data
         customer_name = 'Isha'
         customer_address = 'XYZ'
 
-        # Create a Checkout Session with customer name and address
         checkout_session = stripe.checkout.Session.create(
             success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
             cancel_url=domain_url + "/",
@@ -59,11 +57,11 @@ def create_checkout_session():
 
 @app.route("/success")
 def success():
-    return render_template("success.js")  # Use render_template to render the success template
+    return render_template("success.js")  
 
 @app.route("/cancelled")
 def cancelled():
-    return render_template("cancelled.js")  # Use render_template to render the cancelled template
+    return render_template("cancelled.js")  
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

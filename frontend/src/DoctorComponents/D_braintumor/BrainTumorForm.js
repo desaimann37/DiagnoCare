@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import loader from "../../assets/Spinner-2.gif";
 import { jsPDF } from "jspdf";
+import loader from "../../assets/Spinner-2.gif";
 import { Container, Typography, Grid, Checkbox } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import { styled } from "@mui/material/styles";
@@ -10,7 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import AddPatient from "../AddPatient";
-import ViewPdfButton from "../ViewPdfButton";
+import ViewPdfButton from "../HandlePdf/ViewPdfButton";
 import Swal from "sweetalert2";
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -23,9 +23,9 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const AlzheimerForm = () => {
+const BrainTumorForm = () => {
   const [formData, setFormData] = useState({
-    AlzheimerImage: null,
+    BrainTumorImage: null,
   });
   const [Symptoms, setSymptoms] = useState();
   const [predicted_category, setpredicted_category] = useState();
@@ -89,10 +89,12 @@ const AlzheimerForm = () => {
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
-    window.location = "/alzheimer";
+    window.location = "/doctor/diabetes";
     setOpen(false);
   };
+
 
   const handleChange = (e) => {
     const { name, files } = e.target;
@@ -105,7 +107,7 @@ const AlzheimerForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.AlzheimerImage) {
+    if (!formData.BrainTumorImage) {
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -127,10 +129,10 @@ const AlzheimerForm = () => {
       setLoading(true);
 
       const formDataToSend = new FormData();
-      formDataToSend.append("file", formData.AlzheimerImage);
+      formDataToSend.append("file", formData.BrainTumorImage);
 
       const response = await axios.post(
-        "http://localhost:5000/predict_alzheimer",
+        "http://localhost:5000/predict_braintumor",
         formDataToSend,
         {
           headers: {
@@ -139,7 +141,6 @@ const AlzheimerForm = () => {
         }
       );
       const data = await response.data;
-
       setSymptoms(data.Symptoms);
       setpredicted_category(data.predicted_category);
       setTreatment(data.Treatment);
@@ -151,10 +152,44 @@ const AlzheimerForm = () => {
     }
   };
 
+  const handleRowSelect = async (index, id) => {
+    if (selectedRow === index) {
+      setSelectedRow(null); // Deselect if already selected
+    } else {
+      setSelectedRow(index); // Select the clicked row
+      console.log("Row selected:", index);
+      id = id["$oid"];
+      try {
+        const token = localStorage.getItem("token");
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        };
+        const response = await axios.get(
+          `http://127.0.0.1:5000/auth/patient/${id}`,
+          config
+        );
+        console.log(response);
+        setSelectedPatient({
+          patient_id: response.data._id.$oid,
+          name: response.data.name,
+          address: response.data.address,
+          phone: response.data.phone_number,
+        });
+        console.log(selectedPatient);
+      } catch (error) {
+        console.error("Error fetching tests:", error);
+      }
+    }
+  };
+
+  
   const handleUploadPDF = async(pdfData) => {
     const formData = new FormData();
     
-    const filename = `${combinedData.patient_details.name}_AlzheimerReport.pdf`;
+    const filename = `${combinedData.patient_details.name}_BrainTumorReport.pdf`;
   
     formData.append("pdf", pdfData, filename);
   
@@ -201,7 +236,7 @@ const AlzheimerForm = () => {
     const doc = new jsPDF();
 
     const { name, phone, address } = combinedData.patient_details;
-    const imageBase64 = await getImageBase64(formData.AlzheimerImage);
+    const imageBase64 = await getImageBase64(formData.BrainTumorImage);
 
     const tableData = [
       { header: "Doctor Name:", content: JSON.parse(localStorage.getItem('loggedin_obj')).user.name }, 
@@ -209,7 +244,7 @@ const AlzheimerForm = () => {
       { header: "Patient Name:", content: name }, 
       { header: "Phone:", content: phone },
       { header: "Address:", content: address },
-      { header: "Disease name:", content: "Alzheimer's" },
+      { header: "Disease name:", content: "BrainTumour" },
       { header: "Predicted Category of Disease:", content: predicted_category }, 
       { header: "Symptoms:", content: Symptoms },
       { header: "Treatment:", content: Treatment }, 
@@ -248,10 +283,10 @@ const AlzheimerForm = () => {
       margin: { left: 10, right: 10 }, // Table margin
     });
 
-     // Save the PDF "
-     const pdfData = doc.output("blob");
-     handleUploadPDF(pdfData);
-     doc.save(combinedData.patient_details.name + "_AlzheimerReport.pdf");
+    // Save the PDF "
+    const pdfData = doc.output("blob");
+    handleUploadPDF(pdfData);
+    doc.save(combinedData.patient_details.name + "_BrainTumorReport.pdf");
   };
 
   const getImageBase64 = (file) => {
@@ -261,39 +296,6 @@ const AlzheimerForm = () => {
       reader.onerror = (error) => reject(error);
       reader.readAsDataURL(file);
     });
-  };
-
-  const handleRowSelect = async (index, id) => {
-    if (selectedRow === index) {
-      setSelectedRow(null); // Deselect if already selected
-    } else {
-      setSelectedRow(index); // Select the clicked row
-      console.log("Row selected:", index);
-      id = id["$oid"];
-      try {
-        const token = localStorage.getItem("token");
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        };
-        const response = await axios.get(
-          `http://127.0.0.1:5000/auth/patient/${id}`,
-          config
-        );
-        console.log(response);
-        setSelectedPatient({
-          patient_id: response.data._id.$oid,
-          name: response.data.name,
-          address: response.data.address,
-          phone: response.data.phone_number,
-        });
-        console.log(selectedPatient);
-      } catch (error) {
-        console.error("Error fetching tests:", error);
-      }
-    }
   };
 
   const handleDelete = async (patient_id) => {
@@ -349,7 +351,7 @@ const AlzheimerForm = () => {
 
       {/* Title...*/}
       <div className="d-form-text-section">
-        <h1 className="fs-10 mb-5 align-items-center">Alzheimer's</h1>
+        <h1 className="fs-10 mb-5 align-items-center">BrainTumor</h1>
       </div>
 
       {/* Displaying List of Patients...*/}
@@ -397,7 +399,6 @@ const AlzheimerForm = () => {
                     Phone No. : {patient.phone_number}
                   </p>
                 </div>
-
                 <ViewPdfButton
                   // pdfName={patient.name + "_AlzheimerReport.pdf"}
                   pdfName={patient._id.$oid}
@@ -459,15 +460,15 @@ const AlzheimerForm = () => {
                 onSubmit={handleSubmit}
               >
                 <div className="mb-3">
-                  <label className="mb-2 label-large" htmlFor="AlzheimerImage">
+                  <label className="mb-2 label-large" htmlFor="BrainTumorImage">
                     Upload MRI Photo <span>*</span>
                   </label>
                   <input
-                    id="AlzheimerImage"
+                    id="BrainTumorImage"
                     type="file"
                     accept="image/*"
                     className="form-control"
-                    name="AlzheimerImage"
+                    name="BrainTumorImage"
                     onChange={handleChange}
                     required
                   />
@@ -480,11 +481,12 @@ const AlzheimerForm = () => {
                   </button>
                 </div>
               </form>
-              
               {loading && (
-                <div className="loader-container">
-                  <img src={loader} alt="Loader" className="loader" />
-                </div>
+                <>
+                  <div className="loader-container">
+                    <img src={loader} alt="Loader" className="loader" />
+                  </div>
+                </>
               )}
               {!loading &&
                 Symptoms &&
@@ -494,7 +496,6 @@ const AlzheimerForm = () => {
                   <>
                     <h1>Report</h1>
                     <br />
-
                     <div className="prediction-result">
                       <h2>Predicted Category :</h2>
                       <h5>{predicted_category}</h5>
@@ -518,7 +519,6 @@ const AlzheimerForm = () => {
                       <h5>{Recommendation}</h5>
                     </div>
                     <br />
-
                     <div className="align-items-center">
                       <button
                         type="button"
@@ -533,9 +533,10 @@ const AlzheimerForm = () => {
             </div>
           </div>
         </div>
+        <div className="steps-container"></div>
       </div>
     </>
   );
 };
 
-export default AlzheimerForm;
+export default BrainTumorForm;

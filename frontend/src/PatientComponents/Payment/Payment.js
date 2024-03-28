@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import StripeRedirect from "./StripeRedirect";
 
 const PaymentButton = () => {
   const [sessionId, setSessionId] = useState(null);
@@ -30,7 +29,6 @@ const PaymentButton = () => {
   return (
     <div>
       <button onClick={handlePayment}>Pay Now</button>
-      {/* {sessionId && <StripeRedirect sessionId={sessionId} />} */}
     </div>
   );
 };
