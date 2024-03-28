@@ -37,14 +37,17 @@ function App() {
         {loggedinObj ? (
           <Routes>
             {loggedinObj.user.role === "doctor" ? (
-              <Route path="/doctor" element={<Dlayout />}>
-                <Route index element={<Banner />} />
-                <Route path="diabetes" element={<Diabetes />} />
-                <Route path="lungcancer" element={<LungCancer />} />
-                <Route path="alzheimer" element={<Alzheimer />} />
-                <Route path="braintumor" element={<BrainTumor />} />
-                <Route path="account" element={<Account />} />
-              </Route>
+              <>
+                {console.log("Login object is Found")}
+                <Route path="/doctor" element={<Dlayout />}>
+                  <Route index element={<Banner />} />
+                  <Route path="diabetes" element={<Diabetes />} />
+                  <Route path="lungcancer" element={<LungCancer />} />
+                  <Route path="alzheimer" element={<Alzheimer />} />
+                  <Route path="braintumor" element={<BrainTumor />} />
+                  <Route path="account" element={<Account />} />
+                </Route>
+              </>
             ) : (
               <Route path="/patient" element={<Playout />}>
                 <Route index element={<Home />} />
@@ -58,11 +61,11 @@ function App() {
           </Routes>
         ) : (
           <>
-            <Navigate to="/login" replace />
+          <Login onUserLogin={handleUserLogin} />
+            {/* <Navigate to="/login" replace /> */}
             <Routes>
               <Route
                 path="/login"
-                element={<Login onUserLogin={handleUserLogin} />}
               />
             </Routes>
           </>
