@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request 
+from flask import Blueprint, json, jsonify, request 
 from bson import Binary
 from pymongo import MongoClient
 from bson import ObjectId, json_util
@@ -19,8 +19,7 @@ def add_doctor():
 
         file = request.files['photo']
         image = PILImage.open(file)
-        
-        # Fetch existing user document from auth_collection
+    
         user = auth_collection.find_one({'_id': ObjectId(current_user.id)})
         
         img_byte_array = BytesIO()
@@ -31,7 +30,7 @@ def add_doctor():
         experiences = []
         timeslots = []
 
-        # Extract qualifications
+      
         if data.get('qualifications[startDate]'):
             for i in range(len(data.get('qualifications[startDate]'))):
                 qualification = {
@@ -42,7 +41,6 @@ def add_doctor():
                 }
                 qualifications.append(qualification)
 
-        # Extract experiences
         if data.get('experiences[startDate]'):
             for i in range(len(data.get('experiences[startDate]'))):
                 experience = {
@@ -53,7 +51,6 @@ def add_doctor():
                 }
                 experiences.append(experience)
 
-        # Extract timeslots
         if data.get('timeslots[date]'):
             for i in range(len(data.get('timeslots[date]'))):
                 timeslot = {
@@ -63,7 +60,6 @@ def add_doctor():
                 }
                 timeslots.append(timeslot)
 
-         # Extract other basic 
         email = data.get('email')[0]
         name = data.get('name')[0]
         password = user.get('password')
@@ -92,31 +88,19 @@ def add_doctor():
 
         }
 
-        # Add qualifications if available
         if qualifications:
             doctor['qualifications'] = qualifications
 
-        # Add experiences if available
         if experiences:
             doctor['experiences'] = experiences
 
-        # Add timeslots if available
         if timeslots:
             doctor['timeslots'] = timeslots
         
-        # Update user document with profile information from form
         if user:
-            # Update existing fields with form data
             user.update(doctor)
-            # Remove name and email fields from form data if they exist in the database
-            if 'name' in user:
-                del data['name']
-            if 'email' in user:
-                del data['email']
             # Update profile information in the document
             auth_collection.update_one({'_id': ObjectId(current_user.id)}, {'$set': user})
-            # Update name and email from form data (if present)
-            auth_collection.update_one({'_id': ObjectId(current_user.id)}, {'$set': doctor})
 
             return jsonify({'message': 'Profile saved successfully'}), 200
         else:
@@ -125,23 +109,18 @@ def add_doctor():
         print(e)
         return jsonify({'error': 'Internal server error'}), 500
 
-
-# <<<<<<< HEAD
-
-# # Get all patients
-# =======
-# #Get all doctors
-# >>>>>>> 64e4f386753074efe3f4164b7e899c1ee89891bb
-@doctor_bp.route('/doctors', methods=['GET'])
+@doctor_bp.route('/profile', methods=['GET'])
 @jwt_required()
-def get_all_doctors():
+def get_doctor_profile():
     try:
-        
-         doctors = list(doctor_collection.find({}))
-        
-         doctors = json_util.dumps(doctors)
-        
-         return doctors, 200
+        doctor_data = auth_collection.find_one({'_id': ObjectId(current_user.id)})
+        if doctor_data:
+            # Ensure all fields are JSON serializable
+            doctor_data = json.loads(json_util.dumps(doctor_data))
+            return jsonify(doctor_data), 200
+        else:
+            return jsonify({'message': 'Doctor profile not found'}), 404
     except Exception as e:
         print(e)
         return jsonify({'error': 'Internal server error'}), 500
+

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CForm,
   CCol,
@@ -26,6 +26,65 @@ const ProfileForm = () => {
     about: "",
     photo: null
   });
+
+  useEffect(() => {
+    
+    const fetchProfileData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data' // Change content type to multipart/form-data
+      }
+    };
+        const response = await axios.get('http://127.0.0.1:5000/doctor/profile', config); 
+        console.log("response: ")
+        console.log(response);
+        const userData = response.data;
+
+        const updatedQualifications = userData.qualifications.map(qualification => ({
+          ...qualification,
+          startDate: new Date(qualification.startDate),
+          endDate: new Date(qualification.endDate)
+        }));
+
+        const updatedExperiences = userData.experiences.map(experience => ({
+          ...experience,
+          startDate: new Date(experience.startDate),
+          endDate: new Date(experience.endDate)
+        }));
+
+        const updatedTimeslots = userData.timeslots.map(slot => ({
+          ...slot,
+          date: new Date(slot.date)
+        }));
+
+        setFormData(prevFormData => ({
+          ...prevFormData,
+          name: userData.name || "",
+          email: userData.email || "",
+          phone: userData.phone || "",
+          bio: userData.bio || "",
+          specialization: userData.specialization || "",
+          price: userData.price || "",
+          qualifications: updatedQualifications || [],
+          experiences: updatedExperiences || [],
+          timeslots: updatedTimeslots || [],
+          about: userData.about || "",
+          photo: userData.photo ? new File([], userData.photo.name) : null
+        }));
+      } catch (error) {
+        console.error('Error occurred while fetching profile data:', error);
+      }
+
+     
+    };
+
+    fetchProfileData();
+  }, []);
+  console.log("form data :")
+  console.log(formData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -119,7 +178,7 @@ const ProfileForm = () => {
     formDataToSend.append('about', formData.about);
     formDataToSend.append('photo', formData.photo); // Append photo to formDataToSend
   
-    // Append qualifications
+
     formData.qualifications.forEach((qualification, index) => {
       {
       formDataToSend.append(`qualifications[startDate]`, qualification.startDate);
@@ -129,7 +188,7 @@ const ProfileForm = () => {
       }
     });
   
-    // Append experiences
+
     formData.experiences.forEach((experience, index) => {
       {
       formDataToSend.append(`experiences[startDate]`, experience.startDate);
@@ -139,7 +198,7 @@ const ProfileForm = () => {
       }
     });
   
-    // Append time slots
+
     formData.timeslots.forEach((slot, index) => {
       formDataToSend.append(`timeslots[date]`, slot.date);
       formDataToSend.append(`timeslots[startTime]`, slot.startTime);

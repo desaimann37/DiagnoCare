@@ -1,3 +1,4 @@
+import json
 from flask import Blueprint , jsonify , request 
 from extension import auth_collection,  patient_collection
 from datetime import timedelta
@@ -88,8 +89,16 @@ def api_login():
             return jsonify({'message': 'Password is required'}), 400
 
         user = auth_collection.find_one({'email': email})
+
+        user = {
+            'name' : user.get('name'),
+            'email' : user.get('email'),
+            'password' : user.get('password'),
+            'role' : user.get('role'),
+            '_id' : user.get('_id')
+        }
         
-        if user:
+        if user:    
             hashed_password = user.get('password')
             if check_password_hash(hashed_password, password):
                 # Define a custom expiration time (e.g., 1 day)
