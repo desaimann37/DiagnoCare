@@ -171,9 +171,16 @@ def add_review():
                 'review_date': datetime.utcnow()
             }
             
+            current_rating = doctor.get('rating', 0) 
+            review_count = len(doctor.get('reviews', [])) 
+            new_rating = (int)(((current_rating * review_count) + rating) / (review_count + 1) )
+            
             auth_collection.update_one(
                 {'_id': ObjectId(doctor_id)},
-                {'$push': {'reviews': review}}
+                    {
+                        '$push': {'reviews': review},
+                        '$set': {'rating': new_rating}
+                }
             )
             return jsonify({'message': 'Review added successfully'}), 200
         else:

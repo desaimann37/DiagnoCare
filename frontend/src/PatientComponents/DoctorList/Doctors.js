@@ -50,7 +50,7 @@ const Doctors = ({ history }) => {
             <h3>{doctor.name}</h3>
             <div className="bestsellerBadge">{doctor.specialization}</div>
             <div className="ratingDiv">
-              <span className="rating">doctor.rating
+              <span className="rating">{doctor.rating}
                 <StarRoundedIcon />
                 <StarRoundedIcon />
                 <StarRoundedIcon />

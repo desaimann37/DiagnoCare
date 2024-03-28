@@ -150,7 +150,7 @@ const DoctorDetail = () => {
                     }}
                   >
                     {" "}
-                    doctor.rating (2)
+                    {doctor.rating }({doctor.reviews && doctor.reviews.length})
                   </span>
                 </span>
               </div>
