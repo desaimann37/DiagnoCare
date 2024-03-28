@@ -90,14 +90,6 @@ def api_login():
 
         user = auth_collection.find_one({'email': email})
 
-        user = {
-            'name' : user.get('name'),
-            'email' : user.get('email'),
-            'password' : user.get('password'),
-            'role' : user.get('role'),
-            '_id' : user.get('_id')
-        }
-        
         if user:    
             hashed_password = user.get('password')
             if check_password_hash(hashed_password, password):
