@@ -47,9 +47,9 @@ const Doctors = ({ history }) => {
           <div className="doctorCard">
           <img className="courseImg" src={`data:image/jpeg;base64,${doctor.photo.$binary.base64}`} alt="Doctor Image"/>
             <h3>{doctor.name}</h3>
-            <div className="bestsellerBadge">{doctor.specification}</div>
+            <div className="bestsellerBadge">{doctor.specialization}</div>
             <div className="ratingDiv">
-              <span className="rating">{doctor.rating}
+              <span className="rating">doctor.rating
                 <StarRoundedIcon />
                 <StarRoundedIcon />
                 <StarRoundedIcon />

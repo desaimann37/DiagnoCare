@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import axios from "axios";
-import './doctorDetail.css'
+import "./doctorDetail.css";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import LoadingPage from "../LoadingPage";
-
 
 const DoctorDetail = () => {
   const [doctors, setDoctors] = useState(null);
@@ -59,10 +58,11 @@ const DoctorDetail = () => {
           return;
         }
         const response = await axios.get(
-          'http://127.0.0.1:5000/doctor/doctors', {
+          "http://127.0.0.1:5000/doctor/doctors",
+          {
             headers: {
               Authorization: `Bearer ${token}`,
-            }
+            },
           }
         );
         setDoctors(response.data);
@@ -76,10 +76,17 @@ const DoctorDetail = () => {
   }, []);
 
   if (loading) {
-    return <><center><LoadingPage /></center></>
+    return (
+      <>
+        <center>
+          <LoadingPage />
+        </center>
+      </>
+    );
   }
 
   const doctor = doctors.find((doctor) => doctor.doctor_id === id);
+  console.log(doctor);
   if (!doctor) {
     return <div className="doctor-detail">Doctor not found</div>;
   }
@@ -89,9 +96,13 @@ const DoctorDetail = () => {
       <div className="doctor-margin">
         <div className="doctor-detail">
           <div className="doctor-info-container">
-          <img className="doctor-image" src={`data:image/jpeg;base64,${doctor.photo.$binary.base64}`} alt="Doctor Image"/>
+            <img
+              className="doctor-image"
+              src={`data:image/jpeg;base64,${doctor.photo.$binary.base64}`}
+              alt="Doctor Image"
+            />
             <div className="doctor-info">
-              <div className="bestsellerBadge">{doctor.specialty}</div>
+              <div className="bestsellerBadge">{doctor.specialization}</div>
               <h3 className="doctor-name">{doctor.name}</h3>
               <div className="ratingDiv">
                 <span className="doctor-rating">
@@ -105,43 +116,52 @@ const DoctorDetail = () => {
                     }}
                   >
                     {" "}
-                    {doctor.rating} (2)
+                    doctor.rating (2)
                   </span>
                 </span>
               </div>
               <br />
               <p className="doctor-specialty">
-                Specialaization in {doctor.specification}
+                Specialaization in {doctor.specialization}
               </p>
             </div>
           </div>
           <div className="booking-appointment-card">
             <h4 className="booking-price">
-              Booking Price: <span>₹{doctor.ticketPrice}</span>
+              Booking Price: <span>₹{doctor.price}</span>
             </h4>
             <br />
             <h5>Available Time Slots:</h5>
-            {doctor.availableSlots && (
-            <ul>
-              {doctor.timeslots && (
+            {console.log(doctor)}
+            {doctor.timeslots && (
               <ul>
-                {doctor.timeslots.map((slot, index) => (
-                  <li className="booking-price" key={index}>
-                    {slot}
-                  </li>
-                ))}
+                {doctor.timeslots.map((slot, index) => {
+                  const date = new Date(slot.date.$date);
+                  const day = date.toLocaleDateString("en-US", {
+                    weekday: "long",
+                  });
+                  const timing = `${slot.startTime} - ${slot.endTime}`;
+
+                  return (
+                    <li className="booking-price" key={index}>
+                      {day}: <span>{timing}</span>
+                    </li>
+                  );
+                })}
               </ul>
             )}
-            </ul>
-          )}
             <button className="book-appointment-button">
               Book Appointment
             </button>
           </div>
         </div>
 
-        <center><button onClick={handleSendMail}><h2>Send Mail</h2></button></center>
-        
+        <center>
+          <button className="btn-primary btn" onClick={handleSendMail}>
+            <h2>Send Mail</h2>
+          </button>
+        </center>
+
         <br />
         <div className="doctor-nav">
           <div
@@ -174,34 +194,58 @@ const DoctorDetail = () => {
               <br />
               <h2>Qualification</h2>
               <br />
-              {doctor.qualifications && (
+
               <ul>
-                {doctor.qualifications.map((qualification, index) => (
-                  <li key={index}>
-                    {qualification}
-                  </li>
-                ))}
+                {doctor.qualifications.map((edu, index) => {
+                  const startDate = new Date(edu.startDate.$date);
+                  const endDate = new Date(edu.endDate.$date);
+                  const startYear = startDate.getFullYear();
+                  const endYear = endDate.getFullYear();
+
+                  return (
+                    <li key={index}>
+                      <span>
+                        {startYear} - {endYear}
+                      </span>
+                      <br />
+                      {edu.degree}
+                      <br />
+                      {edu.university}
+                      <br />
+                      <br />
+                    </li>
+                  );
+                })}
               </ul>
-            )}
 
               <div className="experience-section">
                 <h3>Experience</h3>
                 <div className="experience-cards">
-                {doctor.experience && (
-                <div className="experience-card">
-                  <h5>
-                    <span>{doctor.experience}</span>
-                  </h5>
-                </div>
-              )}
+                  {doctor.experiences.map((exp, index) => {
+                    const startDate = new Date(exp.startDate.$date);
+                    const endDate = new Date(exp.endDate.$date);
+                    const startYear = startDate.getFullYear();
+                    const endYear = endDate.getFullYear();
+                    return (
+                      <div className="experience-card" key={index}>
+                        <h5>
+                          <span>
+                            {startYear} - {endYear}
+                          </span>
+                        </h5>
+                        <h5>{exp.position}</h5>
+                        <p>{exp.location}</p>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
           ) : (
             <>
               <div className="feedback-section">
-                <h3>All Reviews ({doctor.reviews.length})</h3>
-                {doctor.reviews.map((review, index) => (
+                <h3>All Reviews ({doctor.reviews && doctor.reviews.length})</h3>
+                {doctor.reviews && doctor.reviews.map((review, index) => (
                   <div className="review" key={index}>
                     <div className="user-profile">
                       <img
@@ -250,7 +294,7 @@ const DoctorDetail = () => {
                   <button
                     className="submit-feedback-button"
                     onClick={handleSubmitFeedback}
-                    >
+                  >
                     Submit Feedback
                   </button>
                 </div>
@@ -263,5 +307,4 @@ const DoctorDetail = () => {
   );
 };
 
-export default DoctorDetail;    
-  
+export default DoctorDetail;

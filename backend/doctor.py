@@ -2,8 +2,8 @@ from flask import Blueprint, jsonify, request
 from bson import Binary
 from pymongo import MongoClient
 from bson import ObjectId, json_util
-from extension import doctor_collection
-from flask_jwt_extended import jwt_required, current_user
+from extension import doctor_collection,auth_collection
+from flask_jwt_extended import jwt_required, current_user, get_jwt_identity
 import base64
 from PIL import Image as PILImage
 from io import BytesIO
@@ -92,19 +92,13 @@ def add_doctor():
         print(e)
         return jsonify({'error': 'Internal server error'}), 500
 
-
-# <<<<<<< HEAD
-
 # # Get all patients
-# =======
-# #Get all doctors
-# >>>>>>> 64e4f386753074efe3f4164b7e899c1ee89891bb
 @doctor_bp.route('/doctors', methods=['GET'])
 @jwt_required()
 def get_all_doctors():
     try:
         
-         doctors = list(doctor_collection.find({}))
+         doctors = list(auth_collection.find({'role' : 'doctor'}))
         
          doctors = json_util.dumps(doctors)
         
