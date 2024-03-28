@@ -15,6 +15,7 @@ import Home from "./PatientComponents/Home/Home";
 import Services from "./PatientComponents/Sevices/Services";
 import DoctorDetail from "./PatientComponents/DoctorList/DoctorDetail";
 import PaymentButton from "./PatientComponents/Payment/Payment";
+import NotFoundPage from "./NotFoundPage";
 import "./style.css";
 import LoadingPage from "./PatientComponents/LoadingPage";
 
@@ -38,7 +39,6 @@ function App() {
           <Routes>
             {loggedinObj.user.role === "doctor" ? (
               <>
-                {console.log("Login object is Found")}
                 <Route path="/doctor" element={<Dlayout />}>
                   <Route index element={<Banner />} />
                   <Route path="diabetes" element={<Diabetes />} />
@@ -58,15 +58,14 @@ function App() {
                 <Route path="payment" element={<PaymentButton />} />
               </Route>
             )}
+            <Route path="*" element={<NotFoundPage />} /> // Wildcard route for 404 page
           </Routes>
         ) : (
           <>
-          <Login onUserLogin={handleUserLogin} />
+            <Login onUserLogin={handleUserLogin} />
             {/* <Navigate to="/login" replace /> */}
             <Routes>
-              <Route
-                path="/login"
-              />
+              <Route path="/login" />
             </Routes>
           </>
         )}
