@@ -9,8 +9,8 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import AddPatient from "../AddPatient";
-import ViewPdfButton from "../ViewPdfButton";
+import AddPatient from "../AddPatient.js";
+import ViewPdfButton from "../HandlePdf/ViewPdfButton.js";
 import Swal from "sweetalert2";
 import api from "../../api.js";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -104,7 +104,7 @@ const LungCancerForm = () => {
     setOpen(true);
   };
   const handleClose = () => {
-    window.location = "/lungcancer";
+    window.location = "/doctor/lungcancer";
     setOpen(false);
   };
 

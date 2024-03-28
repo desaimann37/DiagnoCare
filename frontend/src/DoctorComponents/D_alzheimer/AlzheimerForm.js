@@ -10,13 +10,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import AddPatient from "../AddPatient";
-import ViewPdfButton from "../ViewPdfButton";
+import ViewPdfButton from "../HandlePdf/ViewPdfButton";
 import Swal from "sweetalert2";
-import api from "../../api.js";
-import "./form.css";
-import "jspdf-autotable";
 import DeleteIcon from '@mui/icons-material/Delete';
-
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -27,7 +23,10 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const DiabetesForm = () => {
+const AlzheimerForm = () => {
+  const [formData, setFormData] = useState({
+    AlzheimerImage: null,
+  });
   const [Symptoms, setSymptoms] = useState();
   const [predicted_category, setpredicted_category] = useState();
   const [Treatment, setTreatment] = useState();
@@ -38,21 +37,6 @@ const DiabetesForm = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [patients, setPatients] = useState([]);
-  const [formData, setFormData] = useState({
-    Patient_Name: "",
-    Patient_address: "",
-    Patient_mobile: "",
-    Patient_email: "",
-    Doctor_Name: "",
-    HighBP: "",
-    HighChol: "",
-    CholCheck: "",
-    BMI: "",
-    Stroke: "",
-    HeartDiseaseorAttack: "",
-    Sex: "",
-    Age: "",
-  });
 
   useEffect(() => {
     console.log(selectedPatient);
@@ -69,7 +53,7 @@ const DiabetesForm = () => {
         },
       };
       setCombinedData(combined_data);
-      console.log(combined_data); //This object contains all data required to generate report
+      console.log(combined_data); 
     }
   }, [
     selectedPatient,
@@ -102,26 +86,34 @@ const DiabetesForm = () => {
     fetchPatients();
   }, []);
 
-
-
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
-    window.location = "/diabetes";
+    window.location = "/doctor/alzheimer";
     setOpen(false);
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, files } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: files[0],
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.AlzheimerImage) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please upload an image.",
+      });
+      return;
+    }
+
     if (!selectedPatient) {
       Swal.fire({
         icon: "error",
@@ -131,28 +123,27 @@ const DiabetesForm = () => {
       return;
     }
 
-    if (!formData.Age || !formData.BMI || !formData.CholCheck || !formData.HeartDiseaseorAttack || !formData.HighBP || !formData.HighChol || !formData.Sex || !formData.Stroke) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Please Fill Up All The Fields.",
-      });
-      return;
-    }
-    
     try {
       setLoading(true);
 
-      console.log("Form Data:", formData);
-      const a = await api.post(
-        "http://localhost:5000/predict/diabetes",
-        formData
+      const formDataToSend = new FormData();
+      formDataToSend.append("file", formData.AlzheimerImage);
+
+      const response = await axios.post(
+        "http://localhost:5000/predict_alzheimer",
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
-      console.log("got prediction");
-      setSymptoms(a.data.Symptoms);
-      setpredicted_category(a.data.predicted_category);
-      setTreatment(a.data.Treatment);
-      setRecommendation(a.data.Recommendation);
+      const data = await response.data;
+
+      setSymptoms(data.Symptoms);
+      setpredicted_category(data.predicted_category);
+      setTreatment(data.Treatment);
+      setRecommendation(data.Recommendation);
     } catch (error) {
       console.error("Error analyzing disease:", error);
     } finally {
@@ -163,7 +154,7 @@ const DiabetesForm = () => {
   const handleUploadPDF = async(pdfData) => {
     const formData = new FormData();
     
-    const filename = `${combinedData.patient_details.name}_DiabetesReport.pdf`;
+    const filename = `${combinedData.patient_details.name}_AlzheimerReport.pdf`;
   
     formData.append("pdf", pdfData, filename);
   
@@ -200,7 +191,6 @@ const DiabetesForm = () => {
     });
   }
   };
-  
 
   const handleDownloadPDF = async () => {
     if (!combinedData) {
@@ -208,34 +198,23 @@ const DiabetesForm = () => {
       return;
     }
 
+    const doc = new jsPDF();
+
     const { name, phone, address } = combinedData.patient_details;
-    // Define data for the table
+    const imageBase64 = await getImageBase64(formData.AlzheimerImage);
+
     const tableData = [
       { header: "Doctor Name:", content: JSON.parse(localStorage.getItem('loggedin_obj')).user.name }, 
       { header: "Doctor EmailId:", content: JSON.parse(localStorage.getItem('loggedin_obj')).user.email }, 
       { header: "Patient Name:", content: name }, 
       { header: "Phone:", content: phone },
       { header: "Address:", content: address },
-      { header: "HighBP:", content: formData.HighBP }, 
-      { header: "HighChol:", content: formData.HighChol }, 
-      { header: "CholCheck:", content: formData.CholCheck }, 
-      { header: "BMI:", content: formData.BMI }, 
-      { header: "Stroke:", content: formData.Stroke }, 
-      {
-        header: "Heart Disease or Attack:",
-        content: formData.HeartDiseaseorAttack,
-      }, 
-      { header: "Sex:", content: formData.Sex }, 
-      { header: "Age:", content: formData.Age }, 
-      { header: "Disease name:", content: "Diabetes" },
+      { header: "Disease name:", content: "Alzheimer's" },
       { header: "Predicted Category of Disease:", content: predicted_category }, 
       { header: "Symptoms:", content: Symptoms },
       { header: "Treatment:", content: Treatment }, 
       { header: "Recommendation:", content: Recommendation }, 
     ];
-
-    // Create a new jsPDF document
-    const doc = new jsPDF();
 
     // Set font style and size for title
     doc.setFont("helvetica", "bold");
@@ -244,12 +223,14 @@ const DiabetesForm = () => {
     // Add title
     doc.text("REPORT", 87, 30);
 
+    doc.addImage(imageBase64, "JPG", 10, 40, 60, 60);
+
     // Set font style and size for content
     doc.setFont("helvetica");
     doc.setFontSize(12);
 
     // Set initial y position for table
-    let yPos = 45;
+    let yPos = 105;
 
     // Add table using autoTable plugin
     doc.autoTable({
@@ -267,10 +248,19 @@ const DiabetesForm = () => {
       margin: { left: 10, right: 10 }, // Table margin
     });
 
-    // Save the PDF "
-    const pdfData = doc.output("blob");
-    handleUploadPDF(pdfData);
-    doc.save(combinedData.patient_details.name + "_DiabetesReport.pdf");
+     // Save the PDF "
+     const pdfData = doc.output("blob");
+     handleUploadPDF(pdfData);
+     doc.save(combinedData.patient_details.name + "_AlzheimerReport.pdf");
+  };
+
+  const getImageBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
   };
 
   const handleRowSelect = async (index, id) => {
@@ -328,10 +318,10 @@ const DiabetesForm = () => {
       console.error("Error deleting patient:", error);
     }
   }
-  
 
   return (
     <>
+      {/* Add Patient Dialog Box...*/}
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
@@ -357,12 +347,12 @@ const DiabetesForm = () => {
         </DialogContent>
       </BootstrapDialog>
 
-
+      {/* Title...*/}
       <div className="d-form-text-section">
-        <h1 className="fs-10 mb-5 align-items-center">Diabetes</h1>
+        <h1 className="fs-10 mb-5 align-items-center">Alzheimer's</h1>
       </div>
 
-   
+      {/* Displaying List of Patients...*/}
       <Container style={{ marginTop: "100px", maxWidth: "1400px" }}>
         <Grid
           container
@@ -381,7 +371,7 @@ const DiabetesForm = () => {
             </button>
           </Grid>
         </Grid>
-      <div style={{ maxHeight: "260px", overflowY: "auto", marginTop: "20px" }}>
+        <div style={{ maxHeight: "260px", overflowY: "auto", marginTop: "20px" }}>
         <div className="align-center">
           <div className="diabetes-row">
             {patients.map((patient, index) => (
@@ -399,9 +389,8 @@ const DiabetesForm = () => {
                   </IconButton>
                   </div>
                 </div>
-                
                 <div className="diabetes-content">
-                  <h1>Name : {patient.name}</h1>  
+                  <h1>Name : {patient.name}</h1>
                   <p>
                     Address : {patient.address}
                     <br />
@@ -410,6 +399,7 @@ const DiabetesForm = () => {
                 </div>
 
                 <ViewPdfButton
+                  // pdfName={patient.name + "_AlzheimerReport.pdf"}
                   pdfName={patient._id.$oid}
                 />
               </div>
@@ -448,6 +438,7 @@ const DiabetesForm = () => {
               </div>
 
               <ViewPdfButton
+                // pdfName={patient.name + "_AlzheimerReport.pdf"}
                 pdfName={selectedPatient.patient_id}
               />
             </div>
@@ -467,181 +458,29 @@ const DiabetesForm = () => {
                 autoComplete="off"
                 onSubmit={handleSubmit}
               >
-                <div className="mb-3 d-flex">
-                  <div className="mr-3 flex-grow-1">
-                    <label className="mb-2 label-large" htmlFor="Sex">
-                      Gender <span>*</span>
-                    </label>
-                    <select
-                      id="Sex"
-                      className="form-control custom-dropdown"
-                      name="Sex"
-                      value={formData.Sex}
-                      onChange={handleChange}
-                      requir
-                    >
-                      <option value="">Select an option</option>
-                      <option value="1">Male</option>
-                      <option value="0">Female</option>
-                    </select>
-                    <div className="invalid-feedback">Gender is required</div>
-                  </div>
-                </div>
-
-                {/* Row 2 */}
-                <div className="mb-3 d-flex">
-                  <div className="mr-3 flex-grow-1">
-                    <label className="mb-2 label-large" htmlFor="HighBP">
-                      High BP <span>*</span>
-                    </label>
-                    <select
-                      id="HighBP"
-                      className="form-control custom-dropdown"
-                      name="HighBP"
-                      value={formData.HighBP}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select an option</option>
-                      <option value="1">Yes</option>
-                      <option value="0">No</option>
-                    </select>
-                    <div className="invalid-feedback">High BP is required</div>
-                  </div>
-
-                  <div className="flex-grow-1">
-                    <label className="mb-2 label-large" htmlFor="HighChol">
-                      High Cholesterol <span>*</span>
-                    </label>
-                    <select
-                      id="HighChol"
-                      className="form-control custom-dropdown"
-                      name="HighChol"
-                      value={formData.HighChol}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select an option</option>
-                      <option value="1">Yes</option>
-                      <option value="0">No</option>
-                    </select>
-                    <div className="invalid-feedback">
-                      High Cholesterol is required
-                    </div>
-                  </div>
-                </div>
-
-                {/* Row 3 */}
-                <div className="mb-3 d-flex">
-                  <div className="mr-3 flex-grow-1">
-                    <label className="mb-2 label-large" htmlFor="Stroke">
-                      Stroke <span>*</span>
-                    </label>
-                    <select
-                      id="Stroke"
-                      className="form-control custom-dropdown"
-                      name="Stroke"
-                      value={formData.Stroke}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select an option</option>
-                      <option value="1">Yes</option>
-                      <option value="0">No</option>
-                    </select>
-                    <div className="invalid-feedback">Stroke is required</div>
-                  </div>
-
-                  <div className="flex-grow-1">
-                    <label className="mb-2 label-large" htmlFor="CholCheck">
-                      Cholesterol Check<span>*</span>
-                    </label>
-                    <select
-                      id="CholCheck"
-                      className="form-control custom-dropdown"
-                      name="CholCheck"
-                      value={formData.CholCheck}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select an option</option>
-                      <option value="1">Yes</option>
-                      <option value="0">No</option>
-                    </select>
-                    <div className="invalid-feedback">
-                      Cholesterol Check is required
-                    </div>
-                  </div>
-                </div>
-
-                {/* Row 4 */}
-                <div className="mb-3 d-flex">
-                  <div className="mr-3 flex-grow-1">
-                    <label className="mb-2 label-large" htmlFor="BMI">
-                      BMI <span>*</span>
-                    </label>
-                    <input
-                      id="BMI"
-                      placeholder="Enter BMI value"
-                      type="text"
-                      className="form-control"
-                      name="BMI"
-                      value={formData.BMI}
-                      onChange={handleChange}
-                      required
-                    />
-                    <div className="invalid-feedback">BMI is required</div>
-                  </div>
-
-                  <div className="flex-grow-1">
-                    <label className="mb-2 label-large" htmlFor="Age">
-                      Age <span>*</span>
-                    </label>
-                    <input
-                      id="Age"
-                      placeholder="Enter Age"
-                      type="number"
-                      className="form-control"
-                      name="Age"
-                      value={formData.Age}
-                      onChange={handleChange}
-                      required
-                    />
-                    <div className="invalid-feedback">Age is required</div>
-                  </div>
-                </div>
-
-                {/* Row 5 */}
-                <div className="mb-3 d-flex">
-                  <div className="mr-3 flex-grow-1">
-                    <label
-                      className="mb-2 label-large"
-                      htmlFor="HeartDiseaseorAttack"
-                    >
-                      Heart Disease or Attack <span>*</span>
-                    </label>
-                    <select
-                      id="HeartDiseaseorAttack"
-                      className="form-control custom-dropdown"
-                      name="HeartDiseaseorAttack"
-                      value={formData.HeartDiseaseorAttack}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select an option</option>
-                      <option value="1">Yes</option>
-                      <option value="0">No</option>
-                    </select>
-                    <div className="invalid-feedback">Select an option</div>
-                  </div>
+                <div className="mb-3">
+                  <label className="mb-2 label-large" htmlFor="AlzheimerImage">
+                    Upload MRI Photo <span>*</span>
+                  </label>
+                  <input
+                    id="AlzheimerImage"
+                    type="file"
+                    accept="image/*"
+                    className="form-control"
+                    name="AlzheimerImage"
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="invalid-feedback">Image is required</div>
                 </div>
 
                 <div className="align-items-center">
                   <button type="submit" className="btn btn-primary">
-                    Predict
+                    Detect Disease
                   </button>
                 </div>
               </form>
+              
               {loading && (
                 <div className="loader-container">
                   <img src={loader} alt="Loader" className="loader" />
@@ -689,7 +528,6 @@ const DiabetesForm = () => {
                         Download Report PDF
                       </button>
                     </div>
-                    <br />
                   </>
                 )}
             </div>
@@ -700,4 +538,4 @@ const DiabetesForm = () => {
   );
 };
 
-export default DiabetesForm;
+export default AlzheimerForm;

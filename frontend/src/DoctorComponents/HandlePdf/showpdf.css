@@ -3,13 +3,9 @@
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
-    /* Center the container horizontally */
     display: flex;
-    /* Use flexbox */
     flex-direction: column;
-    /* Align items vertically */
     align-items: center;
-    /* Center items horizontally */
     margin: 30px 100px 30px 100px;
 }
 
@@ -19,18 +15,14 @@
 
 .patient-pdfs-section {
     display: grid;
-    /* grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); */
-    /* gap: 10px; */
 }
 
 .pdf-item {
-    /* border: 1px solid #ccc; */
     padding: 10px;
     border-radius: 5px;
 }
 
 .pdf-item button {
-    /* margin-top: 10px; */
 }
 
 .btn2-primary{

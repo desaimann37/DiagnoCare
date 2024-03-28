@@ -47,16 +47,16 @@ const Footer = () => {
         </a></li>
     </ul>
     {userRole=="patient"?<ul className="menu">
-      <li className="menu__item"><a className="menu__link" href="/p-layout">Home</a></li>
-      <li className="menu__item"><a className="menu__link" href="/p-layout/doctors">Find a doctor</a></li>
-      <li className="menu__item"><a className="menu__link" href="/p-layout/services">Services</a></li>
+      <li className="menu__item"><a className="menu__link" href="/patient">Home</a></li>
+      <li className="menu__item"><a className="menu__link" href="/patient/doctors">Find a doctor</a></li>
+      <li className="menu__item"><a className="menu__link" href="/patient/services">Services</a></li>
 
     </ul>: <ul className="menu">
-      <li className="menu__item"><a className="menu__link" href="/">Home</a></li>
-      <li className="menu__item"><a className="menu__link" href="//diabetes">Diabetes</a></li>
-      <li className="menu__item"><a className="menu__link" href="/lungcancer">LungCancer</a></li>
-      <li className="menu__item"><a className="menu__link" href="/alzheimer">Alzheimer's</a></li>
-      <li className="menu__item"><a className="menu__link" href="/braintumor">BrainTumor</a></li>
+      <li className="menu__item"><a className="menu__link" href="/doctor">Home</a></li>
+      <li className="menu__item"><a className="menu__link" href="/doctor/diabetes">Diabetes</a></li>
+      <li className="menu__item"><a className="menu__link" href="/doctor/lungcancer">LungCancer</a></li>
+      <li className="menu__item"><a className="menu__link" href="/doctor/alzheimer">Alzheimer's</a></li>
+      <li className="menu__item"><a className="menu__link" href="/doctor/braintumor">BrainTumor</a></li>
 
     </ul>}
     <p>&copy;2024 DiagnoCare | All Rights Reserved</p>

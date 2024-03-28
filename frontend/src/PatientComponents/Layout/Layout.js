@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import "./layout.css";
 import Dropdown from "./Dropdown";
-import Footer from "../footer/Footer";
+import Footer from "../../DoctorComponents/Footer/Footer";
 
 const Layout = () => {
   const [showNavbar, setShowNavbar] = useState(false);
@@ -21,35 +21,35 @@ const Layout = () => {
 
   return (
     <>
-      <nav className="navbar">
-        <div className="container">
-          <div className="logo">
+      <nav className="layout-navbar">
+        <div className="layout-container">
+          <div className="layout-logo">
             <b>
               Diagno<span>Care</span>
             </b>
           </div>
-          <div className="menu-icon" onClick={handleShowNavbar}>
-            <MenuOpenIcon sx = {{fontSize: 45}}/>
+          <div className="layout-menu-icon" onClick={handleShowNavbar}>
+            <MenuOpenIcon sx={{ fontSize: 45 }} />
           </div>
-          <div className={`nav-elements  ${showNavbar && "active"}`}>
+          <div className={`layout-nav-elements  ${showNavbar && "active"}`}>
             <ul>
               <li>
-                <Link to="/">Home</Link>
+                <Link to="/patient">Home</Link>
               </li>
               <li>
-                <Link to="/diabetes">Diabetes</Link>
+                <Link to="/patient/services">Services</Link>
               </li>
               <li>
-                <Link to="/lungcancer">LungCancer</Link>
+                <Link to="/patient/doctors">Find a Doctor</Link>
               </li>
               <li>
-                <Link to="/alzheimer">Alzheimer's</Link>
-              </li>
-              <li>
-                <Link to="/braintumor">BrainTumor</Link>
+                <Link to="/patient/chatbot">ChatBot</Link>
               </li>
             </ul>
-            <div className="active-link" style={{ left: `${calculateLeftPosition(location.pathname)}%` }}></div>
+            <div
+              className="layout-active-link"
+              style={{ left: `${calculateLeftPosition(location.pathname)}%` }}
+            ></div>
           </div>
         </div>
         <Dropdown obj1={LoggedinObj} />
@@ -62,16 +62,16 @@ const Layout = () => {
 
 const calculateLeftPosition = (pathname) => {
   switch (pathname) {
-    case '/':
-      return 0.2;
-    case '/diabetes':
-      return 17.9;
-    case '/lungcancer':
-      return 39.2;
-    case '/alzheimer':
-      return 62.5;
-    case '/braintumor':
-      return 85;
+    case "/patient":
+      return 1;
+    case "/patient/services":
+      return 23.9;
+    case "/patient/doctors":
+      return 53.2;
+    case "/patient/doctors/:id":
+      return 53.2;
+    case "/patient/chatbot":
+      return 82.9;
     default:
       return 0;
   }

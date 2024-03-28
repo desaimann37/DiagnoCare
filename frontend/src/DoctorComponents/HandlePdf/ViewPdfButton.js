@@ -4,7 +4,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import AddPatient from "./AddPatient";
+import AddPatient from "../AddPatient";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import ShowPdfs from "./ShowPdfs";

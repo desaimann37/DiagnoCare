@@ -41,9 +41,9 @@ const Login = (props) => {
 
       props.onUserLogin(user_obj);
       if (response.data.user.role == "doctor") {
-        window.location.href = "/";
+        window.location.href = "/doctor";
       } else {
-        window.location.href = "/p-layout";
+        window.location.href = "/patient";
       }
     } catch (error) {
       // setError('Invalid credentials');

@@ -10,7 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import AddPatient from "../AddPatient";
-import ViewPdfButton from "../ViewPdfButton";
+import ViewPdfButton from "../HandlePdf/ViewPdfButton";
 import Swal from "sweetalert2";
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -73,7 +73,7 @@ const Account = () => {
     setOpen(true);
   };
   const handleClose = () => {
-    window.location = "/alzheimer";
+    // window.location = "/doctor/alzheimer";
     setOpen(false);
   };
 
