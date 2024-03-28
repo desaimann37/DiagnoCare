@@ -24,12 +24,12 @@ function App() {
 
   const handleUserLogin = (userObj) => {
     setLoggedinObj(userObj);
-    localStorage.setItem("loggedin_obj", JSON.stringify(userObj));
+    localStorage.setItem("loggedin_obj", userObj);
   };
 
   useEffect(() => {
     const storedUserObj = localStorage.getItem("loggedin_obj");
-    setLoggedinObj(storedUserObj ? JSON.parse(storedUserObj) : null);
+    setLoggedinObj(storedUserObj ? storedUserObj : null);
   }, []);
 
   return (
@@ -37,7 +37,7 @@ function App() {
       <BrowserRouter>
         {loggedinObj ? (
           <Routes>
-            {loggedinObj.role === "doctor" ? (
+            {loggedinObj && JSON.parse(loggedinObj).role === "doctor" ? (
               
               <>
               {console.log("role is doctor")}

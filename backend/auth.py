@@ -55,6 +55,7 @@ def api_signup():
         refresh_token = create_refresh_token(identity=user['name'], expires_delta=custom_expiration_time)
         
         user['_id'] = str(user['_id']) 
+        user = json_util.dumps(user)
 
         print("Signup successful")
 

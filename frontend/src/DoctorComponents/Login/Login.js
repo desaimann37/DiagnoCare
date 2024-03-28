@@ -34,14 +34,17 @@ const Login = (props) => {
       // const user = JSON.parse(userJsonString);
       console.log(user);
 
-      localStorage.setItem("user", JSON.stringify(user.user));
+      localStorage.setItem("user", user.user);
       localStorage.setItem("token", response.data.tokens.access);
 
       setIsRegister(true);
-      const user_obj = user.user;
+      const user_obj = JSON.parse(user.user);
+      console.log(user_obj);
 
-      props.onUserLogin(user_obj);
-      if (user.user.role == "doctor") {
+      console.log(user_obj.role);
+
+      props.onUserLogin(user.user);
+      if (JSON.parse(user.user).role == "doctor") {
         window.location.href = "/doctor";
       } else {
         window.location.href = "/patient";
