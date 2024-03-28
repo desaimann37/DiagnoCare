@@ -42,11 +42,11 @@ const Dropdown = () => {
         </summary>
         <ul>
           <li>
-            {LoggedinObj && LoggedinObj.user ? (
+            {LoggedinObj  ? (
               <p>
-                <span className="block bold">{LoggedinObj.user.name}</span>
+                <span className="block bold">{LoggedinObj.name}</span>
                 <br />
-                <span className="block italic">{LoggedinObj.user.email}</span>
+                <span className="block italic">{LoggedinObj.email}</span>
               </p>
             ) : (
               <p>
@@ -61,7 +61,7 @@ const Dropdown = () => {
           </li>
           {/* <li className="divider"></li> */}
           <li>
-            {LoggedinObj && LoggedinObj.user && (
+            {LoggedinObj && (
               <Link to="#">
                 <span onClick={handleLogout} className="p-material-symbols-outlined">
                   Logout

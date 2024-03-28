@@ -2,8 +2,8 @@ from flask import Blueprint, json, jsonify, request
 from bson import Binary
 from pymongo import MongoClient
 from bson import ObjectId, json_util
-from extension import doctor_collection, auth_collection
-from flask_jwt_extended import jwt_required, current_user
+from extension import doctor_collection,auth_collection
+from flask_jwt_extended import jwt_required, current_user, get_jwt_identity
 import base64
 from PIL import Image as PILImage
 from io import BytesIO
@@ -109,10 +109,16 @@ def add_doctor():
         print(e)
         return jsonify({'error': 'Internal server error'}), 500
 
+<<<<<<< HEAD
 @doctor_bp.route('/profile', methods=['GET'])
+=======
+# # Get all patients
+@doctor_bp.route('/doctors', methods=['GET'])
+>>>>>>> f040fc74a1a1cc6d0f80bb9ed48c20130f7069b4
 @jwt_required()
 def get_doctor_profile():
     try:
+<<<<<<< HEAD
         doctor_data = auth_collection.find_one({'_id': ObjectId(current_user.id)})
         if doctor_data:
             # Ensure all fields are JSON serializable
@@ -120,7 +126,59 @@ def get_doctor_profile():
             return jsonify(doctor_data), 200
         else:
             return jsonify({'message': 'Doctor profile not found'}), 404
+=======
+        
+         doctors = list(auth_collection.find({'role' : 'doctor'}))
+        
+         doctors = json_util.dumps(doctors)
+        
+         return doctors, 200
+>>>>>>> f040fc74a1a1cc6d0f80bb9ed48c20130f7069b4
     except Exception as e:
         print(e)
         return jsonify({'error': 'Internal server error'}), 500
 
+<<<<<<< HEAD
+=======
+@doctor_bp.route('/add_review', methods=['POST'])
+@jwt_required()
+def add_review():
+    try:
+        data = request.json 
+        doctor_id = data.get('doctor_id')
+        patient_id = current_user.id 
+        review_date = datetime.now()
+        rating = data.get('rating')
+        review_content = data.get('review_content')
+
+        patient = auth_collection.find_one({'_id': ObjectId(patient_id)})
+        if not patient:
+            return jsonify({'error': 'Patient not found'}), 404
+
+        patient_name = patient.get('name')
+        patient_photo = patient.get('photo')
+
+        doctor_id = ObjectId(doctor_id)
+        print(doctor_id)
+        doctor = auth_collection.find_one({'_id': doctor_id})
+        if doctor:
+            review = {
+                'patient_id': patient_id,
+                'patient_name': patient_name,
+                'patient_photo': patient_photo,
+                'rating': rating,
+                'review_content': review_content,
+                'review_date': datetime.utcnow()
+            }
+            
+            auth_collection.update_one(
+                {'_id': ObjectId(doctor_id)},
+                {'$push': {'reviews': review}}
+            )
+            return jsonify({'message': 'Review added successfully'}), 200
+        else:
+            return jsonify({'error': 'Doctor not found'}), 404
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Internal server error'}), 500
+>>>>>>> f040fc74a1a1cc6d0f80bb9ed48c20130f7069b4

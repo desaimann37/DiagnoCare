@@ -26,6 +26,7 @@ const Doctors = ({ history }) => {
         );
         
         // Set the fetched data to the state
+        console.log((response.data));
         setDoctors(response.data);
       } catch (error) {
         console.error('Error fetching doctors:', error);
@@ -43,13 +44,13 @@ const Doctors = ({ history }) => {
   return (
     <div className="doctors-container">
       {doctors.map(doctor => (
-        <Link to={`${doctor.doctor_id}`} key={doctor.doctor_id}>
+        <Link to={`${doctor._id.$oid}`} key={doctor.doctor_id}>
           <div className="doctorCard">
           <img className="courseImg" src={`data:image/jpeg;base64,${doctor.photo.$binary.base64}`} alt="Doctor Image"/>
             <h3>{doctor.name}</h3>
-            <div className="bestsellerBadge">{doctor.specification}</div>
+            <div className="bestsellerBadge">{doctor.specialization}</div>
             <div className="ratingDiv">
-              <span className="rating">{doctor.rating}
+              <span className="rating">doctor.rating
                 <StarRoundedIcon />
                 <StarRoundedIcon />
                 <StarRoundedIcon />
