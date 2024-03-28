@@ -1,49 +1,58 @@
-import React, { useEffect , useState} from 'react'
-import './dropdown.css'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import "./dropdown.css";
+import { Link } from "react-router-dom";
 
 const Dropdown = () => {
   const [LoggedinObj, setLoggedinObj] = useState(null);
 
   useEffect(() => {
-    const storedUserObj = localStorage.getItem('loggedin_obj');
+    const storedUserObj = localStorage.getItem("loggedin_obj");
     const parsedUserObj = storedUserObj ? JSON.parse(storedUserObj) : null;
     setLoggedinObj(parsedUserObj);
   }, []);
 
   const handleLogout = () => {
     // Send logout request to the backend
-    fetch('/logout', {
-      method: 'GET',
+    fetch("/logout", {
+      method: "GET",
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-      }
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
     })
-    .then(response => {
-      if (response.ok) {
-        localStorage.removeItem('loggedin_obj');
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        window.location.href = '/login';
-      } else {
-        console.error('Logout failed:', response.statusText);
-      }
-    })
-    .catch(error => {
-      console.error('Error during logout:', error);
-    });
+      .then((response) => {
+        if (response.ok) {
+          localStorage.removeItem("loggedin_obj");
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+        } else {
+          console.error("Logout failed:", response.statusText);
+        }
+      })
+      .catch((error) => {
+        console.error("Error during logout:", error);
+      });
   };
 
   return (
     <div className="dropdown-container">
       <details className="dropdown right">
         <summary className="avatar">
-          {LoggedinObj ? (<img src={`data:image/jpeg;base64,${LoggedinObj.photo.$binary.base64}`} alt="Avatar" />):
-          (<img src="https://gravatar.com/avatar/00000000000000000000000000000000?d=mp" alt="Avatar" />)}
+          {LoggedinObj && LoggedinObj.photo ? (
+            <img
+              src={`data:image/jpeg;base64,${LoggedinObj.photo.$binary.base64}`}
+              alt="Avatar"
+            />
+          ) : (
+            <img
+              src="https://gravatar.com/avatar/00000000000000000000000000000000?d=mp"
+              alt="Avatar"
+            />
+          )}
         </summary>
         <ul>
           <li>
-            {LoggedinObj  ? (
+            {LoggedinObj ? (
               <p>
                 <span className="block bold">{LoggedinObj.name}</span>
                 <br />
@@ -64,7 +73,10 @@ const Dropdown = () => {
           <li>
             {LoggedinObj && (
               <Link to="#">
-                <span onClick={handleLogout} className="material-symbols-outlined">
+                <span
+                  onClick={handleLogout}
+                  className="material-symbols-outlined"
+                >
                   Logout
                 </span>
               </Link>

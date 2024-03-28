@@ -22,7 +22,6 @@ const Login = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const endpoint = isRegister ? "signup" : "login";
 
     try {
@@ -30,18 +29,19 @@ const Login = (props) => {
         `http://127.0.0.1:5000/auth/${endpoint}`,
         formData
       );
-      // console.log(response.data);
-      const userJsonString = response.data.user;
-      const user = JSON.parse(userJsonString);
+      console.log(response);
+      const user = response.data;
+      // const user = JSON.parse(userJsonString);
+      console.log(user);
 
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user.user));
       localStorage.setItem("token", response.data.tokens.access);
 
       setIsRegister(true);
-      const user_obj = user;
+      const user_obj = user.user;
 
       props.onUserLogin(user_obj);
-      if (user.role == "doctor") {
+      if (user.user.role == "doctor") {
         window.location.href = "/doctor";
       } else {
         window.location.href = "/patient";
