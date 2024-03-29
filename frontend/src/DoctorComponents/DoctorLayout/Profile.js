@@ -45,20 +45,23 @@ const ProfileForm = () => {
 
         const updatedQualifications = userData.qualifications.map(qualification => ({
           ...qualification,
-          startDate: new Date(qualification.startDate),
-          endDate: new Date(qualification.endDate)
+          startDate: new Date(qualification.startDate.$date).toISOString().split('T')[0],
+          endDate: new Date(qualification.endDate.$date).toISOString().split('T')[0]
         }));
 
+        console.log(userData.experiences[0].startDate.$date);
         const updatedExperiences = userData.experiences.map(experience => ({
           ...experience,
-          startDate: new Date(experience.startDate),
-          endDate: new Date(experience.endDate)
+          startDate: new Date(experience.startDate.$date).toISOString().split('T')[0],
+          endDate: new Date(experience.endDate.$date).toISOString().split('T')[0]
         }));
 
         const updatedTimeslots = userData.timeslots.map(slot => ({
           ...slot,
-          date: new Date(slot.date)
+          date: new Date(slot.date.$date).toISOString().split('T')[0]
         }));
+
+        console.log(userData.photo);
 
         setFormData(prevFormData => ({
           ...prevFormData,
