@@ -14,10 +14,10 @@ import Chatbot from "./DoctorComponents/Chatwidget/Chatbot";
 import Home from "./PatientComponents/Home/Home";
 import Services from "./PatientComponents/Sevices/Services";
 import DoctorDetail from "./PatientComponents/DoctorList/DoctorDetail";
-import PaymentButton from "./PatientComponents/Payment/Payment";
 import NotFoundPage from "./NotFoundPage";
 import "./style.css";
 import LoadingPage from "./PatientComponents/LoadingPage";
+import PaymentSuccess from "./PatientComponents/DoctorList/PayemntSuccsess";
 
 function App() {
   const [loggedinObj, setLoggedinObj] = useState(null);
@@ -59,7 +59,7 @@ function App() {
                 <Route path="doctors/:id" element={<DoctorDetail />} />
                 <Route path="chatbot" element={<Chatbot />} />
                 <Route path="services" element={<Services />} />
-                <Route path="payment" element={<PaymentButton />} />
+                <Route path="payment-succsess/:id" element={<PaymentSuccess />} />
               </Route>
               </>
             )}

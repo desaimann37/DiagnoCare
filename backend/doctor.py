@@ -130,12 +130,29 @@ def get_doctor_profile():
     try:
          
         doctor_data = auth_collection.find_one({'_id': ObjectId(current_user.id)})
+        if 'bio' in doctor_data:
+            doctor_data = json.loads(json_util.dumps(doctor_data))
+            return jsonify(doctor_data), 200
+            
+        else:
+            return jsonify({'message': 'Doctor profile not found'}), 404
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Internal server error'}), 500
+
+@doctor_bp.route('/one_doctor', methods=['POST'])
+@jwt_required()
+def get_doctor_by_doctorId():
+    try:
+        data = request.json 
+        doctor_id = data.get('doctor_id')
+
+        doctor_data = auth_collection.find_one({'_id': ObjectId(doctor_id)})
         if doctor_data:
-            # Ensure all fields are JSON serializable
             doctor_data = json.loads(json_util.dumps(doctor_data))
             return jsonify(doctor_data), 200
         else:
-            return jsonify({'message': 'Doctor profile not found'}), 404
+            return jsonify({'message': 'Doctor profile not found'}), 400
     except Exception as e:
         print(e)
         return jsonify({'error': 'Internal server error'}), 500

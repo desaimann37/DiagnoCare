@@ -11,8 +11,11 @@ import {
 import Swal from 'sweetalert2';
 import "./profile.css";
 import axios from "axios";
+import LoadingPage from "../../PatientComponents/LoadingPage";
 
 const ProfileForm = () => {
+  const [Profilepic, setProfilepic] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -32,17 +35,22 @@ const ProfileForm = () => {
     const fetchProfileData = async () => {
       try {
         const token = localStorage.getItem('token');
-    const config = {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data' // Change content type to multipart/form-data
+        if (!token) {
+          console.error("Token is missing.");
+          return;
+        }
+    const response = await axios.get(
+      "http://127.0.0.1:5000/doctor/profile",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    };
-        const response = await axios.get('http://127.0.0.1:5000/doctor/profile', config); 
-        console.log("response: ")
-        console.log(response);
-        const userData = response.data;
+    );
 
+        setProfilepic(response.data.photo);
+        const userData = response.data;
+        
         const updatedQualifications = userData.qualifications.map(qualification => ({
           ...qualification,
           startDate: new Date(qualification.startDate.$date).toISOString().split('T')[0],
@@ -77,6 +85,7 @@ const ProfileForm = () => {
           about: userData.about || "",
           photo: userData.photo ? new File([], userData.photo.name) : null
         }));
+        setLoading(false);
       } catch (error) {
         console.error('Error occurred while fetching profile data:', error);
       }
@@ -219,7 +228,7 @@ const ProfileForm = () => {
         });
       }
   
-      // Reset form data after successful submission
+    //  Reset form data after successful submission
       setFormData({
         name: "",
         email: "",
@@ -235,7 +244,6 @@ const ProfileForm = () => {
       });
     } catch (error) {
       console.error('Error occurred while submitting form:', error);
-      // Handle error
     }
   };
   
@@ -266,6 +274,15 @@ const ProfileForm = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <>
+        <center>
+          <LoadingPage/>
+        </center>
+      </>
+    );
+  }
   return (
     <CForm className="row g-3" onSubmit={handleSubmit}>
       <CCol md={6}>
@@ -536,8 +553,9 @@ const ProfileForm = () => {
       <CCol xs={12} className="d-flex align-items-center">
         <div className="avatar-container">
           <img
-            src={formData.photo?(formData.photo instanceof File ? URL.createObjectURL(formData.photo) : formData.photo):"https://www.iconbunny.com/icons/media/catalog/product/2/1/2131.12-doctor-icon-iconbunny.jpg"}
-            alt="Doctor"
+
+           src={Profilepic?`data:image/jpeg;base64,${Profilepic.$binary.base64}`:"https://www.iconbunny.com/icons/media/catalog/product/2/1/2131.12-doctor-icon-iconbunny.jpg"}
+           alt="Doctor"
             className="avatar-image"
           />
         </div>

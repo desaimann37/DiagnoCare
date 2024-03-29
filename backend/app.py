@@ -11,9 +11,11 @@ from auth import auth_bp
 from users import user_bp
 from store import store_bp
 from doctor import doctor_bp
+from payment import payment_bp
+from appointment import appointment_bp
 from flask_jwt_extended import JWTManager
 from predict import predict_alzheimer,predict_braintumor,predict_diabetes,predict_lungcancer
-
+import os
 app = Flask(__name__)
 CORS(app)
 mail = Mail(app)
@@ -40,14 +42,13 @@ jwt = JWTManager(app)
 jwt.init_app(app)
 mail.init_app(app)
 
-
-
-
 # Register blue_print : 
 app.register_blueprint(auth_bp , url_prefix='/auth')
 app.register_blueprint(user_bp , url_prefix='/users')
 app.register_blueprint(store_bp, url_prefix='/store')
 app.register_blueprint(doctor_bp, url_prefix='/doctor')
+app.register_blueprint(payment_bp, url_prefix='/payment')
+app.register_blueprint(appointment_bp, url_prefix='/appointment')
 
 class CustomUser:
     def __init__(self, user_dict):
@@ -136,7 +137,6 @@ def send_email():
     except Exception as e:
         print('Error sending email:', str(e))
         return jsonify({'error': 'Failed to send email'})
-    
-
+        
 if __name__ == '__main__':
     app.run(debug=True)
