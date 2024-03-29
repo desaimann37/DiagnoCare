@@ -130,9 +130,10 @@ def get_doctor_profile():
     try:
          
         doctor_data = auth_collection.find_one({'_id': ObjectId(current_user.id)})
-        if doctor_data:
+        if 'bio' in doctor_data:
             doctor_data = json.loads(json_util.dumps(doctor_data))
             return jsonify(doctor_data), 200
+            
         else:
             return jsonify({'message': 'Doctor profile not found'}), 404
     except Exception as e:

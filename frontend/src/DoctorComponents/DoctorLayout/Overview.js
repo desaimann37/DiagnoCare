@@ -24,13 +24,14 @@ const Overview = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
+            
           }
         );
-        console.log(response.data);
         setDoctors(response.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching doctor details:", error);
+        setLoading(false);
       }
     };
 
@@ -56,6 +57,16 @@ const Overview = () => {
     );
   }
 
+  if(doctors == null){
+    return (
+      <>
+        <center>
+          <h2>Please fill up your profile details first</h2>
+        </center>
+      </>
+    );
+  }
+
   return (
     <div className="overview-container">
       <div className="overview-horizontal-container">
@@ -71,7 +82,7 @@ const Overview = () => {
           <p>
             <span className="specialty">{doctors.specialization}</span>
           </p>
-          <div className="ratingDiv">
+         {doctors.rating ? <div className="ratingDiv">
             <span className="doctor-rating">
               <StarRoundedIcon style={{ fontSize: "28px" }} />
               <span
@@ -83,10 +94,10 @@ const Overview = () => {
                 }}
               >
                 {" "}
-                {doctors.rating} (reviews)
+                { doctors.rating} ({doctors.reviews && doctors.reviews.length})
               </span>
             </span>
-          </div>
+          </div>:<div><h6>No rattings yet</h6></div>}
           <br />
           <div className="overview-bio">
             <p>{doctors.bio}</p>
@@ -151,7 +162,7 @@ const Overview = () => {
             </div>
           </div>
 
-          <h3>All Reviews ({doctors.reviews && doctors.reviews.length})</h3>
+          {doctors.reviews && <h3>All Reviews ({doctors.reviews && doctors.reviews.length})</h3>}
           <div className="feedback-section scrollable-reviews">
                 
                 {doctors.reviews && doctors.reviews.map((review, index) => (
