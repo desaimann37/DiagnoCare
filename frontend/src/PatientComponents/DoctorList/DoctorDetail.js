@@ -7,13 +7,40 @@ import PacmanLoader from "react-spinners/PacmanLoader";
 import LoadingPage from "../LoadingPage";
 
 const DoctorDetail = () => {
-  const [doctors, setDoctors] = useState(null);
+  const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const [activeSection, setActiveSection] = useState("about");
   const [selectedStars, setSelectedStars] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [sessionId, setSessionId] = useState(null);
+
+  const handlePayment = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+
+      const response = await axios.post(
+        "http://127.0.0.1:5000/payment/create-checkout-session",
+        doctor,
+        config
+      );
+      console.log(response);
+      const { session } = response.data;
+      setSessionId(session);
+
+      console.log(response.data.session);
+      window.location.href = session.url;
+    } catch (error) {
+      console.error("Error creating checkout session:", error);
+    }
+  };
 
   const handleGiveFeedback = () => {
     setShowFeedbackForm(true);
@@ -47,16 +74,16 @@ const DoctorDetail = () => {
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
     };
 
     try {
       const review = {
-        doctor_id: id, 
+        doctor_id: id,
         rating: selectedStars,
-        review_content: reviewText
-      }
+        review_content: reviewText,
+      };
       const response = await axios.post(
         "http://127.0.0.1:5000/doctor/add_review",
         review,
@@ -72,7 +99,7 @@ const DoctorDetail = () => {
         const errorData = await response.json();
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
@@ -91,15 +118,20 @@ const DoctorDetail = () => {
           console.error("Token is missing.");
           return;
         }
-        const response = await axios.get(
-          "http://127.0.0.1:5000/doctor/doctors",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        };
+        const response = await axios.post(
+          "http://127.0.0.1:5000/doctor/one_doctor",
+          { doctor_id: id },
+          config
         );
-        setDoctors(response.data);
+
+        setDoctor(response.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching doctor details:", error);
@@ -117,12 +149,6 @@ const DoctorDetail = () => {
         </center>
       </>
     );
-  }
-
-  const doctor = doctors.find((doctor) => doctor._id.$oid === id);
-  console.log(doctor);
-  if (!doctor) {
-    return <div className="doctor-detail">Doctor not found</div>;
   }
 
   return (
@@ -150,7 +176,7 @@ const DoctorDetail = () => {
                     }}
                   >
                     {" "}
-                    {doctor.rating }({doctor.reviews && doctor.reviews.length})
+                    {doctor.rating}({doctor.reviews && doctor.reviews.length})
                   </span>
                 </span>
               </div>
@@ -166,7 +192,6 @@ const DoctorDetail = () => {
             </h4>
             <br />
             <h5>Available Time Slots:</h5>
-            {console.log(doctor)}
             {doctor.timeslots && (
               <ul>
                 {doctor.timeslots.map((slot, index) => {
@@ -184,7 +209,7 @@ const DoctorDetail = () => {
                 })}
               </ul>
             )}
-            <button className="book-appointment-button">
+            <button className="book-appointment-button" onClick={handlePayment}>
               Book Appointment
             </button>
           </div>
@@ -230,48 +255,50 @@ const DoctorDetail = () => {
               <br />
 
               <ul>
-                {doctor.qualifications && doctor.qualifications.map((edu, index) => {
-                  const startDate = new Date(edu.startDate.$date);
-                  const endDate = new Date(edu.endDate.$date);
-                  const startYear = startDate.getFullYear();
-                  const endYear = endDate.getFullYear();
+                {doctor.qualifications &&
+                  doctor.qualifications.map((edu, index) => {
+                    const startDate = new Date(edu.startDate.$date);
+                    const endDate = new Date(edu.endDate.$date);
+                    const startYear = startDate.getFullYear();
+                    const endYear = endDate.getFullYear();
 
-                  return (
-                    <li key={index}>
-                      <span>
-                        {startYear} - {endYear}
-                      </span>
-                      <br />
-                      {edu.degree}
-                      <br />
-                      {edu.university}
-                      <br />
-                      <br />
-                    </li>
-                  );
-                })}
+                    return (
+                      <li key={index}>
+                        <span>
+                          {startYear} - {endYear}
+                        </span>
+                        <br />
+                        {edu.degree}
+                        <br />
+                        {edu.university}
+                        <br />
+                        <br />
+                      </li>
+                    );
+                  })}
               </ul>
 
               <div className="experience-section">
                 <h3>Experience</h3>
                 <div className="experience-cards">
-                  {doctor.experiences && doctor.experiences.map((exp, index) => {
-                    const startDate = new Date(exp.startDate.$date);
-                    const endDate = new Date(exp.endDate.$date);
-                    const startYear = startDate.getFullYear();
-                    const endYear = endDate.getFullYear();
-                    return (
-                      <div className="experience-card" key={index}>
-                        <h5>
-                          <span>
-                            {startYear} - {endYear}
-                          </span>
-                        </h5>
-                        <h5>{exp.position}</h5>
-                        <p>{exp.location}</p>
-                      </div>
-                    );
-                  })}
+                  {doctor.experiences &&
+                    doctor.experiences.map((exp, index) => {
+                      const startDate = new Date(exp.startDate.$date);
+                      const endDate = new Date(exp.endDate.$date);
+                      const startYear = startDate.getFullYear();
+                      const endYear = endDate.getFullYear();
+                      return (
+                        <div className="experience-card" key={index}>
+                          <h5>
+                            <span>
+                              {startYear} - {endYear}
+                            </span>
+                          </h5>
+                          <h5>{exp.position}</h5>
+                          <p>{exp.location}</p>
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
             </div>
@@ -279,29 +306,32 @@ const DoctorDetail = () => {
             <>
               <div className="feedback-section">
                 <h3>All Reviews ({doctor.reviews && doctor.reviews.length})</h3>
-                {doctor.reviews && doctor.reviews.map((review, index) => (
-                  <div className="review" key={index}>
-                    <div className="user-profile">
-                      <img
-                        src={`data:image/jpeg;base64,${review.patient_photo.$binary.base64}`}
-                        alt="User"
-                        className="user-photo"
-                      />
-                    </div>
-                    <div className="review-details">
-                      <h4 className="user-name">{review.patient_name}</h4>
-                      <p className="review-date">{review.review_date.$date}</p>
-                      <div className="rating">
-                        {Array.from({ length: review.rating }, (_, i) => (
-                          <StarRoundedIcon key={i} />
-                        ))}
+                {doctor.reviews &&
+                  doctor.reviews.map((review, index) => (
+                    <div className="review" key={index}>
+                      <div className="user-profile">
+                        <img
+                          src={`data:image/jpeg;base64,${review.patient_photo.$binary.base64}`}
+                          alt="User"
+                          className="user-photo"
+                        />
+                      </div>
+                      <div className="review-details">
+                        <h4 className="user-name">{review.patient_name}</h4>
+                        <p className="review-date">
+                          {review.review_date.$date}
+                        </p>
+                        <div className="rating">
+                          {Array.from({ length: review.rating }, (_, i) => (
+                            <StarRoundedIcon key={i} />
+                          ))}
+                        </div>
+                        <br />
+                        <p className="review-text">{review.review_content}</p>
                       </div>
                       <br />
-                      <p className="review-text">{review.review_content}</p>
                     </div>
-                    <br />
-                  </div>
-                ))}
+                  ))}
                 <button
                   className="give-feedback-button"
                   onClick={handleGiveFeedback}

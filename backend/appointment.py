@@ -1,93 +1,40 @@
-from flask import Blueprint, request, jsonify ,current_app
-from extension import store_collection, patient_collection, auth_collection, appointment_collection
-from flask_mail import Mail, Message
+from flask import Blueprint, request, jsonify
+from extension import appointment_collection
+from flask_jwt_extended import jwt_required, current_user, get_jwt_identity
+from datetime import datetime
 
-appointment_bp = Blueprint('appointment' , __name__)
-mail = Mail()
+appointment_bp = Blueprint('appointment', __name__)
 
-appointments = []
+@appointment_bp.route('/add', methods=['POST'])
+@jwt_required()
+def add_appointment():
+    try:
+        data = request.json
+        doctor_id = data.get('doctor_id')
+        patient_id = current_user.id
+        price = data.get('price')
+        booking_date = datetime.now()
+        
+        appointment_data = {
+            'doctor_id': doctor_id,
+            'patient_id': patient_id,
+            'price': price,
+            'booking_date': booking_date,
+        }
+        appointment_collection.insert_one(appointment_data)
+        
+        return jsonify({'message': 'Appointment added successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
+@appointment_bp.route('/list', methods=['GET'])
+def list_appointments():
+    try:
+        # Example: Fetch all appointments from the appointment collection
+        appointments = list(appointment_collection.find({}))
+        
+        return jsonify({'appointments': appointments}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
-
-@appointment_bp.route('/request', methods=['POST'])
-def request_appointment():
-    data = request.get_json()
-    patient_id = data.get('patient_id')
-    doctor_id = data.get('doctor_id')
-    appointment_date = data.get('appointment_date')
-    appointment_time = data.get('appointment_time')
-
-    if not patient_id or not doctor_id or not appointment_date or not appointment_time:
-        return jsonify({'message': 'Missing required fields'}), 400
-
-    # Check if patient_id exists in the database
-    # patient = Patient.query.get(patient_id)
-    # if not patient:
-    #     return jsonify({'message': 'Invalid patient ID'}), 400
-
-    # Check if doctor_id exists in the database
-    # doctor = Doctor.query.get(doctor_id)
-    # if not doctor:
-    #     return jsonify({'message': 'Invalid doctor ID'}), 400
-
-    # Assuming patient and doctor IDs are valid and existing in the system
-    appointment = {
-        'patient_id': patient_id,
-        'doctor_id': doctor_id,
-        'appointment_date': appointment_date,
-        'appointment_time': appointment_time,
-        'status': 'pending'  # Appointment status: pending, approved, or denied
-    }
-    appointments.append(appointment)
-    send_email(app=current_app,recipient="ishapaghdal0@gmail.com", subject="Appointment Requested", body="Your appointment request has been sent successfully.")
-
-    return jsonify({'message': 'Appointment requested successfully'}), 200
-
-@appointment_bp.route('/approve', methods=['PUT'])
-def approve_appointment():
-    data = request.get_json()
-    appointment_id = data.get('appointment_id')
-
-    if not appointment_id:
-        return jsonify({'message': 'Appointment ID is required'}), 400
-
-    for appointment in appointments:
-        if appointment.get('id') == appointment_id:
-            appointment['status'] = 'approved'
-            return jsonify({'message': 'Appointment approved successfully'}), 200
-
-    return jsonify({'message': 'Appointment not found'}), 404
-
-@appointment_bp.route('/deny', methods=['PUT'])
-def deny_appointment():
-    data = request.get_json()
-    appointment_id = data.get('appointment_id')
-
-    if not appointment_id:
-        return jsonify({'message': 'Appointment ID is required'}), 400
-
-    for appointment in appointments:
-        if appointment.get('id') == appointment_id:
-            appointment['status'] = 'denied'
-            return jsonify({'message': 'Appointment denied successfully'}), 200
-
-    return jsonify({'message': 'Appointment not found'}), 404
-
-@appointment_bp.route('/schedule', methods=['PUT'])
-def schedule_appointment():
-    data = request.get_json()
-    appointment_id = data.get('appointment_id')
-    appointment_date = data.get('appointment_date')
-    appointment_time = data.get('appointment_time')
-
-    if not appointment_id or not appointment_date or not appointment_time:
-        return jsonify({'message': 'Missing required fields'}), 400
-
-    for appointment in appointments:
-        if appointment.get('id') == appointment_id:
-            appointment['appointment_date'] = appointment_date
-            appointment['appointment_time'] = appointment_time
-            appointment['status'] = 'scheduled'
-            return jsonify({'message': 'Appointment scheduled successfully'}), 200
-
-    return jsonify({'message': 'Appointment not found'}), 404
+# You can add more routes for updating, deleting, or retrieving specific appointments as needed

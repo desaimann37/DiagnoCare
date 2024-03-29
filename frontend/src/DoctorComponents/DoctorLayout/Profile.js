@@ -220,19 +220,19 @@ const ProfileForm = () => {
       }
   
       // Reset form data after successful submission
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        bio: "",
-        specialization: "",
-        price: "",
-        qualifications: [],
-        experiences: [],
-        timeslots: [],
-        about: "",
-        photo: null
-      });
+      // setFormData({
+      //   name: "",
+      //   email: "",
+      //   phone: "",
+      //   bio: "",
+      //   specialization: "",
+      //   price: "",
+      //   qualifications: [],
+      //   experiences: [],
+      //   timeslots: [],
+      //   about: "",
+      //   photo: null
+      // });
     } catch (error) {
       console.error('Error occurred while submitting form:', error);
       // Handle error
