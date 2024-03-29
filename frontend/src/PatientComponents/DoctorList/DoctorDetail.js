@@ -15,6 +15,32 @@ const DoctorDetail = () => {
   const [reviewText, setReviewText] = useState("");
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [sessionId, setSessionId] = useState(null);
+  const [file, setFile] = useState(null); // State to store the uploaded file
+
+
+  const handleSendMail = async () => {
+    try {
+      setLoading(true);
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      await axios.post("http://127.0.0.1:5000/send-mail", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      alert("Email sent successfully");
+
+      // Navigate to '/loading' after email is sent
+    } catch (error) {
+      console.error("Error sending email:", error);
+      alert("Failed to send email");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handlePayment = async () => {
     try {
@@ -54,21 +80,6 @@ const DoctorDetail = () => {
     setReviewText(event.target.value);
   };
 
-  const handleSendMail = async () => {
-    try {
-      setLoading(true);
-      await axios.get("http://127.0.0.1:5000/send-mail");
-      alert("Email sent successfully");
-
-      // Navigate to '/loading' after email is sent
-    } catch (error) {
-      console.error("Error sending email:", error);
-      alert("Failed to send email");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleSubmitFeedback = async () => {
     const token = localStorage.getItem("token");
     const config = {
@@ -103,12 +114,17 @@ const DoctorDetail = () => {
     }
   };
 
-  // const handleSubmitFeedback = () => {
-  //   console.log("Selected Stars:", selectedStars);
-  //   console.log("Review Text:", reviewText);
-  //   setSelectedStars(0);
-  //   setReviewText("");
-  // };
+  const handleFileDrop = (event) => {
+    event.preventDefault();
+    const droppedFile = event.dataTransfer.files[0];
+    setFile(droppedFile);
+  };
+
+  const handleFileInputChange = (event) => {
+    const uploadedFile = event.target.files[0];
+    setFile(uploadedFile);
+  };
+ 
 
   useEffect(() => {
     const getDoctorDetails = async () => {
@@ -159,7 +175,7 @@ const DoctorDetail = () => {
             <img
               className="doctor-image"
               src={`data:image/jpeg;base64,${doctor.photo.$binary.base64}`}
-              alt="Doctor Image"
+              alt=""
             />
             <div className="doctor-info">
               <div className="bestsellerBadge">{doctor.specialization}</div>
@@ -215,12 +231,15 @@ const DoctorDetail = () => {
           </div>
         </div>
 
-        <center>
-          <button className="btn-primary btn" onClick={handleSendMail}>
-            <h2>Send Mail</h2>
-          </button>
+         {/* Send Mail Button */}
+         <center>
+          <div className="drop-area" onDrop={handleFileDrop} onDragOver={(e) => e.preventDefault()}>
+            <input type="file" onChange={handleFileInputChange} />
+            <button className="btn-primary btn" onClick={handleSendMail}>
+              <h2>Send Mail</h2>
+            </button>
+          </div>
         </center>
-
         <br />
         <div className="doctor-nav">
           <div

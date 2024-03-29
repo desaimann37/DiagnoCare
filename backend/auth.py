@@ -164,6 +164,7 @@ def add_patient():
         data = request.get_json()
         name = data.get('name')
         address = data.get('address')
+        patient_email = data.get('patient_email')
         phone_number = data.get('phone_number')
         doctor_id = current_user.id
 
@@ -174,6 +175,7 @@ def add_patient():
             'name': name,
             'address': address,
             'phone_number': phone_number,
+            'patient_email': patient_email,
             'doctor_id': doctor_id, 
         }
 

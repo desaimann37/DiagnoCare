@@ -138,5 +138,24 @@ def send_email():
         print('Error sending email:', str(e))
         return jsonify({'error': 'Failed to send email'})
         
+
+@app.route('/send-mail-from-doctor', methods=['GET','POST'])
+def send_email2():
+    try:
+        to = 'desaimann37@gmail.com'
+        subject = 'Testing'
+        body = 'Email Sent with flask only'
+
+        # Create a Message object
+        message = Message(subject=subject, recipients=[to], body=body)
+        # Send the email
+        mail.send(message)
+
+        return jsonify({'message': 'Email sent successfully'})
+    except Exception as e:
+        print('Error sending email:', str(e))
+        return jsonify({'error': 'Failed to send email'})      
+      
+    return 
 if __name__ == '__main__':
     app.run(debug=True)

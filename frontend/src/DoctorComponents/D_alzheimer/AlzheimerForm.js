@@ -50,6 +50,7 @@ const AlzheimerForm = () => {
           name: selectedPatient.name,
           address: selectedPatient.address,
           phone: selectedPatient.phone,
+          patient_email: selectedPatient.patient_email,
         },
       };
       setCombinedData(combined_data);
@@ -200,13 +201,14 @@ const AlzheimerForm = () => {
 
     const doc = new jsPDF();
 
-    const { name, phone, address } = combinedData.patient_details;
+    const { name, phone, address, patient_email} = combinedData.patient_details;
     const imageBase64 = await getImageBase64(formData.AlzheimerImage);
 
     const tableData = [
-      { header: "Doctor Name:", content: JSON.parse(localStorage.getItem('loggedin_obj')).user.name }, 
-      { header: "Doctor EmailId:", content: JSON.parse(localStorage.getItem('loggedin_obj')).user.email }, 
+      { header: "Doctor Name:", content: JSON.parse(localStorage.getItem('loggedin_obj')).name }, 
+      { header: "Doctor EmailId:", content: JSON.parse(localStorage.getItem('loggedin_obj')).email }, 
       { header: "Patient Name:", content: name }, 
+      { header: "Patient EmailId:", content: patient_email},
       { header: "Phone:", content: phone },
       { header: "Address:", content: address },
       { header: "Disease name:", content: "Alzheimer's" },
@@ -252,6 +254,8 @@ const AlzheimerForm = () => {
      const pdfData = doc.output("blob");
      handleUploadPDF(pdfData);
      doc.save(combinedData.patient_details.name + "_AlzheimerReport.pdf");
+    // Notify Patient on their Email Id : 
+    handleSendMail(pdfData)
   };
 
   const getImageBase64 = (file) => {
@@ -288,6 +292,7 @@ const AlzheimerForm = () => {
           name: response.data.name,
           address: response.data.address,
           phone: response.data.phone_number,
+          patient_email: response.data.patient_email,
         });
         console.log(selectedPatient);
       } catch (error) {
@@ -318,6 +323,30 @@ const AlzheimerForm = () => {
       console.error("Error deleting patient:", error);
     }
   }
+
+  const handleSendMail = async (pdfData) => {
+    try {
+      const formData = new FormData();
+      formData.append("pdf", pdfData);
+  
+      const response = await axios.post(
+        "http://127.0.0.1:5000/send-mail-from-doctor",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+  
+      console.log(response.data); // Handle the response from the server as needed
+      // Optionally show a success message
+    } catch (error) {
+      console.error("Error sending email:", error);
+      // Optionally show an error message
+    }
+  };
+  
 
   return (
     <>
@@ -395,6 +424,8 @@ const AlzheimerForm = () => {
                     Address : {patient.address}
                     <br />
                     Phone No. : {patient.phone_number}
+                    <br/>
+                  Email Id : {patient.patient_email}
                   </p>
                 </div>
 
@@ -434,6 +465,8 @@ const AlzheimerForm = () => {
                   Address : {selectedPatient.address}
                   <br />
                   Phone No. : {selectedPatient.phone}
+                  <br/>
+                  Email Id : {selectedPatient.patient_email}
                 </p>
               </div>
 
@@ -527,6 +560,10 @@ const AlzheimerForm = () => {
                       >
                         Download Report PDF
                       </button>
+                      <br/>
+                      {/* <button  type="button"
+                        className="btn btn-primary"
+                        onClick={handleSendMail}>Notify Patient</button> */}
                     </div>
                   </>
                 )}
