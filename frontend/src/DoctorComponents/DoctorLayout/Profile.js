@@ -47,7 +47,6 @@ const ProfileForm = () => {
         },
       }
     );
-
         setProfilepic(response.data.photo);
         const userData = response.data;
         
@@ -160,6 +159,17 @@ const ProfileForm = () => {
     });
   };
 
+  const formDataToJson = (formData) => {
+    const jsonObject = {};
+    for (const [key, value] of formData.entries()) {
+      if (key === 'photo') {
+        continue;
+      }
+      jsonObject[key] = value;
+    }
+    return JSON.stringify(jsonObject);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -171,16 +181,17 @@ const ProfileForm = () => {
       });
       return;
     }
-
-    const token = localStorage.getItem('token');
-    const config = {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data' // Change content type to multipart/form-data
-      }
-    };
   
+    const userObj = JSON.parse(localStorage.getItem("user"));
+
+   
+       const _id = userObj._id;
+       const password = userObj.password;
+    
+
     const formDataToSend = new FormData();
+    formDataToSend.append("_id", _id);
+    formDataToSend.append("password", password);
     formDataToSend.append('name', formData.name);
     formDataToSend.append('email', formData.email);
     formDataToSend.append('phone', formData.phone);
@@ -188,7 +199,8 @@ const ProfileForm = () => {
     formDataToSend.append('specialization', formData.specialization);
     formDataToSend.append('price', formData.price);
     formDataToSend.append('about', formData.about);
-    formDataToSend.append('photo', formData.photo); // Append photo to formDataToSend
+    formDataToSend.append('photo', formData.photo);
+     // Append photo to formDataToSend
   
 
     formData.qualifications.forEach((qualification, index) => {
@@ -218,8 +230,18 @@ const ProfileForm = () => {
     });
   
     try {
+      
+
+      const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data'
+      }
+    };
+
       const response = await axios.post('http://127.0.0.1:5000/doctor/add', formDataToSend, config);
-  
+      
       if (response.status === 200) {
         Swal.fire({
           icon: 'success',
@@ -227,21 +249,25 @@ const ProfileForm = () => {
           text: "doctor's profile updated successfully",
         });
       }
+      const jsonData = formDataToJson(formDataToSend);
+      localStorage.setItem("user", jsonData);
+      localStorage.setItem("loggedin_obj", jsonData);
+
   
     //  Reset form data after successful submission
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        bio: "",
-        specialization: "",
-        price: "",
-        qualifications: [],
-        experiences: [],
-        timeslots: [],
-        about: "",
-        photo: null
-      });
+      // setFormData({
+      //   name: "",
+      //   email: "",
+      //   phone: "",
+      //   bio: "",
+      //   specialization: "",
+      //   price: "",
+      //   qualifications: [],
+      //   experiences: [],
+      //   timeslots: [],
+      //   about: "",
+      //   photo: null
+      // });
     } catch (error) {
       console.error('Error occurred while submitting form:', error);
     }

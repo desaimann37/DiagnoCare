@@ -128,7 +128,8 @@ def get_all_doctors():
 @jwt_required()
 def get_doctor_profile():
     try:
-         
+        print("id:")
+        print(ObjectId(current_user.id))
         doctor_data = auth_collection.find_one({'_id': ObjectId(current_user.id)})
         if 'bio' in doctor_data:
             doctor_data = json.loads(json_util.dumps(doctor_data))

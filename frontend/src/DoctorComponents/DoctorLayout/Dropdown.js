@@ -3,12 +3,26 @@ import "./dropdown.css";
 import { Link } from "react-router-dom";
 
 const Dropdown = () => {
-  const [LoggedinObj, setLoggedinObj] = useState(null);
+  const [loggedinObj, setLoggedinObj] = useState(null);
 
   useEffect(() => {
-    const storedUserObj = localStorage.getItem("loggedin_obj");
-    const parsedUserObj = storedUserObj ? JSON.parse(storedUserObj) : null;
-    setLoggedinObj(parsedUserObj);
+    // Function to update the loggedinObj state from the local storage
+    const updateLoggedinObjFromLocalStorage = () => {
+      const storedUserObj = localStorage.getItem("loggedin_obj");
+      const parsedUserObj = storedUserObj ? JSON.parse(storedUserObj) : null;
+      setLoggedinObj(parsedUserObj);
+    };
+
+    // Update loggedinObj from local storage when the component mounts
+    updateLoggedinObjFromLocalStorage();
+
+    // Add event listener to update loggedinObj when the local storage changes
+    window.addEventListener("storage", updateLoggedinObjFromLocalStorage);
+
+    // Cleanup function to remove the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("storage", updateLoggedinObjFromLocalStorage);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -38,9 +52,9 @@ const Dropdown = () => {
     <div className="dropdown-container">
       <details className="dropdown right">
         <summary className="avatar">
-          {LoggedinObj && LoggedinObj.photo ? (
+          {loggedinObj && loggedinObj.photo ? (
             <img
-              src={`data:image/jpeg;base64,${LoggedinObj.photo.$binary.base64}`}
+              src={`data:image/jpeg;base64,${loggedinObj.photo.$binary.base64}`}
               alt="Avatar"
             />
           ) : (
@@ -52,11 +66,11 @@ const Dropdown = () => {
         </summary>
         <ul>
           <li>
-            {LoggedinObj ? (
+            {loggedinObj ? (
               <p>
-                <span className="block bold">{LoggedinObj.name}</span>
+                <span className="block bold">{loggedinObj.name}</span>
                 <br />
-                <span className="block italic">{LoggedinObj.email}</span>
+                <span className="block italic">{loggedinObj.email}</span>
               </p>
             ) : (
               <p>
@@ -71,7 +85,7 @@ const Dropdown = () => {
           </li>
           {/* <li className="divider"></li> */}
           <li>
-            {LoggedinObj && (
+            {loggedinObj && (
               <Link to="#">
                 <span
                   onClick={handleLogout}
