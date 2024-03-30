@@ -71,3 +71,8 @@
 .overview-vertical-container ul li {
     margin-bottom: 10px;
 }
+
+.scrollable-reviews {
+    max-height: 300px; /* Define the maximum height */
+    overflow-y: auto; /* Enable vertical scroll */
+  }
