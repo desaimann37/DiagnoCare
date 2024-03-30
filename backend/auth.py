@@ -48,11 +48,12 @@ def api_signup():
             'password': hash_password,
             'role': role 
         }
-        auth_collection.insert_one(user)
+        result = auth_collection.insert_one(user)
+        user_id = str(result.inserted_id)
 
         custom_expiration_time = timedelta(days=1)
-        access_token = create_access_token(identity=user['name'], expires_delta=custom_expiration_time)
-        refresh_token = create_refresh_token(identity=user['name'], expires_delta=custom_expiration_time)
+        access_token = create_access_token(identity=user_id, expires_delta=custom_expiration_time)
+        refresh_token = create_refresh_token(identity=user_id, expires_delta=custom_expiration_time)
         
         user['_id'] = str(user['_id']) 
         user = json_util.dumps(user)
@@ -86,9 +87,10 @@ def api_login():
         if user:    
             hashed_password = user.get('password')
             if check_password_hash(hashed_password, password):
+                user_id = str(user['_id'])
                 custom_expiration_time = timedelta(days=1)
-                access_token = create_access_token(identity=user['name'], expires_delta=custom_expiration_time)
-                refresh_token = create_refresh_token(identity=user['name'], expires_delta=custom_expiration_time)
+                access_token = create_access_token(identity=user_id, expires_delta=custom_expiration_time)
+                refresh_token = create_refresh_token(identity=user_id, expires_delta=custom_expiration_time)
 
                 user['_id'] = str(user['_id']) 
                 

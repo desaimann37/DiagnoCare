@@ -1,3 +1,4 @@
+from bson import ObjectId
 from flask import Flask
 from flask import Flask,request, jsonify
 from flask_cors import CORS
@@ -75,7 +76,7 @@ def run_predict():
 def user_lookup_callback(__jwt_headers , jwt_data):
     identity = jwt_data['sub']
     # print(type(identity))
-    user_dict = auth_collection.find_one({'name': identity})
+    user_dict = auth_collection.find_one({'_id': ObjectId(identity)})
     if user_dict:
         return CustomUser(user_dict)
     else:

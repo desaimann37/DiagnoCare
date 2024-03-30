@@ -14,7 +14,8 @@ import axios from "axios";
 import LoadingPage from "../../PatientComponents/LoadingPage";
 
 const ProfileForm = () => {
-  const [Profilepic, setProfilepic] = useState(null);
+  const [profilePicURL, setProfilePicURL] = useState(""); 
+  const[isUpdated,setIsUpdated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
@@ -30,11 +31,11 @@ const ProfileForm = () => {
     photo: null
   });
 
-  useEffect(() => {
-    
-    const fetchProfileData = async () => {
-      try {
-        const token = localStorage.getItem('token');
+  useEffect (() => {
+ 
+    const fetchData = async () => {
+    try{
+    const token = localStorage.getItem('token');
         if (!token) {
           console.error("Token is missing.");
           return;
@@ -47,7 +48,10 @@ const ProfileForm = () => {
         },
       }
     );
-        setProfilepic(response.data.photo);
+
+    if(response.status === 200){ 
+        setIsUpdated(true);
+        
         const userData = response.data;
         
         const updatedQualifications = userData.qualifications.map(qualification => ({
@@ -68,7 +72,7 @@ const ProfileForm = () => {
           date: new Date(slot.date.$date).toISOString().split('T')[0]
         }));
 
-        console.log(userData.photo);
+        
 
         setFormData(prevFormData => ({
           ...prevFormData,
@@ -82,17 +86,27 @@ const ProfileForm = () => {
           experiences: updatedExperiences || [],
           timeslots: updatedTimeslots || [],
           about: userData.about || "",
-          photo: userData.photo ? new File([], userData.photo.name) : null
+          //photo: userData.photo ? new File([], userData.photo.name) : null
         }));
+        if (userData.photo) {
+          setProfilePicURL(
+            userData.photo
+              ? `data:image/jpeg;base64,${userData.photo.$binary.base64}`
+              : "https://www.iconbunny.com/icons/media/catalog/product/2/1/2131.12-doctor-icon-iconbunny.jpg"
+          );
+        }
         setLoading(false);
-      } catch (error) {
-        console.error('Error occurred while fetching profile data:', error);
-      }
+      
 
-     
+    
     };
+    }
+    catch (error) {
+      console.error('Error occurred while fetching profile data:', error);
+    }
+  };
 
-    fetchProfileData();
+  fetchData();
   }, []);
   console.log("form data :")
   console.log(formData);
@@ -253,21 +267,6 @@ const ProfileForm = () => {
       localStorage.setItem("user", jsonData);
       localStorage.setItem("loggedin_obj", jsonData);
 
-  
-    //  Reset form data after successful submission
-      // setFormData({
-      //   name: "",
-      //   email: "",
-      //   phone: "",
-      //   bio: "",
-      //   specialization: "",
-      //   price: "",
-      //   qualifications: [],
-      //   experiences: [],
-      //   timeslots: [],
-      //   about: "",
-      //   photo: null
-      // });
     } catch (error) {
       console.error('Error occurred while submitting form:', error);
     }
@@ -300,7 +299,23 @@ const ProfileForm = () => {
     }
   };
 
-  if (loading) {
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    // Read the selected image file and set it as the profile picture
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      setProfilePicURL(e.target.result);
+    };
+    reader.readAsDataURL(file);
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      photo: file // Update the 'photo' field with the selected file
+    }));
+  };
+
+  if (loading && isUpdated) {
     return (
       <>
         <center>
@@ -578,12 +593,11 @@ const ProfileForm = () => {
       </CCol>
       <CCol xs={12} className="d-flex align-items-center">
         <div className="avatar-container">
-          <img
-
-           src={Profilepic?`data:image/jpeg;base64,${Profilepic.$binary.base64}`:"https://www.iconbunny.com/icons/media/catalog/product/2/1/2131.12-doctor-icon-iconbunny.jpg"}
-           alt="Doctor"
-            className="avatar-image"
-          />
+        <img
+          src={profilePicURL || "https://www.iconbunny.com/icons/media/catalog/product/2/1/2131.12-doctor-icon-iconbunny.jpg"}
+          alt="Doctor"
+          className="avatar-image"
+        />
         </div>
 
         <CInputGroup className="ml-3">
@@ -593,21 +607,14 @@ const ProfileForm = () => {
             id="profilePicture"
             accept="image/*"
             style={{ borderRadius: "8px" }}
-            onChange={(e) => {
-             
-              const file = e.target.files[0];
-              setFormData((prevFormData) => ({
-                ...prevFormData,
-                photo: file // Update the 'photo' field with the selected file
-              }));
-            }}
+            onChange={handleImageChange}
           />
         </CInputGroup>
       </CCol>
       <CCol xs={12}>
-        <CButton color="primary" type="submit">
-          Submit
-        </CButton>
+      <CButton color="primary" type="submit">
+    {isUpdated ? "Update" : "Submit"}
+  </CButton>
       </CCol>
     </CForm>
   );
