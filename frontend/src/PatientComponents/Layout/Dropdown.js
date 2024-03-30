@@ -12,7 +12,6 @@ const Dropdown = () => {
   }, []);
 
   const handleLogout = () => {
-    // Send logout request to the backend
     fetch('/logout', {
       method: 'GET',
       headers: {
@@ -55,8 +54,8 @@ const Dropdown = () => {
             )}
           </li>
           <li>
-            <Link to="/patient">
-              <span className="p-material-symbols-outlined">Account</span>
+            <Link to="/patient/mybooking">
+              <span className="p-material-symbols-outlined">My Booking</span>
             </Link>
           </li>
           {/* <li className="divider"></li> */}

@@ -39,6 +39,7 @@ const AddPatient = (props) => {
 
     setFormData({
       name: "",
+      patient_email:"",
       address: "",
       phone_number: "",
     });
@@ -76,6 +77,24 @@ const AddPatient = (props) => {
                     required
                   />
                   <div className="invalid-feedback">Name is required</div>
+                </div>
+              </div>
+              <div className="mb-3 d-flex">
+                <div className="mr-3 flex-grow-1">
+                  <label className="mb-2 label-large" htmlFor="patient_email">
+                    Email <span>*</span>
+                  </label>
+                  <input
+                    id="patient_email"
+                    placeholder="Enter Email of the patient"
+                    type="email"
+                    className="form-control"
+                    name="patient_email"
+                    value={formData.patient_email}
+                    onChange={handleChange}
+                    required
+                  />
+                  <div className="invalid-feedback">Email is required</div>
                 </div>
               </div>
 

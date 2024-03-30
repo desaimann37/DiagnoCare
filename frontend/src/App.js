@@ -18,6 +18,9 @@ import NotFoundPage from "./NotFoundPage";
 import "./style.css";
 import LoadingPage from "./PatientComponents/LoadingPage";
 import PaymentSuccess from "./PatientComponents/DoctorList/PayemntSuccsess";
+import MyBooking from "./PatientComponents/Layout/MyBooking";
+import JoinRoomButton from "./PatientComponents/Meeting/JoinRoomButton";
+import JoinRoom from './PatientComponents/Meeting/JoinRoom';
 
 function App() {
   const [loggedinObj, setLoggedinObj] = useState(null);
@@ -59,6 +62,9 @@ function App() {
                 <Route path="doctors/:id" element={<DoctorDetail />} />
                 <Route path="chatbot" element={<Chatbot />} />
                 <Route path="services" element={<Services />} />
+                <Route path="mybooking" element={<MyBooking />} />
+                <Route path="join_room" element={<JoinRoomButton />} />
+                <Route path="meeting" element={<JoinRoom />} />
                 <Route path="payment-succsess/:id" element={<PaymentSuccess />} />
               </Route>
               </>

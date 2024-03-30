@@ -1,10 +1,11 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import paymentSuccsess from "../../assets/payment-succsess.jpg";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
 
 const PaymentSuccess = () => {
   const { id } = useParams();
+
   const redirectToHome = () => {
     window.location.href = "/patient";
   };
@@ -30,7 +31,7 @@ const PaymentSuccess = () => {
         const doctor = res.data;
 
         // Book appointment
-        await axios.post(
+        const appointmentResponse = await axios.post(
           "http://127.0.0.1:5000/appointment/add",
           {
             doctor_id: id,
@@ -38,6 +39,8 @@ const PaymentSuccess = () => {
           },
           config
         );
+        
+        const appointmentId = appointmentResponse.data.appointment_id; // Extract appointment ID
 
         // Send payment confirmation mail
         const response = await axios.post(
@@ -45,6 +48,7 @@ const PaymentSuccess = () => {
           {
             doctor_name: doctor.name,
             doctor_email: doctor.email,
+            appointment_id: appointmentId, 
           },
           config
         );
@@ -53,7 +57,6 @@ const PaymentSuccess = () => {
       }
     };
 
-    // Call the function to send payment confirmation mail
     sendPaymentConfirmationMail();
   }, []); 
 
@@ -101,8 +104,6 @@ const styles = {
   },
   img : {
     width: "800px"
-    
-    
   }
 };
 

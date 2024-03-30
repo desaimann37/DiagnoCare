@@ -45,7 +45,7 @@ def create_checkout_session():
 
         checkout_session = stripe.checkout.Session.create(
             # success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
-            success_url=domain_url + "patient/payment-succsess"+doctor['_id']['$oid'],
+            success_url=domain_url + "patient/payment-succsess/"+doctor['_id']['$oid'],
             cancel_url=domain_url + "/patient",
             payment_method_types=["card"],
             mode="payment",
@@ -82,18 +82,19 @@ def send_payment_confirmation_mail():
         customer_email = current_user.email
         doctor_name = data.get('doctor_name')
         doctor_email = data.get('doctor_email')
+        appointment_id = data.get('appointment_id') 
 
         email_data_patient = {
             "to": customer_email,
             "subject": "Appointment Confirmation",
-            "body": f"Dear {customer_name}, your appointment has been successfully booked."
+            "body": f"Dear {customer_name}, your appointment has been successfully booked. your meeting ID for the appointment is {appointment_id}"
         }
         send_email_post(**email_data_patient)
 
         email_data_doctor = {
             "to": doctor_email,
             "subject": "New Appointment Booking",
-            "body": f"Dear {doctor_name}, a new appointment has been booked by {customer_name} ({customer_email})."
+            "body": f"Dear {doctor_name}, a new appointment has been booked by {customer_name} ({customer_email}).  your meeting ID for the appointment is {appointment_id}"
         }
         send_email_post(**email_data_doctor)
 

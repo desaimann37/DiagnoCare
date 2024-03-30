@@ -16,6 +16,8 @@ from appointment import appointment_bp
 from flask_jwt_extended import JWTManager
 from predict import predict_alzheimer,predict_braintumor,predict_diabetes,predict_lungcancer
 import os
+from flask import request
+
 app = Flask(__name__)
 CORS(app)
 mail = Mail(app)
@@ -138,5 +140,41 @@ def send_email():
         print('Error sending email:', str(e))
         return jsonify({'error': 'Failed to send email'})
         
+
+
+
+@app.route('/send-mail-from-doctor', methods=['POST'])
+def send_email2():
+    try:
+        # Get the PDF file from the request FormData
+        pdf_file = request.files['pdf']
+        
+        # Extract other form data if needed
+        # formData = request.form
+        
+        # You can use the form data or any other information if needed
+        
+        to = 'desaimann37@gmail.com'
+        subject = 'Testing'
+        body = 'Email Sent with flask only'
+
+        # Create a Message object
+        message = Message(subject=subject, recipients=[to], body=body)
+        
+        # Generate a new filename for the attached PDF
+        new_filename = 'Your_Report.pdf'  # Change this to your desired filename
+        
+        # Attach the PDF file to the email with the new filename
+        message.attach(new_filename, 'application/pdf', pdf_file.read())
+
+        # Send the email
+        mail.send(message)
+
+        return jsonify({'message': 'Email sent successfully'})
+    except Exception as e:
+        print('Error sending email:', str(e))
+        return jsonify({'error': 'Failed to send email'})
+
+
 if __name__ == '__main__':
     app.run(debug=True)

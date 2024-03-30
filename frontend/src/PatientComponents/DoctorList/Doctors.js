@@ -5,7 +5,7 @@ import StarHalfRoundedIcon from '@mui/icons-material/StarHalfRounded';
 import axios from 'axios'; 
 import './doctors.css'
 
-const Doctors = ({ history }) => {
+const Doctors = () => {
   const [doctors, setDoctors] = useState([]);
 
   useEffect(() => {
@@ -16,16 +16,13 @@ const Doctors = ({ history }) => {
       },
     };
     
-    // Function to fetch doctors data
     const fetchDoctors = async () => {
       try {
-        // Make GET request to your API endpoint
         const response = await axios.get(
           "http://127.0.0.1:5000/doctor/doctors",
           config
         );
         
-        // Set the fetched data to the state
         console.log((response.data));
         setDoctors(response.data);
       } catch (error) {
@@ -33,13 +30,8 @@ const Doctors = ({ history }) => {
       }
     };
 
-    // Call the fetchDoctors function when the component mounts
     fetchDoctors();
-  }, []); // Empty dependency array to ensure the effect runs only once on component mount
-
-  // const handleDoctorClick = (id) => {
-  //   history.push(`/${id}`);
-  // };
+  }, []); 
 
   return (
     <div className="doctors-container">
