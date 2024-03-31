@@ -21,6 +21,7 @@ import PaymentSuccess from "./PatientComponents/DoctorList/PayemntSuccsess";
 import MyBooking from "./PatientComponents/Layout/MyBooking";
 import JoinRoomButton from "./PatientComponents/Meeting/JoinRoomButton";
 import JoinRoom from './PatientComponents/Meeting/JoinRoom';
+import SendAccurateRec from "./DoctorComponents/SendAccurateRec";
 
 function App() {
   const [loggedinObj, setLoggedinObj] = useState(null);
@@ -51,6 +52,7 @@ function App() {
                   <Route path="alzheimer" element={<Alzheimer />} />
                   <Route path="braintumor" element={<BrainTumor />} />
                   <Route path="account" element={<Account />} />
+                  <Route path="acc-recommendation" element={<SendAccurateRec />} />
                 </Route>
               </>
             ) : (

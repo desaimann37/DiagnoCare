@@ -1,18 +1,19 @@
-import React from "react";
-import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell } from "@coreui/react";
+import React, { useState } from "react";
+import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CButton } from "@coreui/react";
+import SendAccurateRec from "../SendAccurateRec";
 
 const Appointments = () => {
   // Temporary patient array
   const patients = [
     {
       id: 1,
-      name: "John Doe",
-      gender: "Male",
+      name: "Isha",
+      gender: "Female",
       paymentStatus: "Paid",
       price: "$200",
       bookingDate: "2024-03-09",
-      image:
-        "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
+      image: "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
+      patient_email: "desaimann36@gmail.com", // This email is dummy and used for testing purpose...
     },
     {
       id: 2,
@@ -21,8 +22,7 @@ const Appointments = () => {
       paymentStatus: "Paid",
       price: "$150",
       bookingDate: "2024-03-08",
-      image:
-        "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
+      image: "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
     },
     {
       id: 3,
@@ -31,10 +31,14 @@ const Appointments = () => {
       paymentStatus: "Not Paid",
       price: "$100",
       bookingDate: "2024-03-07",
-      image:
-        "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
+      image: "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
     },
   ];
+
+  const handleRecommendationClick = (patient) => {
+    // Redirect to SendAccurateRec component with patient details
+    window.location.href = `/doctor/acc-recommendation?patientId=${patient.id}&name=${patient.name}&gender=${patient.gender}&paymentStatus=${patient.paymentStatus}&price=${patient.price}&bookingDate=${patient.bookingDate}&image=${patient.image}&patient_email=${patient.patient_email}`;
+  };
 
   return (
     <CTable>
@@ -47,6 +51,7 @@ const Appointments = () => {
           <CTableHeaderCell scope="col">Payment Status</CTableHeaderCell>
           <CTableHeaderCell scope="col">Price</CTableHeaderCell>
           <CTableHeaderCell scope="col">Booking Date</CTableHeaderCell>
+          <CTableHeaderCell scope="col">Send Recommendation</CTableHeaderCell>
         </CTableRow>
       </CTableHead>
       <CTableBody>
@@ -61,7 +66,9 @@ const Appointments = () => {
             <CTableDataCell>{patient.paymentStatus}</CTableDataCell>
             <CTableDataCell>{patient.price}</CTableDataCell>
             <CTableDataCell>{patient.bookingDate}</CTableDataCell>
-            
+            <CTableDataCell>
+              <CButton color="primary" onClick={() => handleRecommendationClick(patient)}>Send</CButton>
+            </CTableDataCell>
           </CTableRow>
         ))}
       </CTableBody>

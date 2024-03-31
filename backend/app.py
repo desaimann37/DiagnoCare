@@ -177,5 +177,32 @@ def send_email2():
         return jsonify({'error': 'Failed to send email'})
 
 
+
+@app.route('/send-recommendation', methods=['POST'])
+def send_recommendation():
+    try:
+        to = 'desaimann37@gmail.com'
+        subject = request.form['subject']
+        body = request.form['body']
+
+        pdf_file = request.files['pdf']
+
+        # Create a Message object
+        message = Message(subject=subject, recipients=[to], body=body)
+
+        # Attach any file or PDF if needed
+        # message.attach("file.pdf", "application/pdf", pdf_data)
+        # Generate a new filename for the attached PDF
+        new_filename = 'Your_Recommendation.pdf'  # Change this to your desired filename
+        
+        # Attach the PDF file to the email with the new filename
+        message.attach(new_filename, 'application/pdf', pdf_file.read())
+        # Send the email
+        mail.send(message)
+
+        return jsonify({'message': 'Email sent successfully'})
+    except Exception as e:
+        print('Error sending email:', str(e))
+        return jsonify({'error': 'Failed to send email'})
 if __name__ == '__main__':
     app.run(debug=True)
