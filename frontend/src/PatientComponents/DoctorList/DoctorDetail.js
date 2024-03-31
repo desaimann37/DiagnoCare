@@ -4,6 +4,7 @@ import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import axios from "axios";
 import "./doctorDetail.css";
 import PacmanLoader from "react-spinners/PacmanLoader";
+import CircularProgress from '@mui/material/CircularProgress';
 import LoadingPage from "../LoadingPage";
 
 const DoctorDetail = () => {
@@ -17,7 +18,6 @@ const DoctorDetail = () => {
   const [sessionId, setSessionId] = useState(null);
   const [file, setFile] = useState(null); // State to store the uploaded file
 
-
   const handleSendMail = async () => {
     try {
       setLoading(true);
@@ -25,7 +25,7 @@ const DoctorDetail = () => {
       const formData = new FormData();
       formData.append("file", file);
 
-      await axios.post("http://localhost:5000/send-mail-from-doctor", formData, {
+      await axios.post("http://127.0.0.1:5000/send-mail", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -53,7 +53,7 @@ const DoctorDetail = () => {
       };
 
       const response = await axios.post(
-        "https://ishapaghdal-DiagnoCare.hf.space/payment/create-checkout-session",
+        "http://127.0.0.1:5000/payment/create-checkout-session",
         doctor,
         config
       );
@@ -96,7 +96,7 @@ const DoctorDetail = () => {
         review_content: reviewText,
       };
       const response = await axios.post(
-        "https://ishapaghdal-DiagnoCare.hf.space/doctor/add_review",
+        "http://127.0.0.1:5000/doctor/add_review",
         review,
         config
       );
@@ -124,7 +124,6 @@ const DoctorDetail = () => {
     const uploadedFile = event.target.files[0];
     setFile(uploadedFile);
   };
- 
 
   useEffect(() => {
     const getDoctorDetails = async () => {
@@ -142,7 +141,7 @@ const DoctorDetail = () => {
           },
         };
         const response = await axios.post(
-          "https://ishapaghdal-DiagnoCare.hf.space/doctor/one_doctor",
+          "http://127.0.0.1:5000/doctor/one_doctor",
           { doctor_id: id },
           config
         );
@@ -198,7 +197,7 @@ const DoctorDetail = () => {
               </div>
               <br />
               <p className="doctor-specialty">
-                Specialaization in {doctor.specialization}
+                Specialization in {doctor.specialization}
               </p>
             </div>
           </div>
@@ -208,7 +207,7 @@ const DoctorDetail = () => {
             </h4>
             <br />
             <h5>Available Time Slots:</h5>
-            {doctor.timeslots && (
+            {doctor.timeslots.length != 0 ? (
               <ul>
                 {doctor.timeslots.map((slot, index) => {
                   const date = new Date(slot.date.$date);
@@ -224,16 +223,25 @@ const DoctorDetail = () => {
                   );
                 })}
               </ul>
+            ) : (
+              <h6>OPPS! No available time slots</h6>
             )}
-            <button className="book-appointment-button" onClick={handlePayment}>
+            <button
+              className="book-appointment-button"
+              onClick={handlePayment}
+            >
               Book Appointment
             </button>
           </div>
         </div>
 
-         {/* Send Mail Button */}
-         <center>
-          <div className="drop-area" onDrop={handleFileDrop} onDragOver={(e) => e.preventDefault()}>
+        {/* Send Mail Button */}
+        <center>
+          <div
+            className="drop-area"
+            onDrop={handleFileDrop}
+            onDragOver={(e) => e.preventDefault()}
+          >
             <input type="file" onChange={handleFileInputChange} />
             <button className="btn-primary btn" onClick={handleSendMail}>
               <h2>Send Mail</h2>
@@ -260,7 +268,7 @@ const DoctorDetail = () => {
         <div className="nav-line"></div>
 
         <div className="doctor-section">
-          {activeSection == "about" ? (
+          {activeSection === "about" ? (
             <div className="about-section">
               <br />
               <h2>
@@ -300,7 +308,7 @@ const DoctorDetail = () => {
               <div className="experience-section">
                 <h3>Experience</h3>
                 <div className="experience-cards">
-                  {doctor.experiences &&
+                  {doctor.experiences.length != 0 ? (
                     doctor.experiences.map((exp, index) => {
                       const startDate = new Date(exp.startDate.$date);
                       const endDate = new Date(exp.endDate.$date);
@@ -317,14 +325,19 @@ const DoctorDetail = () => {
                           <p>{exp.location}</p>
                         </div>
                       );
-                    })}
+                    })
+                  ) : (
+                    <h6>No experience yet</h6>
+                  )}
                 </div>
               </div>
             </div>
           ) : (
             <>
               <div className="feedback-section">
-                <h3>All Reviews ({doctor.reviews && doctor.reviews.length})</h3>
+                <h3>
+                  All Reviews ({doctor.reviews && doctor.reviews.length})
+                </h3>
                 {doctor.reviews &&
                   doctor.reviews.map((review, index) => (
                     <div className="review" key={index}>

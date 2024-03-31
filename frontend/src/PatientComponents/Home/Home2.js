@@ -1,11 +1,13 @@
-import React from 'react'
+import React from 'react';
 import { useState, useEffect } from "react";
-import heart from "../../assets/heart2.png";
-import brain from "../../assets/brain.png";
-import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
-import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import PsychologyAltIcon from '@mui/icons-material/PsychologyAlt';
+import SearchIcon from '@mui/icons-material/Search';
+import AppointmentIcon from '@mui/icons-material/CalendarToday';
+import PaymentIcon from '@mui/icons-material/Payment';
+import MeetingIcon from '@mui/icons-material/MeetingRoom';
+import ReviewIcon from '@mui/icons-material/Star';
+import ChatIcon from '@mui/icons-material/Chat';
+import ConsultationIcon from '@mui/icons-material/ContactSupport';
+import EmailIcon from '@mui/icons-material/Email';
 
 const Home2 = () => {
     const [loaded, setLoaded] = useState(false);
@@ -23,13 +25,12 @@ const Home2 = () => {
               <br />
               <br />
               <h1>
-                We have Amazing <span>Service.</span>
+                Explore Our <span>Services</span>
               </h1>
               <br />
               <div className="home2-content-wrapper">
                 <p>
-                  DiagnoCare is committed to advancing healthcare practices
-                  through innovation and expertise.
+                  DiagnoCare offers a range of services to empower you in managing your health effectively.
                 </p>
                 <br />
                 <br />
@@ -40,53 +41,91 @@ const Home2 = () => {
         <div className="home2-row">
           <div className="home2-column">
             <div className="home2-icon-container">
-              <MonitorHeartIcon sx={{ color: "#006ef7",fontSize: 30 }}/>
-              {/* <img src={heart} alt="Icon" /> */}
+              <SearchIcon sx={{ color: "#006ef7", fontSize: 30 }} />
             </div>
             <div className="home2-content">
-              <h1>Diabetes Prediction</h1>
+              <h1>Search Doctor</h1>
               <p>
-                Predict diabetes based on numeric data entered in the form. The
-                accuracy of Our Prediction Model is <span>90%</span>
+                Find doctors based on specialty and rating.
               </p>
             </div>
           </div>
           <div className="home2-column">
             <div className="home2-icon-container">
-              <VolunteerActivismIcon sx={{ color: "#006ef7",fontSize: 30 }}/>
-              {/* <img src={heart} alt="Icon" /> */}
+              <AppointmentIcon sx={{ color: "#006ef7", fontSize: 30 }} />
             </div>
             <div className="home2-content">
-              <h1>Lung Cancer Prediction</h1>
+              <h1>Book Appointment</h1>
               <p>
-                Predict Lung Cancer based on numeric data entered in the form. The
-                accuracy of Our Prediction Model is <span>90%</span>
+                Book appointments with doctors conveniently online.
               </p>
             </div>
           </div>
           <div className="home2-column">
             <div className="home2-icon-container">
-              {/* <img src={heart} alt="Icon" /> */}
-              <PsychologyAltIcon sx={{ color: "#006ef7",fontSize: 30 }}/>
+              <PaymentIcon sx={{ color: "#006ef7", fontSize: 30 }} />
             </div>
             <div className="home2-content">
-              <h1>Alzheimer's Disease Prediction</h1>
+              <h1>Payment</h1>
               <p>
-                Predict Alzheimer's based on The image provided. The
-                accuracy of Our Prediction Model is <span>90%</span>
+                Make secure payments for doctor appointments.
               </p>
             </div>
           </div>
           <div className="home2-column">
             <div className="home2-icon-container">
-              {/* <img src={heart} alt="Icon" /> */}
-              <PsychologyIcon sx={{ color: "#006ef7",fontSize: 30 }}/>
+              <MeetingIcon sx={{ color: "#006ef7", fontSize: 30 }} />
             </div>
             <div className="home2-content">
-              <h1>Brain Tumuor Prediction</h1>
+              <h1>Online Appointment</h1>
               <p>
-              Predict Brain Tumuor based on The image provided. The
-                accuracy of Our Prediction Model is <span>90%</span>
+                Join online consultations with doctors after booking and payment.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="home2-row">
+          <div className="home2-column">
+            <div className="home2-icon-container">
+              <ReviewIcon sx={{ color: "#006ef7", fontSize: 30 }} />
+            </div>
+            <div className="home2-content">
+              <h1>Doctor Reviews</h1>
+              <p>
+                Review and rate doctors based on your experiences.
+              </p>
+            </div>
+          </div>
+          <div className="home2-column">
+            <div className="home2-icon-container">
+              <ChatIcon sx={{ color: "#006ef7", fontSize: 30 }} />
+            </div>
+            <div className="home2-content">
+              <h1>Healthcare Chatbot</h1>
+              <p>
+                Chat with our healthcare bot to receive health recommendations.
+              </p>
+            </div>
+          </div>
+          <div className="home2-column">
+            <div className="home2-icon-container">
+              <ConsultationIcon sx={{ color: "#006ef7", fontSize: 30 }} />
+            </div>
+            <div className="home2-content">
+              <h1>Accurate Consultation</h1>
+              <p>
+                Get accurate and personalized consultations from doctors.
+              </p>
+            </div>
+          </div>
+          <div className="home2-column">
+            <div className="home2-icon-container">
+              <EmailIcon sx={{ color: "#006ef7", fontSize: 30 }} />
+            </div>
+            <div className="home2-content">
+              <h1>Confirmation Email</h1>
+              <p>
+                Receive confirmation emails after booking doctor appointments.
               </p>
             </div>
           </div>
@@ -95,4 +134,4 @@ const Home2 = () => {
     );
 }
 
-export default Home2
+export default Home2;

@@ -1,11 +1,12 @@
 import React from "react";
 import PacmanLoader from "react-spinners/PacmanLoader";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const LoadingPage = () => {
   return (
-    <div className="loading-page">
-      <PacmanLoader color={"#36D7B7"} loading={true} size={50} />
-    </div>
+    <div className="loader-container">
+          <CircularProgress size={80} /> 
+        </div>
   );
 };
 

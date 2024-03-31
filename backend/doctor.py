@@ -206,3 +206,60 @@ def add_review():
     except Exception as e:
         print(e)
         return jsonify({'error': 'Internal server error'}), 500
+    
+@doctor_bp.route('/qualification/<qualification_id>', methods=['DELETE'])
+@jwt_required()
+def delete_qualification(qualification_id):
+    try:
+        user = auth_collection.find_one({'_id': ObjectId(current_user.id)})
+        if user:
+            qualifications = user.get('qualifications', [])
+            if int(qualification_id) < len(qualifications):
+                qualifications.pop(int(qualification_id))
+                auth_collection.update_one({'_id': ObjectId(current_user.id)}, {'$set': {'qualifications': qualifications}})
+                return jsonify({'message': 'Qualification deleted successfully'}), 200
+            else:
+                return jsonify({'error': 'Invalid qualification ID'}), 400
+        else:
+            return jsonify({'error': 'User profile not found'}), 404
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Internal server error'}), 500
+    
+@doctor_bp.route('/experience/<experience_id>', methods=['DELETE'])
+@jwt_required()
+def delete_experience(experience_id):
+    try:
+        user = auth_collection.find_one({'_id': ObjectId(current_user.id)})
+        if user:
+            experiences = user.get('experiences', [])
+            if int(experience_id) < len(experiences):
+                experiences.pop(int(experience_id))
+                auth_collection.update_one({'_id': ObjectId(current_user.id)}, {'$set': {'experiences': experiences}})
+                return jsonify({'message': 'Experience deleted successfully'}), 200
+            else:
+                return jsonify({'error': 'Invalid experience ID'}), 400
+        else:
+            return jsonify({'error': 'User profile not found'}), 404
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Internal server error'}), 500
+
+@doctor_bp.route('/timeslot/<timeslot_id>', methods=['DELETE'])
+@jwt_required()
+def delete_timeslot(timeslot_id):
+    try:
+        user = auth_collection.find_one({'_id': ObjectId(current_user.id)})
+        if user:
+            timeslots = user.get('timeslots', [])
+            if int(timeslot_id) < len(timeslots):
+                timeslots.pop(int(timeslot_id))
+                auth_collection.update_one({'_id': ObjectId(current_user.id)}, {'$set': {'timeslots': timeslots}})
+                return jsonify({'message': 'Timeslot deleted successfully'}), 200
+            else:
+                return jsonify({'error': 'Invalid timeslot ID'}), 400
+        else:
+            return jsonify({'error': 'User profile not found'}), 404
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Internal server error'}), 500

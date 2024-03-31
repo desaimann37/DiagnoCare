@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 import { useState, useEffect } from "react";
-import desktop from "../../assets/desktop.png";
+import patientImage from "../../assets/desktop.png";
 
 const Home3 = () => {
     const [loaded, setLoaded] = useState(false);
@@ -12,30 +12,38 @@ const Home3 = () => {
     return (
       <div className="home3-container">
         <div className="home3-image-container">
-          <img src={desktop} alt="Your Image" />
+          <img src={patientImage} alt="Your Image" />
         </div>
         <div className="home3-text-container">
           {loaded && (
             <div className="home3-animated-text">
               <h1>
-                Easy to <span>Get Started</span>
+                Get Started Easily
               </h1>
               <br />
               <h3>01. Register</h3>
               <p className="home3-big-font">
-              Create an account by providing all the details.
+                Create an account by providing all the necessary details.
               </p><br/>
-              <h3>02. Select Patient</h3>
+              <h3>02. Search Doctor</h3>
               <p className="home3-big-font">
-                Select the patient whom you want to diagnosis.
+                Find and select a doctor suitable for your diagnosis.
               </p><br/>
-              <h3>03. Disease Details</h3>
+              <h3>03. Book Appointment</h3>
               <p className="home3-big-font">
-                Enter the details of the disease and click on diagnosis button.
+                Book an appointment with the selected doctor for consultation.
               </p><br/>
-              <h3>04. Generate Report</h3>
+              <h3>04. Make Payment</h3>
               <p className="home3-big-font">
-                Generate report of the patient and download it in PDF form.
+                Make secure payments for the appointment using our payment gateway.
+              </p><br/>
+              <h3>05. Join Online Consultation</h3>
+              <p className="home3-big-font">
+                Join the scheduled online consultation with your doctor.
+              </p><br/>
+              <h3>06. Receive Confirmation</h3>
+              <p className="home3-big-font">
+                Receive confirmation of your appointment via email.
               </p><br/>
             </div>
           )}
@@ -44,4 +52,4 @@ const Home3 = () => {
     );
 }
 
-export default Home3
+export default Home3;
