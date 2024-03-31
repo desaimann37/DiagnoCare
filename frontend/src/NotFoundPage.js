@@ -3,14 +3,14 @@ import notfound from "../src/assets/404.png";
 
 const NotFoundPage = () => {
   const handleGoHome = async () => {
-    const storedUserObj = await localStorage.getItem("loggedin_obj");
+    const storedUserObj = localStorage.getItem("loggedin_obj");
 
     if (storedUserObj) {
       const userObj = JSON.parse(storedUserObj);
 
-      if (userObj.user && userObj.user.role === "patient") {
+      if (userObj.role === "patient") {
         window.location.href = "/patient";
-      } else if (userObj.user && userObj.user.role === "doctor") {
+      } else if (userObj.role === "doctor") {
         window.location.href = "/doctor";
       } else {
         window.location.href = "/login";

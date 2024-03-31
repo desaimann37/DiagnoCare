@@ -41,7 +41,7 @@ const ProfileForm = () => {
           return;
         }
     const response = await axios.get(
-      "http://127.0.0.1:5000/doctor/profile",
+      "https://ishapaghdal-DiagnoCare.hf.space/doctor/profile",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -254,7 +254,7 @@ const ProfileForm = () => {
       }
     };
 
-      const response = await axios.post('http://127.0.0.1:5000/doctor/add', formDataToSend, config);
+      const response = await axios.post('https://ishapaghdal-DiagnoCare.hf.space/doctor/add', formDataToSend, config);
       
       if (response.status === 200) {
         Swal.fire({

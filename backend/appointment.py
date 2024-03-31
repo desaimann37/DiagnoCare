@@ -50,8 +50,10 @@ def get_appointments_with_patients_by_doctor():
             
             if patient_data:
                 patient_photo = base64.b64encode(patient_data['photo']).decode('utf-8')
-                
+                appointment_id = str(appointment['_id'])
+
                 appointment = {
+                    'appointment_id': appointment_id,
                     'patient_id': str(patient_data['_id']), 
                     'patient_name': patient_data['name'],
                     'patient_email': patient_data['email'],

@@ -27,7 +27,7 @@ const AddPatient = (props) => {
         'Content-Type': 'application/json'
       }
     };
-    const response = await axios.post('http://127.0.0.1:5000/auth/patients', formData, config);
+    const response = await axios.post('https://ishapaghdal-DiagnoCare.hf.space/auth/patients', formData, config);
 
     if (response.status === 200) {
       Swal.fire({

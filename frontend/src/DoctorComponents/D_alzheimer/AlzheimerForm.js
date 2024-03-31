@@ -76,7 +76,7 @@ const AlzheimerForm = () => {
     const fetchPatients = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:5000/auth/patients",
+          "https://ishapaghdal-DiagnoCare.hf.space/auth/patients",
           config
         );
         setPatients(response.data);
@@ -131,7 +131,7 @@ const AlzheimerForm = () => {
       formDataToSend.append("file", formData.AlzheimerImage);
 
       const response = await axios.post(
-        "http://localhost:5000/predict_alzheimer",
+        "https://ishapaghdal-DiagnoCare.hf.space/predict_alzheimer",
         formDataToSend,
         {
           headers: {
@@ -161,7 +161,7 @@ const AlzheimerForm = () => {
   
     try {
        const response =  await axios.post(
-        "http://localhost:5000/store/report",
+        "https://ishapaghdal-DiagnoCare.hf.space/store/report",
         formData,
         {
           headers: {
@@ -283,7 +283,7 @@ const AlzheimerForm = () => {
           },
         };
         const response = await axios.get(
-          `http://127.0.0.1:5000/auth/patient/${id}`,
+          `https://ishapaghdal-DiagnoCare.hf.space/auth/patient/${id}`,
           config
         );
         console.log(response);
@@ -311,7 +311,7 @@ const AlzheimerForm = () => {
         },
       };
       const response = await axios.delete(
-        `http://localhost:5000/auth/delete_patient/${patient_id}`, 
+        `https://ishapaghdal-DiagnoCare.hf.space/auth/delete_patient/${patient_id}`, 
         config
       );
   
@@ -330,7 +330,7 @@ const AlzheimerForm = () => {
       formData.append("pdf", pdfData);
   
       const response = await axios.post(
-        "http://127.0.0.1:5000/send-mail-from-doctor",
+        "https://ishapaghdal-DiagnoCare.hf.space/send-mail-from-doctor",
         formData,
         {
           headers: {

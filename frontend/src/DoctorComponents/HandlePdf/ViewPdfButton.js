@@ -36,7 +36,7 @@ const ViewPdfButton = ({ pdfName }) => {
   const handleViewPdf = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/store/get_pdf/${pdfName}`,
+        `https://ishapaghdal-DiagnoCare.hf.space/store/get_pdf/${pdfName}`,
         { responseType: "arraybuffer" }
       );
 
