@@ -29,6 +29,8 @@ const AddPatient = (props) => {
     };
     const response = await axios.post('https://ishapaghdal-DiagnoCare.hf.space/auth/patients', formData, config);
 
+
+    
     if (response.status === 200) {
       Swal.fire({
         icon: 'success',
