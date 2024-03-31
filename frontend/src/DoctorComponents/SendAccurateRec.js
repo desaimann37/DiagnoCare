@@ -44,6 +44,8 @@ function SendAccurateRec() {
       // Check if the response indicates success
       if (response.data.message === 'Email sent successfully') {
         console.log('Email sent successfully');
+        alert('Email sent successfully');
+        window.location.href='/doctor'
       } else {
         console.error('Failed to send email');
       }
