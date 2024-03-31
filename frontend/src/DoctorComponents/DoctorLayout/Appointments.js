@@ -1,39 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CButton } from "@coreui/react";
 import SendAccurateRec from "../SendAccurateRec";
+import axios from 'axios';
 
 const Appointments = () => {
-  // Temporary patient array
-  const patients = [
-    {
-      id: 1,
-      name: "Isha",
-      gender: "Female",
-      paymentStatus: "Paid",
-      price: "$200",
-      bookingDate: "2024-03-09",
-      image: "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
-      patient_email: "desaimann36@gmail.com", // This email is dummy and used for testing purpose...
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      gender: "Female",
-      paymentStatus: "Paid",
-      price: "$150",
-      bookingDate: "2024-03-08",
-      image: "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
-    },
-    {
-      id: 3,
-      name: "Alex Johnson",
-      gender: "Male",
-      paymentStatus: "Not Paid",
-      price: "$100",
-      bookingDate: "2024-03-07",
-      image: "https://t4.ftcdn.net/jpg/02/60/04/09/240_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg",
-    },
-  ];
+  const [appointments, setAppointments] = useState([]);
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/appointment/doctor", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setAppointments(response.data.appointments);
+      } catch (error) {
+        console.error("Error fetching appointments:", error);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
+
+  const startConsultation = (appointmentId) => {
+    window.location.href = `/doctor/meeting?roomID=${appointmentId}`;
+};
 
   const handleRecommendationClick = (patient) => {
     // Redirect to SendAccurateRec component with patient details
@@ -47,19 +39,19 @@ const Appointments = () => {
           <CTableHeaderCell scope="col">#</CTableHeaderCell>
           <CTableHeaderCell scope="col">Avatar</CTableHeaderCell>
           <CTableHeaderCell scope="col">Name</CTableHeaderCell>
-          <CTableHeaderCell scope="col">Gender</CTableHeaderCell>
           <CTableHeaderCell scope="col">Payment Status</CTableHeaderCell>
           <CTableHeaderCell scope="col">Price</CTableHeaderCell>
           <CTableHeaderCell scope="col">Booking Date</CTableHeaderCell>
           <CTableHeaderCell scope="col">Send Recommendation</CTableHeaderCell>
+          <CTableHeaderCell scope="col">Join Meeting</CTableHeaderCell>
         </CTableRow>
       </CTableHead>
       <CTableBody>
-        {patients.map(patient => (
-          <CTableRow key={patient.id}>
-            <CTableHeaderCell scope="row">{patient.id}</CTableHeaderCell>
+        {appointments.map((appointment, index) => (
+          <CTableRow key={index}>
+            <CTableHeaderCell scope="row">{index + 1}</CTableHeaderCell>
             <CTableDataCell>
-              <img src={patient.image} alt={patient.name} className="avatar-container" style={{ width: 50, height: 50 }} />
+              <img src={`data:image/jpeg;base64,${appointment.patient_photo}`} alt={appointment.patient_name} className="avatar-container" style={{ width: 50, height: 50 }} />
             </CTableDataCell>
             <CTableDataCell>{patient.name}</CTableDataCell>
             <CTableDataCell>{patient.gender}</CTableDataCell>
@@ -69,6 +61,11 @@ const Appointments = () => {
             <CTableDataCell>
               <CButton color="primary" onClick={() => handleRecommendationClick(patient)}>Send</CButton>
             </CTableDataCell>
+            <CTableDataCell>{appointment.patient_name}</CTableDataCell>
+            <CTableDataCell><span style={{color:"green"}}>Paid</span></CTableDataCell>
+            <CTableDataCell>{appointment.price}</CTableDataCell>
+            <CTableDataCell>{new Date(appointment.appointment_date).toLocaleDateString()}</CTableDataCell>
+            <CTableDataCell><button className="logout-button" onClick={() => startConsultation(appointment.appointment_id)}>Start Consultation</button></CTableDataCell>
           </CTableRow>
         ))}
       </CTableBody>

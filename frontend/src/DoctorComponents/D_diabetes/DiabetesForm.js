@@ -91,7 +91,7 @@ const DiabetesForm = () => {
     const fetchPatients = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:5000/auth/patients",
+          "https://ishapaghdal-DiagnoCare.hf.space/auth/patients",
           config
         );
         setPatients(response.data);
@@ -145,7 +145,7 @@ const DiabetesForm = () => {
 
       console.log("Form Data:", formData);
       const a = await api.post(
-        "http://localhost:5000/predict/diabetes",
+        "https://ishapaghdal-DiagnoCare.hf.space/predict/diabetes",
         formData
       );
       console.log("got prediction");
@@ -169,7 +169,7 @@ const DiabetesForm = () => {
   
     try {
        const response =  await axios.post(
-        "http://localhost:5000/store/report",
+        "https://ishapaghdal-DiagnoCare.hf.space/store/report",
         formData,
         {
           headers: {
@@ -289,7 +289,7 @@ const DiabetesForm = () => {
           },
         };
         const response = await axios.get(
-          `http://127.0.0.1:5000/auth/patient/${id}`,
+          `https://ishapaghdal-DiagnoCare.hf.space/auth/patient/${id}`,
           config
         );
         console.log(response);
@@ -316,7 +316,7 @@ const DiabetesForm = () => {
         },
       };
       const response = await axios.delete(
-        `http://localhost:5000/auth/delete_patient/${patient_id}`, 
+        `https://ishapaghdal-DiagnoCare.hf.space/auth/delete_patient/${patient_id}`, 
         config
       );
   

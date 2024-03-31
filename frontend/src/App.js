@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Dlayout from "./DoctorComponents/DoctorLayout/Layout";
 import Login from "./DoctorComponents/Login/Login";
@@ -16,12 +16,12 @@ import Services from "./PatientComponents/Sevices/Services";
 import DoctorDetail from "./PatientComponents/DoctorList/DoctorDetail";
 import NotFoundPage from "./NotFoundPage";
 import "./style.css";
-import LoadingPage from "./PatientComponents/LoadingPage";
 import PaymentSuccess from "./PatientComponents/DoctorList/PayemntSuccsess";
 import MyBooking from "./PatientComponents/Layout/MyBooking";
 import JoinRoomButton from "./PatientComponents/Meeting/JoinRoomButton";
 import JoinRoom from './PatientComponents/Meeting/JoinRoom';
 import SendAccurateRec from "./DoctorComponents/SendAccurateRec";
+
 
 function App() {
   const [loggedinObj, setLoggedinObj] = useState(null);
@@ -42,9 +42,7 @@ function App() {
         {loggedinObj ? (
           <Routes>
             {loggedinObj && JSON.parse(loggedinObj).role === "doctor" ? (
-              
               <>
-              {console.log("role is doctor")}
                 <Route path="/doctor" element={<Dlayout />}>
                   <Route index element={<Banner />} />
                   <Route path="diabetes" element={<Diabetes />} />
@@ -53,22 +51,25 @@ function App() {
                   <Route path="braintumor" element={<BrainTumor />} />
                   <Route path="account" element={<Account />} />
                   <Route path="acc-recommendation" element={<SendAccurateRec />} />
+                  <Route path="meeting" element={<JoinRoom />} />
                 </Route>
               </>
             ) : (
               <>
-              {console.log("role is patient")}
-              <Route path="/patient" element={<Playout />}>
-                <Route index element={<Home />} />
-                <Route path="doctors" element={<Doctors />} />
-                <Route path="doctors/:id" element={<DoctorDetail />} />
-                <Route path="chatbot" element={<Chatbot />} />
-                <Route path="services" element={<Services />} />
-                <Route path="mybooking" element={<MyBooking />} />
-                <Route path="join_room" element={<JoinRoomButton />} />
-                <Route path="meeting" element={<JoinRoom />} />
-                <Route path="payment-succsess/:id" element={<PaymentSuccess />} />
-              </Route>
+                <Route path="/patient" element={<Playout />}>
+                  <Route index element={<Home />} />
+                  <Route path="doctors" element={<Doctors />} />
+                  <Route path="doctors/:id" element={<DoctorDetail />} />
+                  <Route path="chatbot" element={<Chatbot />} />
+                  <Route path="services" element={<Services />} />
+                  <Route path="mybooking" element={<MyBooking />} />
+                  <Route path="join_room" element={<JoinRoomButton />} />
+                  <Route path="meeting" element={<JoinRoom />} />
+                  <Route
+                    path="payment-succsess/:id"
+                    element={<PaymentSuccess />}
+                  />
+                </Route>
               </>
             )}
             <Route path="*" element={<NotFoundPage />} />

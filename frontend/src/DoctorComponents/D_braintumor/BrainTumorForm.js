@@ -75,7 +75,7 @@ const BrainTumorForm = () => {
     const fetchPatients = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:5000/auth/patients",
+          "https://ishapaghdal-DiagnoCare.hf.space/auth/patients",
           config
         );
         setPatients(response.data);
@@ -132,7 +132,7 @@ const BrainTumorForm = () => {
       formDataToSend.append("file", formData.BrainTumorImage);
 
       const response = await axios.post(
-        "http://localhost:5000/predict_braintumor",
+        "https://ishapaghdal-DiagnoCare.hf.space/predict_braintumor",
         formDataToSend,
         {
           headers: {
@@ -168,7 +168,7 @@ const BrainTumorForm = () => {
           },
         };
         const response = await axios.get(
-          `http://127.0.0.1:5000/auth/patient/${id}`,
+          `https://ishapaghdal-DiagnoCare.hf.space/auth/patient/${id}`,
           config
         );
         console.log(response);
@@ -195,7 +195,7 @@ const BrainTumorForm = () => {
   
     try {
        const response =  await axios.post(
-        "http://localhost:5000/store/report",
+        "https://ishapaghdal-DiagnoCare.hf.space/store/report",
         formData,
         {
           headers: {
@@ -308,7 +308,7 @@ const BrainTumorForm = () => {
         },
       };
       const response = await axios.delete(
-        `http://localhost:5000/auth/delete_patient/${patient_id}`, 
+        `https://ishapaghdal-DiagnoCare.hf.space/auth/delete_patient/${patient_id}`, 
         config
       );
   

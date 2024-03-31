@@ -2,7 +2,7 @@ from bson import ObjectId
 from flask import Flask
 from flask import Flask,request, jsonify
 from flask_cors import CORS
-from extension import jwt, auth_collection
+from extension import auth_collection
 import tensorflow as tf
 from flask_mail import Mail, Message
 from PIL import Image
@@ -130,7 +130,7 @@ def send_email():
         message = Message(subject=subject, recipients=[to], body=body)
 
         # Attach the zip file
-        with app.open_resource("C:\\Users\\Admin\\Downloads\\patient_data.zip") as zip_file:
+        with app.open_resource("C:\\Users\\pagha\\Downloads\\stripe-sample-code.zip") as zip_file:
             message.attach("file.zip", "application/zip", zip_file.read())
 
         # Send the email
@@ -155,7 +155,7 @@ def send_email2():
         
         # You can use the form data or any other information if needed
         
-        to = 'desaimann37@gmail.com'
+        to = 'ishapaghdal1@gmail.com'
         subject = 'Testing'
         body = 'Email Sent with flask only'
 

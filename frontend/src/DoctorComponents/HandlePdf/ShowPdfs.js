@@ -16,7 +16,7 @@ const ShowPdfs = (props) => {
   const fetchPatientDetails = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/store/get_pdf_pid/${props.pdfName}`
+        `https://ishapaghdal-DiagnoCare.hf.space/store/get_pdf_pid/${props.pdfName}`
       );
 
       setPatientData(response.data.patient);
@@ -29,7 +29,7 @@ const ShowPdfs = (props) => {
   const openPdf = async (pdfName) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/store/open_pdf/${pdfName}`,
+        `https://ishapaghdal-DiagnoCare.hf.space/store/open_pdf/${pdfName}`,
         { responseType: "arraybuffer" }
       );
 
@@ -69,7 +69,7 @@ const ShowPdfs = (props) => {
   const handleDelete = async(pdf)=>{
    try {
     const response = await axios.delete(
-      `http://localhost:5000/store/delete_pdf/${pdf}`
+      `https://ishapaghdal-DiagnoCare.hf.space/store/delete_pdf/${pdf}`
     );
 
     // Update the state to remove the deleted PDF

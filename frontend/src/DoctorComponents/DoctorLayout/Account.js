@@ -46,7 +46,7 @@ const Account = () => {
     const fetchPatients = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:5000/auth/patients",
+          "https://ishapaghdal-DiagnoCare.hf.space/auth/patients",
           config
         );
         setPatients(response.data);
@@ -59,7 +59,7 @@ const Account = () => {
 
   useEffect(() => {
     // Fetch account list from the backend
-    fetch('http://127.0.0.1:5000/users/doctor/list?page=1&per_page=100' , {
+    fetch('https://ishapaghdal-DiagnoCare.hf.space/users/doctor/list?page=1&per_page=100' , {
       headers:{
         'Authorization' : `Bearer ${localStorage.getItem('access_token')}`,
       },
@@ -93,7 +93,7 @@ const Account = () => {
           },
         };
         const response = await axios.get(
-          `http://127.0.0.1:5000/auth/patient/${id}`,
+          `https://ishapaghdal-DiagnoCare.hf.space/auth/patient/${id}`,
           config
         );
         console.log(response);
@@ -170,7 +170,7 @@ const Account = () => {
         },
       };
       const response = await axios.delete(
-        `http://localhost:5000/auth/delete_patient/${patient_id}`, 
+        `https://ishapaghdal-DiagnoCare.hf.space/auth/delete_patient/${patient_id}`, 
         config
       );
   

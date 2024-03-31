@@ -88,7 +88,7 @@ const LungCancerForm = () => {
     const fetchPatients = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:5000/auth/patients",
+          "https://ishapaghdal-DiagnoCare.hf.space/auth/patients",
           config
         );
         setPatients(response.data);
@@ -142,7 +142,7 @@ const LungCancerForm = () => {
         setLoading(true);
 
       const a = await api.post(
-        "http://localhost:5000/predict/lungcancer",
+        "https://ishapaghdal-DiagnoCare.hf.space/predict/lungcancer",
         formData
       );
 
@@ -166,7 +166,7 @@ const LungCancerForm = () => {
   
     try {
        const response =  await axios.post(
-        "http://localhost:5000/store/report",
+        "https://ishapaghdal-DiagnoCare.hf.space/store/report",
         formData,
         {
           headers: {
@@ -289,7 +289,7 @@ const LungCancerForm = () => {
           },
         };
         const response = await axios.get(
-          `http://127.0.0.1:5000/auth/patient/${id}`,
+          `https://ishapaghdal-DiagnoCare.hf.space/auth/patient/${id}`,
           config
         );
         console.log(response);
@@ -316,7 +316,7 @@ const LungCancerForm = () => {
         },
       };
       const response = await axios.delete(
-        `http://localhost:5000/auth/delete_patient/${patient_id}`, 
+        `https://ishapaghdal-DiagnoCare.hf.space/auth/delete_patient/${patient_id}`, 
         config
       );
   

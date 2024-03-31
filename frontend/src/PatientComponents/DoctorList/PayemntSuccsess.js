@@ -23,7 +23,7 @@ const PaymentSuccess = () => {
 
         // Get doctor's data
         const res = await axios.post(
-          "http://127.0.0.1:5000/doctor/one_doctor",
+          "https://ishapaghdal-DiagnoCare.hf.space/doctor/one_doctor",
           { doctor_id: id }, 
           config
         );
@@ -32,7 +32,7 @@ const PaymentSuccess = () => {
 
         // Book appointment
         const appointmentResponse = await axios.post(
-          "http://127.0.0.1:5000/appointment/add",
+          "https://ishapaghdal-DiagnoCare.hf.space/appointment/add",
           {
             doctor_id: id,
             price: doctor.price,
@@ -44,7 +44,7 @@ const PaymentSuccess = () => {
 
         // Send payment confirmation mail
         const response = await axios.post(
-          "http://127.0.0.1:5000/payment/payment_confirmation_mail",
+          "http://localhost:5000/payment/payment_confirmation_mail",
           {
             doctor_name: doctor.name,
             doctor_email: doctor.email,
