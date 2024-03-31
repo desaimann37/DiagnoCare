@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell } from "@coreui/react";
-// import SendAccurateRec from "../SendAccurateRec";
-import axios from "axios"
-
+import axios from "axios";
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -26,13 +24,13 @@ const Appointments = () => {
 
   const startConsultation = (appointmentId) => {
     window.location.href = `/doctor/meeting?roomID=${appointmentId}`;
-};
-
-  const handleRecommendationClick = (patient) => {
-    // Redirect to SendAccurateRec component with patient details
-    window.location.href = `/doctor/acc-recommendation?patientId=${patient.id}&name=${patient.name}&gender=${patient.gender}&paymentStatus=${patient.paymentStatus}&price=${patient.price}&bookingDate=${patient.bookingDate}&image=${patient.image}&patient_email=${patient.patient_email}`;
   };
 
+  const handleRecommendationClick = (appointment) => {
+    const { id, patient_name, price, appointment_date, image, patient_email } = appointment;
+    // Redirect to SendAccurateRec component with patient details
+    window.location.href = `/doctor/acc-recommendation?patientId=${id}&name=${patient_name}&price=${price}&bookingDate=${appointment_date}&image=${image}&patient_email=${patient_email}`;
+  };
 
   return (
     <CTable>
@@ -56,7 +54,7 @@ const Appointments = () => {
               <img src={`data:image/jpeg;base64,${appointment.patient_photo}`} alt={appointment.patient_name} className="avatar-container" style={{ width: 50, height: 50 }} />
             </CTableDataCell>
             <CTableDataCell>{appointment.patient_name}</CTableDataCell>
-            <CTableDataCell><span style={{color:"green"}}>Paid</span></CTableDataCell>
+            <CTableDataCell><span style={{ color: "green" }}>Paid</span></CTableDataCell>
             <CTableDataCell>{appointment.price}</CTableDataCell>
             <CTableDataCell>{new Date(appointment.appointment_date).toLocaleDateString()}</CTableDataCell>
             <CTableDataCell>

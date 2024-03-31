@@ -231,7 +231,7 @@ const DoctorDetail = () => {
           </div>
         </div>
 
-         {/* Send Mail Button */}
+         {/* Send Mail Button 
          <center>
           <div className="drop-area" onDrop={handleFileDrop} onDragOver={(e) => e.preventDefault()}>
             <input type="file" onChange={handleFileInputChange} />
@@ -240,6 +240,7 @@ const DoctorDetail = () => {
             </button>
           </div>
         </center>
+        */}
         <br />
         <div className="doctor-nav">
           <div
