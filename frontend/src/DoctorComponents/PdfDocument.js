@@ -21,26 +21,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const PdfDocument = () => {
-  // Create a PDF document
+const PdfDocument = (message) => {
   const MyDocument = (
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
           <Text style={styles.heading}>Recommendation</Text>
-          <Text style={styles.text}>Write your recommendation here...</Text>
+          <Text style={styles.text}>{message}</Text> {/* Include the message in PDF */}
         </View>
       </Page>
     </Document>
   );
 
-  // Convert the PDF document to a Blob
   const blob = new Blob([MyDocument], { type: 'application/pdf' });
-
-  // Create a File object from the Blob
   const file = new File([blob], 'recommendation.pdf', { type: 'application/pdf' });
 
-  // Return the File object
   return file;
 };
 

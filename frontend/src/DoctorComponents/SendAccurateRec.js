@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { CButton } from '@coreui/react';
 import PdfDocument from './PdfDocument';
@@ -8,27 +8,38 @@ function SendAccurateRec() {
   const [message, setMessage] = useState('');
   const location = useLocation();
 
-  // Extract patient email from URL query parameter
-  const searchParams = new URLSearchParams(location.search);
-  const patientEmail = searchParams.get('patient_email');
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const patientName = searchParams.get('name');
+    // const gender = searchParams.get('gender');
+    // const paymentStatus = searchParams.get('paymentStatus');
+    const price = searchParams.get('price');
+    const bookingDate = searchParams.get('bookingDate');
+    const patientEmail = searchParams.get('patient_email');
     const doctorEmail = 'desaimann37@gmail.com';
+  
+    // Construct message with patient details
+    const patientDetails = `Patient Name: ${patientName}\nPrice: ${price}\nBooking Date: ${bookingDate}\nPatient Email: ${patientEmail}\nDoctor Email: ${doctorEmail}`;
+    setMessage(patientDetails);
+  }, [location.search]);
+
+
+
   // Handle message change
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
 
   // Handle sending email
-  const handleSendEmail = async (pdfData) => {
+  const handleSendEmail = async () => {
     try {
-      // Create form data object
       const formData = new FormData();
-      formData.append('pdf', pdfData); // Use the provided pdfData instead of generating from PdfDocument()
-      formData.append('to', patientEmail);
-      formData.append('from', doctorEmail);
+      formData.append('pdf', PdfDocument(message)); // Pass message directly to PdfDocument
+      formData.append('to', message.match(/Patient Email: (.*)\n/)[1]); // Extract patient email from message
+      formData.append('from', 'desaimann37@gmail.com');
       formData.append('subject', 'Recommendation');
       formData.append('body', message);
 
-      // Send POST request to backend endpoint
       const response = await axios.post(
         "http://127.0.0.1:5000/send-recommendation",
         formData,
@@ -38,14 +49,13 @@ function SendAccurateRec() {
           },
         }
       );
-      
-      console.log(response.data); // Log response data for debugging
 
-      // Check if the response indicates success
+      console.log(response.data);
+
       if (response.data.message === 'Email sent successfully') {
         console.log('Email sent successfully');
         alert('Email sent successfully');
-        window.location.href='/doctor'
+        window.location.href='/doctor';
       } else {
         console.error('Failed to send email');
       }
@@ -70,7 +80,7 @@ function SendAccurateRec() {
           marginBottom: '10px',
         }}
       />
-      <CButton color="primary" onClick={() => handleSendEmail(PdfDocument())}>
+      <CButton color="primary" onClick={handleSendEmail}>
         Send Email
       </CButton>
     </div>

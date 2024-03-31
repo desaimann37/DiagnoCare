@@ -235,19 +235,16 @@ const DoctorDetail = () => {
           </div>
         </div>
 
-        {/* Send Mail Button */}
-        <center>
-          <div
-            className="drop-area"
-            onDrop={handleFileDrop}
-            onDragOver={(e) => e.preventDefault()}
-          >
+         {/* Send Mail Button 
+         <center>
+          <div className="drop-area" onDrop={handleFileDrop} onDragOver={(e) => e.preventDefault()}>
             <input type="file" onChange={handleFileInputChange} />
             <button className="btn-primary btn" onClick={handleSendMail}>
               <h2>Send Mail</h2>
             </button>
           </div>
         </center>
+        */}
         <br />
         <div className="doctor-nav">
           <div
