@@ -21,6 +21,7 @@ import MyBooking from "./PatientComponents/Layout/MyBooking";
 import JoinRoomButton from "./PatientComponents/Meeting/JoinRoomButton";
 import JoinRoom from './PatientComponents/Meeting/JoinRoom';
 import SendAccurateRec from "./DoctorComponents/SendAccurateRec";
+import UpdateProfile from "./DoctorComponents/DoctorLayout/UpdateProfile";
 
 
 function App() {
@@ -49,10 +50,12 @@ function App() {
                   <Route path="lungcancer" element={<LungCancer />} />
                   <Route path="alzheimer" element={<Alzheimer />} />
                   <Route path="braintumor" element={<BrainTumor />} />
-                  <Route path="account" element={<Account />} />
+                  <Route path="account" element={<UpdateProfile/>}/>
+                  <Route path="mypatient" element={<Account />} />
                   <Route path="acc-recommendation" element={<SendAccurateRec />} />
-                  <Route path="meeting" element={<JoinRoom />} />
                 </Route>
+                <Route path="/doctor/meeting" element={<JoinRoom />} />
+
               </>
             ) : (
               <>
@@ -64,12 +67,12 @@ function App() {
                   <Route path="services" element={<Services />} />
                   <Route path="mybooking" element={<MyBooking />} />
                   <Route path="join_room" element={<JoinRoomButton />} />
-                  <Route path="meeting" element={<JoinRoom />} />
                   <Route
                     path="payment-succsess/:id"
                     element={<PaymentSuccess />}
                   />
                 </Route>
+                <Route path="/patient/meeting" element={<JoinRoom />} />
               </>
             )}
             <Route path="*" element={<NotFoundPage />} />

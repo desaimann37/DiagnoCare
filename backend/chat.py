@@ -1,18 +1,17 @@
-from flask import Flask, request, jsonify
+from flask import Blueprint , request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 from openai import OpenAI
 import os
 
-app = Flask(__name__)
-CORS(app)  
+chat_bp = Blueprint('chat' , __name__)
 
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key = OPENAI_API_KEY)
 
-@app.route('/chat', methods=['POST'])
+@chat_bp.route('/chat', methods=['POST'])
 def chat():
     data = request.get_json()
     # response = client.chat.completions.create(
@@ -52,6 +51,3 @@ def chat():
     #     stop=None,
     #     temprature=0.7
     # )
-
-if __name__ == '__main__':
-    app.run(debug=True , port=5000)

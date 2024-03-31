@@ -18,7 +18,7 @@ function Chatbot() {
 
     try {
       // Make HTTP POST request to the Flask backend
-      const response = await axios.post('http://127.0.0.1:5000/chat', { question: input });
+      const response = await axios.post('https://ishapaghdal-DiagnoCare.hf.space/chat/chat', { question: input });
       const botResponse = { sender: 'bot', text: response.data.response };
 
       // Add bot's response to the chat history

@@ -3,6 +3,7 @@ import axios from "axios";
 import doc3 from "../../assets/doc3.jpg";
 import "./login.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Swal from "sweetalert2";
 
 const Login = (props) => {
   const [formData, setFormData] = useState({
@@ -22,8 +23,28 @@ const Login = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.email || !formData.password) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please Fill Up All The Fields.",
+      });
+      return;
+    }
+
     const endpoint = isRegister ? "signup" : "login";
 
+    if(endpoint === "signup"){
+      if(!formData.name){
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Please Fill Up All The Fields.",
+        });
+        return;
+      }
+    }
     try {
       const response = await axios.post(
         `https://ishapaghdal-DiagnoCare.hf.space/auth/${endpoint}`,
@@ -49,11 +70,58 @@ const Login = (props) => {
       } else {
         window.location.href = "/patient";
       }
-    } catch (error) {
-      // setError('Invalid credentials');
-      // Handle error, e.g., show error message
+
+      
+        if(response.status == 200){
+
+          if(endpoint === "login"){
+          Swal.fire({
+            icon: "success",
+            title: "Signup successful! ",
+            text: "User registered successfully.",
+          });
+          }
+      
+      if(endpoint === "login"){
+        if(response.status == 200){
+          Swal.fire({
+            icon: "success",
+            title: "Login successful! ",
+            text: "User loggedin successfully.",
+          });
+        }
+      }
     }
-    //Redirect User to Home page!!
+    } catch (error) {
+      if (error.response) {
+        const status = error.response.status;
+        if (status === 401) {
+          Swal.fire({
+            icon: "error",
+            title: "Password incorrect!",
+            text: "Please provide the correct password.",
+          });
+        } else if (status === 404) {
+          Swal.fire({
+            icon: "error",
+            title: "User not found!",
+            text: "Please provide the correct email address.",
+          });
+        } else if (status === 400) {
+          Swal.fire({
+            icon: "error",
+            title: "Email already exists!",
+            text: "Please provide another email address.",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "An error occurred. Please try again later.",
+          });
+        }
+      }
+    }
   };
 
   const toggleForm = () => {

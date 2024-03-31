@@ -16,6 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import user from "../../assets/user.jpg";
 import UpdateProfile from "./UpdateProfile";
+import LoadingPage from "../../PatientComponents/LoadingPage";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -33,6 +34,7 @@ const Account = () => {
   const [patients, setPatients] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const [loading, setLoading] = useState(true); // State to indicate loading status
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -50,8 +52,10 @@ const Account = () => {
           config
         );
         setPatients(response.data);
+        setLoading(false); // Set loading to false once data is fetched
       } catch (error) {
         console.error("Error fetching tests:", error);
+        setLoading(false); // Set loading to false in case of error
       }
     };
     fetchPatients();
@@ -65,24 +69,28 @@ const Account = () => {
       },
     })
       .then(response => response.json())
-      .then(data => setAccounts(data))
-      .catch(error => console.error('Error fetching accounts:', error));
+      .then(data => {
+        setAccounts(data);
+        setLoading(false); // Set loading to false once data is fetched
+      })
+      .catch(error => {
+        console.error('Error fetching accounts:', error);
+        setLoading(false); // Set loading to false in case of error
+      });
   }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
-    // window.location = "/doctor/alzheimer";
     setOpen(false);
   };
 
   const handleRowSelect = async (index, id) => {
     if (selectedRow === index) {
-      setSelectedRow(null); // Deselect if already selected
+      setSelectedRow(null);
     } else {
-      setSelectedRow(index); // Select the clicked row
-      console.log("Row selected:", index);
+      setSelectedRow(index);
       id = id["$oid"];
       try {
         const token = localStorage.getItem("token");
@@ -96,14 +104,12 @@ const Account = () => {
           `https://ishapaghdal-DiagnoCare.hf.space/auth/patient/${id}`,
           config
         );
-        console.log(response);
         setSelectedPatient({
           patient_id: response.data._id.$oid,
           name: response.data.name,
           address: response.data.address,
           phone: response.data.phone_number,
         });
-        console.log(selectedPatient);
       } catch (error) {
         console.error("Error fetching tests:", error);
       }
@@ -138,7 +144,6 @@ const Account = () => {
     })
       .then(response => response.json())
       .then(updatedAccount => {
-        // Update the state with the modified account
         setAccounts(accounts.map(account => (account.id === accountId ? updatedAccount : account)));
       })
       .catch(error => console.error('Error updating account:', error));
@@ -151,7 +156,6 @@ const Account = () => {
     })
       .then(response => {
         if (response.ok) {
-          // Remove the deleted account from the state
           setAccounts(accounts.filter(account => account.id !== accountId));
         } else {
           console.error('Error deleting account:', response.statusText);
@@ -161,7 +165,6 @@ const Account = () => {
   };
 
   const handleDelete = async (patient_id) => {
-    console.log(patient_id);
     try {
       const token = localStorage.getItem("token");
       const config = {
@@ -173,11 +176,7 @@ const Account = () => {
         `https://ishapaghdal-DiagnoCare.hf.space/auth/delete_patient/${patient_id}`, 
         config
       );
-  
-      // Update the state to remove the deleted patient
       setPatients(prevPatients => prevPatients.filter(item => item._id.$oid !== patient_id));
-      
-      console.log(response);
     } catch (error) {
       console.error("Error deleting patient:", error);
     }
@@ -185,85 +184,89 @@ const Account = () => {
 
   return (
     <div>
-      <UpdateProfile/>
-      {/* Add Patient Dialog Box...*/}
-      <BootstrapDialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={open}
-      >
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Add Patient
-        </DialogTitle>
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-        <DialogContent dividers>
-          <AddPatient handleClose={handleClose} />
-        </DialogContent>
-      </BootstrapDialog>
-
-      {/* Displaying List of Patients...*/}
-      <Container style={{ marginTop: "100px", maxWidth: "1400px" }}>
-        <Grid
-          container
-          spacing={3}
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Grid item>
-            <Typography variant="h4" component="h1" gutterBottom>
-              <h1 className="patient-list">Patients List</h1>
-            </Typography>
-          </Grid>
-          <Grid item>
-            <button onClick={handleClickOpen} className="btn btn-primary">
+      {loading ? ( // Render loader if loading is true
+        <LoadingPage/>
+      ) : (
+        <>
+          {/* Add Patient Dialog Box...*/}
+          <BootstrapDialog
+            onClose={handleClose}
+            aria-labelledby="customized-dialog-title"
+            open={open}
+          >
+            <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
               Add Patient
-            </button>
-          </Grid>
-        </Grid>
-        <div className="align-center">
-          <div className="diabetes-row">
-            {patients.map((patient, index) => (
-              <div key={patient._id} className="diabetes-column">
-                <div className="row-container">
-                   <div className="diabetes-icon-container">
-                   <img src={user} alt="user"/>
-                  </div>
-                  <div className="delete-icon-container">
-                  <IconButton aria-label="delete"  onClick={() => handleDelete(patient._id.$oid)}>
-                     <DeleteIcon />
-                  </IconButton>
-                  </div>
-                </div>
-                <div className="diabetes-content">
-                  <h1>Name : {patient.name}</h1>
-                  <p>
-                    Address : {patient.address}
-                    <br />
-                    Phone No. : {patient.phone_number}
-                  </p>
-                </div>
+            </DialogTitle>
+            <IconButton
+              aria-label="close"
+              onClick={handleClose}
+              sx={{
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500],
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+            <DialogContent dividers>
+              <AddPatient handleClose={handleClose} />
+            </DialogContent>
+          </BootstrapDialog>
 
-                <ViewPdfButton
-                  // pdfName={patient.name + "_AlzheimerReport.pdf"}
-                  pdfName={patient._id.$oid}
-                />
+          {/* Displaying List of Patients...*/}
+          <Container style={{ marginTop: "100px", maxWidth: "1400px" }}>
+            <Grid
+              container
+              spacing={3}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Grid item>
+                <Typography variant="h4" component="h1" gutterBottom>
+                  <h1 className="patient-list">Patients List</h1>
+                </Typography>
+              </Grid>
+              <Grid item>
+                <button onClick={handleClickOpen} className="btn btn-primary">
+                  Add Patient
+                </button>
+              </Grid>
+            </Grid>
+            <div className="align-center">
+              <div className="diabetes-row">
+                {patients.map((patient, index) => (
+                  <div key={patient._id} className="diabetes-column">
+                    <div className="row-container">
+                      <div className="diabetes-icon-container">
+                        <img src={user} alt="user"/>
+                      </div>
+                      <div className="delete-icon-container">
+                        <IconButton aria-label="delete"  onClick={() => handleDelete(patient._id.$oid)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </div>
+                    </div>
+                    <div className="diabetes-content">
+                      <h1>Name : {patient.name}</h1>
+                      <p>
+                        Address : {patient.address}
+                        <br />
+                        Phone No. : {patient.phone_number}
+                      </p>
+                    </div>
+
+                    <ViewPdfButton
+                      pdfName={patient._id.$oid}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-        <br />
-      </Container>
+            </div>
+            <br />
+          </Container>
+        </>
+      )}
     </div>
   );
 };

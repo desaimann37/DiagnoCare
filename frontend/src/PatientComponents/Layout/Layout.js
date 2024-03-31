@@ -19,6 +19,8 @@ const Layout = () => {
     setShowNavbar(!showNavbar);
   };
 
+  const leftPosition = calculateLeftPosition(location.pathname);
+
   return (
     <>
       <nav className="layout-navbar">
@@ -46,10 +48,12 @@ const Layout = () => {
                 <Link to="/patient/chatbot">ChatBot</Link>
               </li>
             </ul>
-            <div
-              className="layout-active-link"
-              style={{ left: `${calculateLeftPosition(location.pathname)}%` }}
-            ></div>
+            {leftPosition && (
+              <div
+                className="layout-active-link"
+                style={{ left: `${leftPosition}%` }}
+              ></div>
+            )}
           </div>
         </div>
         <Dropdown obj1={LoggedinObj} />
@@ -73,7 +77,7 @@ const calculateLeftPosition = (pathname) => {
     case "/patient/chatbot":
       return 82.9;
     default:
-      return 0;
+      return null;
   }
 };
 

@@ -79,6 +79,11 @@ const Dropdown = () => {
             )}
           </li>
           <li>
+            <Link to="/doctor/mypatient">
+              <span className="material-symbols-outlined">My Patient</span>
+            </Link>
+          </li>
+          <li>
             <Link to="/doctor/account">
               <span className="material-symbols-outlined">Account</span>
             </Link>

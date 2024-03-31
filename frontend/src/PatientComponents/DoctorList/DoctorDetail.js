@@ -53,7 +53,7 @@ const DoctorDetail = () => {
       };
 
       const response = await axios.post(
-        "http://127.0.0.1:5000/payment/create-checkout-session",
+        "https://ishapaghdal-DiagnoCare.hf.space/payment/create-checkout-session",
         doctor,
         config
       );
@@ -96,7 +96,7 @@ const DoctorDetail = () => {
         review_content: reviewText,
       };
       const response = await axios.post(
-        "http://127.0.0.1:5000/doctor/add_review",
+        "https://ishapaghdal-DiagnoCare.hf.space/doctor/add_review",
         review,
         config
       );
@@ -141,7 +141,7 @@ const DoctorDetail = () => {
           },
         };
         const response = await axios.post(
-          "http://127.0.0.1:5000/doctor/one_doctor",
+          "https://ishapaghdal-DiagnoCare.hf.space/doctor/one_doctor",
           { doctor_id: id },
           config
         );

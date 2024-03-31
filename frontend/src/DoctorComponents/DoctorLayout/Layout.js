@@ -19,6 +19,9 @@ const Layout = () => {
     setShowNavbar(!showNavbar);
   };
 
+  const leftPosition = calculateLeftPosition(location.pathname);
+  const showSlider = leftPosition !== null;
+
   return (
     <>
       <nav className="navbar">
@@ -49,7 +52,7 @@ const Layout = () => {
                 <Link to="/doctor/braintumor">BrainTumor</Link>
               </li>
             </ul>
-            <div className="active-link" style={{ left: `${calculateLeftPosition(location.pathname)}%` }}></div>
+            {showSlider && <div className="active-link" style={{ left: `${leftPosition}%` }}></div>}
           </div>
         </div>
         <Dropdown obj1={LoggedinObj} />
@@ -73,7 +76,7 @@ const calculateLeftPosition = (pathname) => {
     case '/doctor/braintumor':
       return 85;
     default:
-      return 0;
+      return null;
   }
 };
 

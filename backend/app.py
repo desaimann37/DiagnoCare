@@ -14,6 +14,7 @@ from store import store_bp
 from doctor import doctor_bp
 from payment import payment_bp
 from appointment import appointment_bp
+from chat import chat_bp
 from flask_jwt_extended import JWTManager
 from predict import predict_alzheimer,predict_braintumor,predict_diabetes,predict_lungcancer
 import os
@@ -52,6 +53,7 @@ app.register_blueprint(store_bp, url_prefix='/store')
 app.register_blueprint(doctor_bp, url_prefix='/doctor')
 app.register_blueprint(payment_bp, url_prefix='/payment')
 app.register_blueprint(appointment_bp, url_prefix='/appointment')
+app.register_blueprint(chat_bp, url_prefix='/chat')
 
 class CustomUser:
     def __init__(self, user_dict):
