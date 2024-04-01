@@ -7,7 +7,7 @@ const PaymentSuccess = () => {
   const { id } = useParams();
 
   const redirectToHome = () => {
-    window.location.href = "patient";
+    window.location.href = "/patient";
   };
 
   useEffect(() => {

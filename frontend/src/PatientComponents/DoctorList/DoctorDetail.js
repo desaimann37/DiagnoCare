@@ -171,11 +171,14 @@ const DoctorDetail = () => {
       <div className="doctor-margin">
         <div className="doctor-detail">
           <div className="doctor-info-container">
-            <img
-              className="doctor-image"
-              src={`data:image/jpeg;base64,${doctor.photo.$binary.base64}`}
-              alt=""
-            />
+            
+            {(doctor.photo) ? 
+              <img
+                className="doctor-image"
+                src={`data:image/jpeg;base64,${doctor.photo.$binary.base64}`}
+                alt=""
+              />: <img className="courseImg" src="https://gravatar.com/avatar/00000000000000000000000000000000?d=mp" alt=""/>
+          }
             <div className="doctor-info">
               <div className="bestsellerBadge">{doctor.specialization}</div>
               <h3 className="doctor-name">{doctor.name}</h3>
