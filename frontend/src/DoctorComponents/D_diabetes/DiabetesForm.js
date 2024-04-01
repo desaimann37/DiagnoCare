@@ -66,6 +66,7 @@ const DiabetesForm = () => {
           name: selectedPatient.name,
           address: selectedPatient.address,
           phone: selectedPatient.phone,
+          patient_email: selectedPatient.patient_email,
         },
       };
       setCombinedData(combined_data);
@@ -211,8 +212,8 @@ const DiabetesForm = () => {
     const { name, phone, address } = combinedData.patient_details;
     // Define data for the table
     const tableData = [
-      { header: "Doctor Name:", content: JSON.parse(localStorage.getItem('loggedin_obj')).user.name }, 
-      { header: "Doctor EmailId:", content: JSON.parse(localStorage.getItem('loggedin_obj')).user.email }, 
+      { header: "Doctor Name:", content: JSON.parse(localStorage.getItem('loggedin_obj')).name }, 
+      { header: "Doctor EmailId:", content: JSON.parse(localStorage.getItem('loggedin_obj')).email }, 
       { header: "Patient Name:", content: name }, 
       { header: "Phone:", content: phone },
       { header: "Address:", content: address },
@@ -298,6 +299,7 @@ const DiabetesForm = () => {
           name: response.data.name,
           address: response.data.address,
           phone: response.data.phone_number,
+          patient_email: response.data.patient_email,
         });
         console.log(selectedPatient);
       } catch (error) {
@@ -406,6 +408,8 @@ const DiabetesForm = () => {
                     Address : {patient.address}
                     <br />
                     Phone No. : {patient.phone_number}
+                    <br />
+                    Email Id : {patient.patient_email}
                   </p>
                 </div>
 
@@ -444,6 +448,8 @@ const DiabetesForm = () => {
                   Address : {selectedPatient.address}
                   <br />
                   Phone No. : {selectedPatient.phone}
+                  <br />
+                  Email Id : {selectedPatient.patient_email}
                 </p>
               </div>
 
