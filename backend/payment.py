@@ -34,7 +34,7 @@ def get_publishable_key():
 @payment_bp.route("/create-checkout-session", methods=['POST'])
 @jwt_required()
 def create_checkout_session():
-    domain_url = "http://localhost:3000/"
+    domain_url = "https://diagno-care.vercel.app/"
     stripe.api_key = stripe_keys["secret_key"]
     try:
         doctor = request.get_json()
