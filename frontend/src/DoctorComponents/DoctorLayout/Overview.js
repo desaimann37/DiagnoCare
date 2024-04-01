@@ -18,7 +18,7 @@ const Overview = () => {
         }
 
         const response = await axios.get(
-          "https://ishapaghdal-DiagnoCare.hf.space/doctor/profile",
+          "http://localhost:5000/doctor/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`,

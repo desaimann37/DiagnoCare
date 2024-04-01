@@ -46,7 +46,11 @@ const Doctors = () => {
         doctors.map(doctor => (
           <Link to={`${doctor._id.$oid}`} key={doctor.doctor_id}>
             <div className="doctorCard">
-              <img className="courseImg" src={`data:image/jpeg;base64,${doctor.photo.$binary.base64}`} alt="Doctor Image"/>
+              {
+              (doctor.photo) ? 
+              <img className="courseImg" src={`data:image/jpeg;base64,${doctor.photo.$binary.base64}`} alt=""/>
+              : <img className="courseImg" src="https://gravatar.com/avatar/00000000000000000000000000000000?d=mp" alt=""/>
+              }
               <h3>{doctor.name}</h3>
               <div className="bestsellerBadge">{doctor.specialization}</div>
               <div className="ratingDiv">
