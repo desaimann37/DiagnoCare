@@ -333,7 +333,7 @@ const ProfileForm = () => {
           name="name"
           onChange={handleChange}
           value={formData.name}
-          disabled={loading}
+          
           label={
             <span>
               Name<span style={{ color: "red", fontSize: "17px" }}>*</span>
@@ -347,7 +347,7 @@ const ProfileForm = () => {
           type="email"
           id="inputEmail"
           name="email"
-          disabled={loading}
+          
           value={formData.email}
           onChange={handleChange}
           label={
@@ -364,7 +364,7 @@ const ProfileForm = () => {
           id="inputPhone"
           onChange={handleChange}
           name="phone"
-          disabled={loading}
+          
           value={formData.phone}
           label={
             <span>
@@ -379,7 +379,7 @@ const ProfileForm = () => {
           id="inputBio"
           onChange={handleChange}
           name="bio"
-          disabled={loading}
+          
           value={formData.bio}
           label={
             <span>
@@ -393,7 +393,7 @@ const ProfileForm = () => {
         <CFormSelect
           id="inputSpecialization"
           label="Specialization"
-          disabled={loading}
+          
           onChange={handleChange}
           name="specialization"
           value={formData.specialization}
@@ -408,7 +408,7 @@ const ProfileForm = () => {
         <CFormInput
           id="inputPrice"
           name="price"
-          disabled={loading}
+          
           onChange={handleChange}
           value={formData.price}
           label={
@@ -595,7 +595,7 @@ const ProfileForm = () => {
           value={formData.about}
           placeholder="Write about you..."
           style={{ borderRadius: "8px" }}
-          disabled={loading}
+          
         />
       </CCol>
       <CCol xs={12} className="d-flex align-items-center">
@@ -619,7 +619,7 @@ const ProfileForm = () => {
         </CInputGroup>
       </CCol>
       <CCol xs={12}>
-      <CButton color="primary" type="submit" disabled={loading}>
+      <CButton color="primary" type="submit" >
     {isUpdated ? "Update" : "Submit"}
   </CButton>
       </CCol>
