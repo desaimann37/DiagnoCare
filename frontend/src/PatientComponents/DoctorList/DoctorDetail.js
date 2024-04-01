@@ -53,7 +53,7 @@ const DoctorDetail = () => {
       };
 
       const response = await axios.post(
-        "https://ishapaghdal-DiagnoCare.hf.space/payment/create-checkout-session",
+        "http://localhost:5000/payment/create-checkout-session",
         doctor,
         config
       );
@@ -210,7 +210,8 @@ const DoctorDetail = () => {
             </h4>
             <br />
             <h5>Available Time Slots:</h5>
-            {doctor.timeslots.length != 0 ? (
+            
+            {doctor.timeslots && doctor.timeslots.length !== 0 ? (
               <ul>
                 {doctor.timeslots.map((slot, index) => {
                   const date = new Date(slot.date.$date);
@@ -308,7 +309,7 @@ const DoctorDetail = () => {
               <div className="experience-section">
                 <h3>Experience</h3>
                 <div className="experience-cards">
-                  {doctor.experiences.length != 0 ? (
+                  {doctor.experiences && doctor.experiences.length !== 0 ? (
                     doctor.experiences.map((exp, index) => {
                       const startDate = new Date(exp.startDate.$date);
                       const endDate = new Date(exp.endDate.$date);

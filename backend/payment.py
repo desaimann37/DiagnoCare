@@ -40,8 +40,8 @@ def create_checkout_session():
         doctor = request.get_json()
         customer_name = current_user.name
         customer_email = current_user.email
-        photo_data = base64.b64decode(doctor['photo']['$binary']['base64'])
-        photo_url = f"data:image/jpeg;base64,{base64.b64encode(photo_data).decode()}"
+        # photo_data = base64.b64decode(doctor['photo']['$binary']['base64'])
+        # photo_url = f"data:image/jpeg;base64,{base64.b64encode(photo_data).decode()}"
 
         checkout_session = stripe.checkout.Session.create(
             # success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
