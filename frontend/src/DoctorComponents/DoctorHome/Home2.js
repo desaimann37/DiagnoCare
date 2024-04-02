@@ -48,7 +48,7 @@ const Home2 = () => {
             <h1>Diabetes Prediction</h1>
             <p>
               Predict diabetes based on numeric data entered in the form. The
-              accuracy of Our Prediction Model is <span>90%</span>
+              accuracy of Our Prediction Model is <span>85%</span>
             </p>
           </div>
         </div>
@@ -61,7 +61,7 @@ const Home2 = () => {
             <h1>Lung Cancer Prediction</h1>
             <p>
               Predict Lung Cancer based on numeric data entered in the form. The
-              accuracy of Our Prediction Model is <span>90%</span>
+              accuracy of Our Prediction Model is <span>94%</span>
             </p>
           </div>
         </div>
@@ -74,7 +74,7 @@ const Home2 = () => {
             <h1>Alzheimer's Disease Prediction</h1>
             <p>
               Predict Alzheimer's based on The image provided. The
-              accuracy of Our Prediction Model is <span>90%</span>
+              accuracy of Our Prediction Model is <span>96%</span>
             </p>
           </div>
         </div>
@@ -87,7 +87,7 @@ const Home2 = () => {
             <h1>Brain Tumuor Prediction</h1>
             <p>
             Predict Brain Tumuor based on The image provided. The
-              accuracy of Our Prediction Model is <span>90%</span>
+              accuracy of Our Prediction Model is <span>93%</span>
             </p>
           </div>
         </div>

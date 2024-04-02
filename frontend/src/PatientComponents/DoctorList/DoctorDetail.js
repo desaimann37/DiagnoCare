@@ -175,6 +175,7 @@ const DoctorDetail = () => {
             {(doctor.photo) ? 
               <img
                 className="doctor-image"
+                style={{width: "300px", height: "300px"}}
                 src={`data:image/jpeg;base64,${doctor.photo.$binary.base64}`}
                 alt=""
               />: <img className="courseImg" src="https://gravatar.com/avatar/00000000000000000000000000000000?d=mp" alt=""/>
