@@ -41,7 +41,7 @@ function SendAccurateRec() {
       formData.append('body', message);
 
       const response = await axios.post(
-        "https://ishapaghdal-DiagnoCare.hf.space/send-recommendation",
+        "http://localhost:5000/send-recommendation",
         formData,
         {
           headers: {
