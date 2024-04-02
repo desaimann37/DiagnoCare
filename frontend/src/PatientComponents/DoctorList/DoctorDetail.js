@@ -53,7 +53,7 @@ const DoctorDetail = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:5000/payment/create-checkout-session",
+        "https://ishapaghdal-DiagnoCare.hf.space/payment/create-checkout-session",
         doctor,
         config
       );
