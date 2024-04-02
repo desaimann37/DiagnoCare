@@ -517,6 +517,7 @@ const AlzheimerForm = () => {
               {loading && (
                 <div className="loader-container">
                   <img src={loader} alt="Loader" className="loader" />
+                  Please Wait, We are genrating report for you.
                 </div>
               )}
               {!loading &&
