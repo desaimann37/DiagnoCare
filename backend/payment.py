@@ -87,14 +87,14 @@ def send_payment_confirmation_mail():
         email_data_patient = {
             "to": customer_email,
             "subject": "Appointment Confirmation",
-            "body": f"Dear {customer_name}, your appointment has been successfully booked. your meeting ID for the appointment is {appointment_id}"
+            "body": f"Dear {customer_name}, your appointment has been successfully booked. your meeting ID for the appointment is {appointment_id}. You can Join meetin with https://diagno-care.vercel.app/doctor/meeting?roomID={appointment_id}"
         }
         send_email_post(**email_data_patient)
 
         email_data_doctor = {
             "to": doctor_email,
             "subject": "New Appointment Booking",
-            "body": f"Dear {doctor_name}, a new appointment has been booked by {customer_name} ({customer_email}).  your meeting ID for the appointment is {appointment_id}"
+            "body": f"Dear {doctor_name}, a new appointment has been booked by {customer_name} ({customer_email}).  your meeting ID for the appointment is {appointment_id}. You can Join meetin with https://diagno-care.vercel.app/doctor/meeting?roomID={appointment_id}"
         }
         send_email_post(**email_data_doctor)
 

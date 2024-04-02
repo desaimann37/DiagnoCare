@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './chatbot.css'; // Import the CSS file for styling
 import axios from 'axios'; // Import axios for making HTTP requests
 
 function Chatbot() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([{ sender: 'bot', text: 'Welcome, ask your question!' }]);
   const [input, setInput] = useState('');
+
+  // useEffect(() => {
+  //   // Fetch initial bot response when component mounts
+  //   async function fetchInitialResponse() {
+  //     try {
+  //       // const response = await axios.post('https://ishapaghdal-DiagnoCare.hf.space/chat/chat', { question: 'Hello' });
+  //       // const botResponse = { sender: 'bot', text: response.data.response };
+  //       // setMessages(messages => [...messages, botResponse]);
+  //     } catch (error) {
+  //       console.error('Error:', error);
+  //     }
+  //   }
+
+  //   fetchInitialResponse();
+  // }, []); // Empty dependency array to ensure this effect runs only once
 
   const handleMessageSubmit = async (e) => {
     e.preventDefault();
@@ -12,7 +27,7 @@ function Chatbot() {
 
     // Add user's message to the chat history
     const newUserMessage = { sender: 'user', text: input };
-    setMessages(messages=>([...messages, newUserMessage]));
+    setMessages(messages => [...messages, newUserMessage]);
     
     setInput('');
 
@@ -22,7 +37,7 @@ function Chatbot() {
       const botResponse = { sender: 'bot', text: response.data.response };
 
       // Add bot's response to the chat history
-      setMessages(messages=>([...messages, botResponse]));
+      setMessages(messages => [...messages, botResponse]);
     } catch (error) {
       console.error('Error:', error);
     }
