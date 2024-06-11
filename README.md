@@ -8,13 +8,13 @@ Welcome to DiagnoCare, where we stand at the forefront of healthcare innovation 
 
 ### Programming Languages 💻
 
-Python 🐍
-React ⚛️
+- Python
+- React 
 
 ### Backend 
-Flask Server 
+- Flask Server 
 ### Frontend 
-React Js 
+- React Js 
 ### Communication API 📞
 - ZEGOCLOUD 
 ### Payment Gateway 💳
@@ -26,22 +26,23 @@ React Js
 - MongoDBCompass : Query Visualization
 - Postman : API Testing and Development
 ### Deployment 🌐
-- Backend Deployment: Hugging Face 🤗
-- Frontend Deployment: Vercel ▲
+- Backend Deployment: Hugging Face 
+- Frontend Deployment: Vercel 
 
 
 ## Features 🌟
 
-- Advanced Diagnostics 🩺: Utilize cutting-edge algorithms to diagnose conditions such as diabetes, lung cancer, brain tumors, and Alzheimer's disease through numerical data and MRI images.
-
-- Secure Communication 📞: Book appointments, share medical documents, and consult with healthcare professionals via video conferencing, ensuring a patient-centric approach.
-
-- Patient History Tracking 📑: Doctors can easily track patient histories and upload diagnostic reports for seamless continuity of care and informed decision-making.
-
-- Enhanced Diagnostic Accuracy 🧬: Committed to improving diagnostic precision and early intervention for better healthcare outcomes and patient experiences.
-
-
-
+- Utilize algorithms to diagnose conditions such as diabetes, lung cancer, brain tumors, and Alzheimer's disease through numerical data and MRI images.
+- Book appointments
+- Share medical documents
+- Consult with healthcare professionals via video conferencing, ensuring a patient-centric approach.
+- Doctors can easily track patient histories
+- Upload diagnostic reports for seamless continuity of care and informed decision-making.
+- Finding Best Doctors
+- Booking Appointment of doctor
+- Making payment
+- Online consultation
+- Reviewing Doctor
 
 ## Installation
 
