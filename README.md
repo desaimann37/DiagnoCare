@@ -48,7 +48,7 @@ React Js ⚛️
 1. Install my-project with npm
 
 ```bash
-  git clone https://github.com/your-repo/DiagnoCare.git
+  git clone https://github.com/ishapaghdal301/DiagnoCare.git
   cd DiagnoCare
 ```
 
