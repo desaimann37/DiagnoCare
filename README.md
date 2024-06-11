@@ -1,5 +1,5 @@
 
-# DiagnoCare : Revolutionizing Healthcare with Machine Learning 🚀💉
+# DiagnoCare : Revolutionizing Healthcare with Machine Learning 💉
 
 Welcome to DiagnoCare, where we stand at the forefront of healthcare innovation by seamlessly integrating machine learning technology into the diagnostic process. Our platform is designed to empower both patients and healthcare providers, offering a comprehensive suite of features aimed at streamlining disease detection and management.
 
@@ -11,20 +11,20 @@ Welcome to DiagnoCare, where we stand at the forefront of healthcare innovation 
 Python 🐍
 React ⚛️
 
-### Backend 🚀
-Flask Server 🌐
-### Frontend 🎨
-React Js ⚛️
+### Backend 
+Flask Server 
+### Frontend 
+React Js 
 ### Communication API 📞
-- ZEGOCLOUD 📹
+- ZEGOCLOUD 
 ### Payment Gateway 💳
-- Stripe 💵
-### Database 🗄️
+- Stripe 
+### Database 
 - MongoDB 🍃
 ### Development and Collaboration 🔧
-- GitHub 🐙: Version Control and Collaboration
-- MongoDBCompass 🔍: Query Visualization
-- Postman 📨: API Testing and Development
+- GitHub : Version Control and Collaboration
+- MongoDBCompass : Query Visualization
+- Postman : API Testing and Development
 ### Deployment 🌐
 - Backend Deployment: Hugging Face 🤗
 - Frontend Deployment: Vercel ▲
@@ -32,20 +32,20 @@ React Js ⚛️
 
 ## Features 🌟
 
-- Advanced Diagnostics 🧠🩺: Utilize cutting-edge algorithms to diagnose conditions such as diabetes, lung cancer, brain tumors, and Alzheimer's disease through numerical data and MRI images.
+- Advanced Diagnostics 🩺: Utilize cutting-edge algorithms to diagnose conditions such as diabetes, lung cancer, brain tumors, and Alzheimer's disease through numerical data and MRI images.
 
-- Secure Communication 🔒📞: Book appointments, share medical documents, and consult with healthcare professionals via video conferencing, ensuring a patient-centric approach.
+- Secure Communication 📞: Book appointments, share medical documents, and consult with healthcare professionals via video conferencing, ensuring a patient-centric approach.
 
-- Patient History Tracking 📑🔍: Doctors can easily track patient histories and upload diagnostic reports for seamless continuity of care and informed decision-making.
+- Patient History Tracking 📑: Doctors can easily track patient histories and upload diagnostic reports for seamless continuity of care and informed decision-making.
 
-- Enhanced Diagnostic Accuracy 📈🧬: Committed to improving diagnostic precision and early intervention for better healthcare outcomes and patient experiences.
+- Enhanced Diagnostic Accuracy 🧬: Committed to improving diagnostic precision and early intervention for better healthcare outcomes and patient experiences.
 
 
 
 
 ## Installation
 
-1. Install my-project with npm
+1. Clone the Repository
 
 ```bash
   git clone https://github.com/ishapaghdal301/DiagnoCare.git
