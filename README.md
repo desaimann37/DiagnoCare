@@ -1,5 +1,6 @@
 
-# DiagnoCare : Revolutionizing Healthcare with Machine Learning 💉
+# DiagnoCare
+### Revolutionizing Healthcare with Machine Learning 💉
 
 Welcome to DiagnoCare, where we stand at the forefront of healthcare innovation by seamlessly integrating machine learning technology into the diagnostic process. Our platform is designed to empower both patients and healthcare providers, offering a comprehensive suite of features aimed at streamlining disease detection and management.
 
