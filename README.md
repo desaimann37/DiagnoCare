@@ -50,7 +50,7 @@ Welcome to DiagnoCare, where we stand at the forefront of healthcare innovation 
 1. Clone the Repository
 
 ```bash
-  git clone https://github.com/ishapaghdal301/DiagnoCare.git
+  git clone https://github.com/desaimann37/DiagnoCare.git
   cd DiagnoCare
 ```
 
@@ -69,6 +69,6 @@ Welcome to DiagnoCare, where we stand at the forefront of healthcare innovation 
 ```
 
 ## Contact 📧
-- ishapaghdal@gmail.com
-- https://github.com/ishapaghdal301
+- desaimann37@gmail.com
+- https://github.com/desaimann37
 
